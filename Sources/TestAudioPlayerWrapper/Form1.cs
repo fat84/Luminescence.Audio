@@ -7,7 +7,7 @@ namespace TestAudioPlayerWrapper
 {
    public partial class mainForm : Form
    {
-      private readonly AudioPlayer player = new AudioPlayer();
+      private readonly IAudioPlayer player = new FFmpegAudioPlayer();
 
       public mainForm()
       {

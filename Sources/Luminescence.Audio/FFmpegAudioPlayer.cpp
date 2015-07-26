@@ -1,5 +1,5 @@
 #include "StdAfx.h"
-#include "AudioPlayer.h"
+#include "FFmpegAudioPlayer.h"
 
 //#define DX_SDK_INSTALLED  //the system must have the DirectX SDK Developer Runtime installed for debugging to be supported
 
@@ -7,7 +7,7 @@ namespace Luminescence
 {
    namespace Audio
    {
-      AudioPlayer::AudioPlayer() :
+      FFmpegAudioPlayer::FFmpegAudioPlayer() :
          pXAudio2(NULL), pMasteringVoice(NULL), pSourceVoice(NULL), container(NULL), codec_context(NULL), swr_ctx(NULL), volume(1.0f), audioStream(-1)
       {
          //CoInitializeEx(NULL, COINIT_APARTMENTTHREADED); /*COINIT_MULTITHREADED*/ /*COINIT_APARTMENTTHREADED*/
@@ -18,14 +18,14 @@ namespace Luminescence
          av_register_all();
       }
 
-      void AudioPlayer::Release()
+      void FFmpegAudioPlayer::Release()
       {
          Stop();
          ShutdownAudioEngine();
          //CoUninitialize();
       }
 
-      void AudioPlayer::ShutdownAudioEngine()
+      void FFmpegAudioPlayer::ShutdownAudioEngine()
       {
          if (pMasteringVoice != NULL)
          {
@@ -46,7 +46,7 @@ namespace Luminescence
          }
       }
 
-      void AudioPlayer::CleanUpFFmpegResource()
+      void FFmpegAudioPlayer::CleanUpFFmpegResource()
       {
          if (swr_ctx != NULL)
          {
@@ -71,7 +71,7 @@ namespace Luminescence
          audioStream = -1;
       }
 
-      void AudioPlayer::Play(String^ path)
+      void FFmpegAudioPlayer::Play(String^ path)
       {
          if (pXAudio2 == NULL)
             throw gcnew ObjectDisposedException("You cannot use this instance of audio player because it has been disposed.");
@@ -181,13 +181,13 @@ namespace Luminescence
 
          cancellationToken = gcnew CancellationTokenSource();
          context = SynchronizationContext::Current;
-         voiceFeederTask = Task::Factory->StartNew(gcnew Action(this, &AudioPlayer::FeedSourceVoice), cancellationToken->Token, TaskCreationOptions::LongRunning, TaskScheduler::Default);
+         voiceFeederTask = Task::Factory->StartNew(gcnew Action(this, &FFmpegAudioPlayer::FeedSourceVoice), cancellationToken->Token, TaskCreationOptions::LongRunning, TaskScheduler::Default);
 
          RaisePlayingEvent(path);
       }
 
       // ATTENTION : exécution de la méthode dans un thread de travail
-      void AudioPlayer::StopAudioEngine()
+      void FFmpegAudioPlayer::StopAudioEngine()
       {
          CleanUpSourceVoiceResource();
          CleanUpFFmpegResource();
@@ -199,7 +199,7 @@ namespace Luminescence
          RaiseStoppedEvent(path);
       }
 
-      void AudioPlayer::CleanUpSourceVoiceResource()
+      void FFmpegAudioPlayer::CleanUpSourceVoiceResource()
       {
          pSourceVoice->Stop();
          pSourceVoice->FlushSourceBuffers();
@@ -216,7 +216,7 @@ namespace Luminescence
       }
 
       // ATTENTION : exécution de la méthode dans un thread de travail
-      void AudioPlayer::FeedSourceVoice()
+      void FFmpegAudioPlayer::FeedSourceVoice()
       {
          CancellationToken^ token = cancellationToken->Token;
          bool eofReached = false;
@@ -254,7 +254,7 @@ namespace Luminescence
          }
       }
 
-      bool AudioPlayer::FeedSourceVoiceBuffer(int buffersToQueue, UINT32 minBufferSize)
+      bool FFmpegAudioPlayer::FeedSourceVoiceBuffer(int buffersToQueue, UINT32 minBufferSize)
       {
          AVFrame* frame = av_frame_alloc();
          int got_frame, consumed, audio_buf_size;
@@ -342,7 +342,7 @@ namespace Luminescence
          return eofReached;
       }
 
-      void AudioPlayer::Stop()
+      void FFmpegAudioPlayer::Stop()
       {
          if (voiceFeederTask != nullptr && !voiceFeederTask->IsCompleted)
          {
@@ -351,7 +351,7 @@ namespace Luminescence
          }
       }
 
-      void AudioPlayer::InitializeAudioEngine()
+      void FFmpegAudioPlayer::InitializeAudioEngine()
       {
          UINT32 flags = 0;
 

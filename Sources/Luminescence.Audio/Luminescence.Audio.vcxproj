@@ -89,14 +89,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AudioPlayer.h" />
+    <ClInclude Include="FFmpegAudioPlayer.h" />
     <ClInclude Include="ChromaprintFingerprinter.h" />
+    <ClInclude Include="IAudioPlayer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
-    <ClCompile Include="AudioPlayer.cpp" />
+    <ClCompile Include="FFmpegAudioPlayer.cpp" />
     <ClCompile Include="ChromaprintFingerprinter.cpp" />
     <ClCompile Include="Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

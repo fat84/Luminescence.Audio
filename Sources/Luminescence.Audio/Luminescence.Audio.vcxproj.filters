@@ -21,10 +21,13 @@
     <ClInclude Include="resource.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="AudioPlayer.h">
+    <ClInclude Include="ChromaprintFingerprinter.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="ChromaprintFingerprinter.h">
+    <ClInclude Include="FFmpegAudioPlayer.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="IAudioPlayer.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,10 +38,10 @@
     <ClCompile Include="Stdafx.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="AudioPlayer.cpp">
+    <ClCompile Include="ChromaprintFingerprinter.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="ChromaprintFingerprinter.cpp">
+    <ClCompile Include="FFmpegAudioPlayer.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

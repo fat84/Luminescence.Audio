@@ -27,7 +27,10 @@
     <ClInclude Include="FFmpegAudioPlayer.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="IAudioPlayer.h">
+    <ClInclude Include="TaglibTagger.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="TaglibHelper.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -44,6 +47,9 @@
     <ClCompile Include="FFmpegAudioPlayer.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="TaglibTagger.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.ico">
@@ -54,5 +60,8 @@
     <ResourceCompile Include="app.rc">
       <Filter>Fichiers de ressources</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\Luminescence.Xiph\Sources\Luminescence.Xiph\License.txt" />
   </ItemGroup>
 </Project>

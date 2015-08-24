@@ -4,8 +4,6 @@
 #include <vector>
 #include <deque>
 
-#include "IAudioPlayer.h"
-
 extern "C"
 {
 #include <libavcodec/avcodec.h>
@@ -25,8 +23,25 @@ using namespace System::Threading::Tasks;
 namespace Luminescence
 {
    namespace Audio
-   {      
-      public ref class FFmpegAudioPlayer : public IAudioPlayer
+   {    
+      public ref class PathEventArgs : EventArgs
+      {
+      private:
+         String^ path;
+
+      public:
+         PathEventArgs(String^ p)
+         {
+            path = p;
+         }
+
+         property String^ Path
+         {
+            String^ get() { return path; }
+         }
+      };
+
+      public ref class FFmpegAudioPlayer
       {
       private:
          void Release();
@@ -94,21 +109,21 @@ namespace Luminescence
          FFmpegAudioPlayer();
          ~FFmpegAudioPlayer() { Release(); }
 
-         virtual void Play(String^ path);
-         virtual void Stop();
+         void Play(String^ path);
+         void Stop();
 
-         virtual event EventHandler<PathEventArgs^>^ PlayerStopped;
-         virtual event EventHandler<PathEventArgs^>^ PlayerStarted;
+         event EventHandler<PathEventArgs^>^ PlayerStopped;
+         event EventHandler<PathEventArgs^>^ PlayerStarted;
 
          property String^ PlayingFile 
          { 
-            virtual String^ get() { return file; } 
+            String^ get() { return file; } 
          }
 
          property float Volume
          {
-            virtual float get() { return volume; }
-            virtual void set(float value)
+            float get() { return volume; }
+            void set(float value)
             {
                // A volume level of 1.0 means there is no attenuation or gain and 0 means silence. 
                // Negative levels can be used to invert the audio's phase.
@@ -126,8 +141,8 @@ namespace Luminescence
 
          property bool Muted
          {
-            virtual bool get() { return isMuted; }
-            virtual void set(bool value)
+            bool get() { return isMuted; }
+            void set(bool value)
             {
                if (pMasteringVoice == NULL)
                   throw gcnew ObjectDisposedException("You cannot use this instance of audio player because it has been disposed.");
@@ -145,8 +160,8 @@ namespace Luminescence
 
          property bool Paused
          {
-            virtual bool get() { return isPaused; }
-            virtual void set(bool value)
+            bool get() { return isPaused; }
+            void set(bool value)
             {
                if (value == isPaused) return;
 

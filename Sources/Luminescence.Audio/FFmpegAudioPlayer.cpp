@@ -1,6 +1,9 @@
 #include "StdAfx.h"
 #include "FFmpegAudioPlayer.h"
 
+#include <msclr\marshal.h>
+#include <msclr\marshal_cppstd.h>
+
 //#define DX_SDK_INSTALLED  //the system must have the DirectX SDK Developer Runtime installed for debugging to be supported
 
 namespace Luminescence
@@ -78,8 +81,7 @@ namespace Luminescence
 
          Stop();
 
-         std::string file_name;
-         MarshalString(path, file_name);
+         std::string file_name = msclr::interop::marshal_as<std::string>(path);
          pin_ptr<AVFormatContext*> _container = &container;
 
          if (avformat_open_input(_container, file_name.c_str(), NULL, NULL) < 0)

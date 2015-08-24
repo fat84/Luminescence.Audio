@@ -3,13 +3,3 @@
 // stdafx.obj contient les informations de type précompilées
 
 #include "stdafx.h"
-
-void MarshalString(System::String^ s, std::string& os)
-{
-	using namespace System;
-	using namespace System::Runtime::InteropServices;
-
-	const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer(); 
-	os = chars; 
-	Marshal::FreeHGlobal(IntPtr((void*)chars)); 
-}

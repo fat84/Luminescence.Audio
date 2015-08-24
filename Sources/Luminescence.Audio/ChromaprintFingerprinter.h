@@ -1,5 +1,8 @@
 #pragma once
 
+#include <msclr\marshal.h>
+#include <msclr\marshal_cppstd.h>
+
 extern "C" 
 {
 #include <libavcodec/avcodec.h>
@@ -29,8 +32,7 @@ namespace Luminescence
          static array<int>^ GetFingerprint(String^ path) { return GetFingerprint(path, 120); }
          static array<int>^ GetFingerprint(String^ path, int length)
          {
-            std::string file_name;
-            MarshalString(path, file_name);
+            std::string file_name = msclr::interop::marshal_as<std::string>(path);
 
             ChromaprintContext* chromaprint_ctx = chromaprint_new(CHROMAPRINT_ALGORITHM_DEFAULT);
 

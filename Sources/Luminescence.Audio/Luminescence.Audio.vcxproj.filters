@@ -62,6 +62,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\Luminescence.Xiph\Sources\Luminescence.Xiph\License.txt" />
+    <Text Include="License.txt" />
   </ItemGroup>
 </Project>

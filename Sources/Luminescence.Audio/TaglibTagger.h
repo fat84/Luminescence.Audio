@@ -11,6 +11,7 @@ namespace Luminescence
    {
       [FileFormat("MP3", ".mp3")]
       [FileFormat("FLAC (Free Lossless Audio Codec)", ".flac")]
+      [FileFormat("Ogg Vorbis", ".ogg")]
       public ref class TaglibTagger
       {
       private:
@@ -27,9 +28,6 @@ namespace Luminescence
          Dictionary<String^, List<String^>^>^ tags;
          List<Picture^>^ pictures;
 
-         static Dictionary<String^, List<String^>^>^ MapToDictionary(TagLib::PropertyMap map);
-         static TagLib::PropertyMap DictionaryToMap(Dictionary<String^, List<String^>^>^ dic);
-
          void ReadTags(String^ path);
 
          void ReadFlacFile(String^ path);
@@ -37,6 +35,9 @@ namespace Luminescence
 
          void ReadMp3File(String^ path);
          bool WriteMp3File();
+
+         void ReadOggFile(String^ path);
+         bool WriteOggFile();
 
       public:
          TaglibTagger(String^ path) { ReadTags(path); }

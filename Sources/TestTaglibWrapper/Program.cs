@@ -16,10 +16,13 @@ namespace TestTaglibWrapper
          TaglibSettings.MaxId3Version = Id3Version.id3v24;
 
          bool workOnCopy = true;
+         bool addCover = true;
          var paths = new[]
          {
-            @"C:\Users\cyber\Downloads\03 - Hey Brother.flac",
-            @"C:\Users\cyber\Downloads\00 All that she wants.mp3"
+            @"C:\Users\cyber\Downloads\Test\03 - Hey Brother.flac",
+            @"C:\Users\cyber\Downloads\Test\00 All that she wants.mp3",
+            @"C:\Users\cyber\Downloads\Test\vorbis.ogg",
+            //@"C:\Users\cyber\Downloads\Test\flac.ogg"
          };
 
          foreach (string path in paths)
@@ -27,7 +30,7 @@ namespace TestTaglibWrapper
             string realPath = workOnCopy ? WorkOnCopy(path) : path;
 
             ReadAudioFile(realPath);
-            WriteAudioFile(realPath);
+            WriteAudioFile(realPath, addCover);
             ReadAudioFile(realPath);
 
             if (workOnCopy)
@@ -40,7 +43,7 @@ namespace TestTaglibWrapper
          Console.ReadKey();
       }
 
-      private static void WriteAudioFile(string path)
+      private static void WriteAudioFile(string path, bool addCover)
       {
          Console.WriteLine($"Ecriture du fichier {path}");
 
@@ -58,11 +61,19 @@ namespace TestTaglibWrapper
 
          tagger.Pictures.Clear();
 
-         Console.WriteLine("Ajout d'une pochette : FrontCover, JPEG, 385 918 octets, sans description");
-         string cover = @"C:\Users\cyber\Downloads\folder.jpg";
-         tagger.Pictures.Add(new Picture(File.ReadAllBytes(cover), Format.JPEG, PictureType.FrontCover, null));
+         if (addCover)
+         {
+            Console.WriteLine("Ajout d'une pochette : FrontCover, JPEG, 385 918 octets, sans description");
+            string cover = @"C:\Users\cyber\Downloads\Test\folder.jpg";
+            tagger.Pictures.Add(new Picture(File.ReadAllBytes(cover), Format.JPEG, PictureType.FrontCover, null)); 
+         }
 
-         tagger.SaveTags();
+         Console.WriteLine("Saving...");
+         bool result = tagger.SaveTags();
+         if (result)
+            Console.WriteLine("Saved with success.");
+         else
+            Console.WriteLine("Saved with problem.");
          Console.WriteLine();
       }
 
@@ -71,6 +82,14 @@ namespace TestTaglibWrapper
          Console.WriteLine($"Lecture du fichier {path}");
 
          TaglibTagger tagger = new TaglibTagger(path);
+         Console.WriteLine($"Codec = {tagger.Codec}");
+         Console.WriteLine($"Codec Version = {tagger.CodecVersion}");
+         Console.WriteLine($"Bitrate = {tagger.Bitrate}");
+         Console.WriteLine($"Duration = {tagger.Duration} seconds");
+         Console.WriteLine($"Sample rate = {tagger.SampleRate} Hertz");
+         Console.WriteLine($"Channels = {tagger.Channels} channels");
+         Console.WriteLine($"Bits per sample = {tagger.BitsPerSample} bits");
+         Console.WriteLine();
 
          foreach (var tag in tagger.Tags)
          {
@@ -81,15 +100,18 @@ namespace TestTaglibWrapper
             Console.WriteLine();
          }
 
-         foreach (var cover in tagger.Pictures)
+         if (tagger.Pictures != null)
          {
-            Console.WriteLine("COVER ART:");
-            Console.WriteLine($"   Type={cover.Type}");
-            Console.WriteLine($"   Description={cover.Description}");
-            Console.WriteLine($"   PictureFormat={cover.PictureFormat}");
-            Console.WriteLine($"   Size={cover.Data.Length} bytes");
+            foreach (var cover in tagger.Pictures)
+            {
+               Console.WriteLine("COVER ART:");
+               Console.WriteLine($"   Type={cover.Type}");
+               Console.WriteLine($"   Description={cover.Description}");
+               Console.WriteLine($"   PictureFormat={cover.PictureFormat}");
+               Console.WriteLine($"   Size={cover.Data.Length} bytes");
 
-            Console.WriteLine();
+               Console.WriteLine();
+            } 
          }
       }
 

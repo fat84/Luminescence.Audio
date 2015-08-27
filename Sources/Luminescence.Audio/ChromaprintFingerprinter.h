@@ -22,6 +22,14 @@ namespace Luminescence
 {
    namespace Audio 
    {
+      static array<int>^ ConvertNativeToManagedArray(const int* data, int size)
+      {
+         array<int>^ buffer = gcnew array<int>(size);
+         pin_ptr<int> buffer_start = &buffer[0];
+         memcpy(buffer_start, data, size);
+         return buffer;
+      }
+
       public ref class ChromaprintFingerprinter abstract sealed
       {
       private:
@@ -33,7 +41,6 @@ namespace Luminescence
          static array<int>^ GetFingerprint(String^ path, int length)
          {
             std::string file_name = msclr::interop::marshal_as<std::string>(path);
-
             ChromaprintContext* chromaprint_ctx = chromaprint_new(CHROMAPRINT_ALGORITHM_DEFAULT);
 
             String^ error = nullptr;
@@ -46,24 +53,14 @@ namespace Luminescence
 
             int32_t* raw_fingerprint;
             int raw_fingerprint_size = 0;
-            if (!chromaprint_get_raw_fingerprint(chromaprint_ctx, (void **)&raw_fingerprint, &raw_fingerprint_size))
+            if (!chromaprint_get_raw_fingerprint(chromaprint_ctx, (void **)&raw_fingerprint, &raw_fingerprint_size) || raw_fingerprint_size == 0)
             {
+               chromaprint_dealloc(raw_fingerprint);
                chromaprint_free(chromaprint_ctx);
                throw gcnew Exception("Not enough memory to get raw fingerprint.");
             }
 
-            if (raw_fingerprint_size == 0)
-            {
-               chromaprint_dealloc(raw_fingerprint);
-               chromaprint_free(chromaprint_ctx);
-               throw gcnew Exception("Not enough data to calculate fingerprint.");
-            }
-
-            array<int>^ mfp = gcnew array<int>(raw_fingerprint_size);
-            //Marshal::Copy(IntPtr(&raw_fingerprint[0]), mfp, 0, raw_fingerprint_size);
-            for (int i = 0; i < raw_fingerprint_size; i++) 
-               mfp[i] = raw_fingerprint[i];			
-
+            array<int>^ mfp = ConvertNativeToManagedArray(raw_fingerprint, raw_fingerprint_size);
             chromaprint_dealloc(raw_fingerprint);
             chromaprint_free(chromaprint_ctx);
 

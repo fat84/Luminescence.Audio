@@ -86,30 +86,30 @@ namespace Luminescence
 
       static String^ GetVorbisVersionFromVendor(String^ vendor)
       {
-         if (vendor->StartsWith("AO; aoTuV")) return "aoTuV";
+         if (vendor->StartsWith("AO; aoTuV")) return "Vorbis aoTuV";
 
-         if (vendor == "Xiphophorus libVorbis I 20000508") return "1.0 Beta 1/2";
-         if (vendor == "Xiphophorus libVorbis I 20001031") return "1.0 Beta 3";
-         if (vendor == "Xiphophorus libVorbis I 20010225") return "1.0 Beta 4";
-         if (vendor == "Xiphophorus libVorbis I 20010615") return "1.0 RC1";
-         if (vendor == "Xiphophorus libVorbis I 20010813") return "1.0 RC2";
-         if (vendor == "Xiphophorus libVorbis I 20011217") return "1.0 RC3";
-         if (vendor == "Xiphophorus libVorbis I 20011231") return "1.0 RC3";
+         if (vendor == "Xiphophorus libVorbis I 20000508") return "Vorbis 1.0 Beta 1/2";
+         if (vendor == "Xiphophorus libVorbis I 20001031") return "Vorbis 1.0 Beta 3";
+         if (vendor == "Xiphophorus libVorbis I 20010225") return "Vorbis 1.0 Beta 4";
+         if (vendor == "Xiphophorus libVorbis I 20010615") return "Vorbis 1.0 RC1";
+         if (vendor == "Xiphophorus libVorbis I 20010813") return "Vorbis 1.0 RC2";
+         if (vendor == "Xiphophorus libVorbis I 20011217") return "Vorbis 1.0 RC3";
+         if (vendor == "Xiphophorus libVorbis I 20011231") return "Vorbis 1.0 RC3";
 
          // https://trac.xiph.org/browser/trunk/vorbis/CHANGES
-         if (vendor == "Xiph.Org libVorbis I 20020717") return "1.0.0";
-         if (vendor == "Xiph.Org libVorbis I 20030909") return "1.0.1";
-         if (vendor == "Xiph.Org libVorbis I 20040629") return "1.1.0";
-         if (vendor == "Xiph.Org libVorbis I 20050304") return "1.1.1/2";
-         if (vendor == "Xiph.Org libVorbis I 20070622") return "1.2.0";
-         if (vendor == "Xiph.Org libVorbis I 20080501") return "1.2.1";
-         if (vendor == "Xiph.Org libVorbis I 20090624") return "1.2.2";
-         if (vendor == "Xiph.Org libVorbis I 20090709") return "1.2.3";
-         if (vendor == "Xiph.Org libVorbis I 20100325 (Everywhere)") return "1.3.1";
-         if (vendor == "Xiph.Org libVorbis I 20101101 (Schaufenugget)") return "1.3.2";
-         if (vendor == "Xiph.Org libVorbis I 20120203 (Omnipresent)") return "1.3.3";
-         if (vendor == "Xiph.Org libVorbis I 20140122 (Turpakäräjiin)") return "1.3.4";
-         if (vendor == "Xiph.Org libVorbis I 20150105 (????)") return "1.3.5";
+         if (vendor == "Xiph.Org libVorbis I 20020717") return "Vorbis 1.0.0";
+         if (vendor == "Xiph.Org libVorbis I 20030909") return "Vorbis 1.0.1";
+         if (vendor == "Xiph.Org libVorbis I 20040629") return "Vorbis 1.1.0";
+         if (vendor == "Xiph.Org libVorbis I 20050304") return "Vorbis 1.1.1/2";
+         if (vendor == "Xiph.Org libVorbis I 20070622") return "Vorbis 1.2.0";
+         if (vendor == "Xiph.Org libVorbis I 20080501") return "Vorbis 1.2.1";
+         if (vendor == "Xiph.Org libVorbis I 20090624") return "Vorbis 1.2.2";
+         if (vendor == "Xiph.Org libVorbis I 20090709") return "Vorbis 1.2.3";
+         if (vendor == "Xiph.Org libVorbis I 20100325 (Everywhere)") return "Vorbis 1.3.1";
+         if (vendor == "Xiph.Org libVorbis I 20101101 (Schaufenugget)") return "Vorbis 1.3.2";
+         if (vendor == "Xiph.Org libVorbis I 20120203 (Omnipresent)") return "Vorbis 1.3.3";
+         if (vendor == "Xiph.Org libVorbis I 20140122 (Turpakäräjiin)") return "Vorbis 1.3.4";
+         if (vendor == "Xiph.Org libVorbis I 20150105 (????)") return "Vorbis 1.3.5";
 
          return nullptr;
       }

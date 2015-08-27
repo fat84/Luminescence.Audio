@@ -9,9 +9,11 @@ namespace Luminescence
 {
    namespace Audio
    {
-      [FileFormat("MP3", ".mp3")]
+      [FileFormat("MP3 (MPEG-1/2 Audio Layer 3)", ".mp3")]
       [FileFormat("FLAC (Free Lossless Audio Codec)", ".flac")]
       [FileFormat("Ogg Vorbis", ".ogg")]
+      [FileFormat("WMA (Windows Media Audio)", ".wma")]
+      [FileFormat("AAC (Advanced Audio Coding)", ".m4a")]
       public ref class TaglibTagger
       {
       private:
@@ -28,6 +30,8 @@ namespace Luminescence
          Dictionary<String^, List<String^>^>^ tags;
          List<Picture^>^ pictures;
 
+         void TaglibTagger::CheckIgnoredTags(TagLib::PropertyMap& map);
+
          void ReadTags(String^ path);
 
          void ReadFlacFile(String^ path);
@@ -38,6 +42,9 @@ namespace Luminescence
 
          void ReadOggFile(String^ path);
          bool WriteOggFile();
+
+         void ReadWmaFile(String^ path);
+         bool WriteWmaFile();
 
       public:
          TaglibTagger(String^ path) { ReadTags(path); }

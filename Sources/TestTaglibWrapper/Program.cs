@@ -16,24 +16,29 @@ namespace TestTaglibWrapper
          TaglibSettings.MaxId3Version = Id3Version.id3v24;
 
          bool workOnCopy = true;
+         bool writeTags = true;
          bool addCover = true;
          var paths = new[]
          {
-            @"C:\Users\cyber\Downloads\Test\03 - Hey Brother.flac",
-            @"C:\Users\cyber\Downloads\Test\00 All that she wants.mp3",
-            @"C:\Users\cyber\Downloads\Test\vorbis.ogg",
-            //@"C:\Users\cyber\Downloads\Test\flac.ogg"
+            //@"C:\Users\cyber\Downloads\Test\03 - Hey Brother.flac",
+            //@"C:\Users\cyber\Downloads\Test\00 All that she wants.mp3",
+            //@"C:\Users\cyber\Downloads\Test\vorbis.ogg",
+            //@"C:\Users\cyber\Downloads\Test\flac.ogg", // should crash because Ogg FLAC is not supported yet
+            @"C:\Users\cyber\Downloads\Test\wma2.wma",
          };
 
          foreach (string path in paths)
          {
-            string realPath = workOnCopy ? WorkOnCopy(path) : path;
+            string realPath = workOnCopy && writeTags ? WorkOnCopy(path) : path;
 
             ReadAudioFile(realPath);
-            WriteAudioFile(realPath, addCover);
-            ReadAudioFile(realPath);
+            if (writeTags)
+            {
+               WriteAudioFile(realPath, addCover);
+               ReadAudioFile(realPath); 
+            }
 
-            if (workOnCopy)
+            if (workOnCopy && writeTags)
                File.Delete(realPath);
 
             Console.WriteLine("----------------------------------------");
@@ -56,8 +61,8 @@ namespace TestTaglibWrapper
          Console.WriteLine(@"Ajout: ARTIST=""artist 2""");
          AddTag(tags, "ARTIST", "artist 2");
 
-         Console.WriteLine(@"Ajout: FAKE=""toto""");
-         AddTag(tags, "FAKE", "toto");
+         //Console.WriteLine(@"Ajout: FAKE=""toto""");
+         //AddTag(tags, "FAKE", "toto");
 
          tagger.Pictures.Clear();
 

@@ -13,6 +13,7 @@
 #include <attachedpictureframe.h>
 #include <id3v2tag.h>
 #include <vorbisfile.h>
+#include <asffile.h>
 
 #include "TaglibTagger.h"
 
@@ -22,7 +23,7 @@ using namespace System::IO;
 namespace Luminescence
 {
    namespace Audio
-   {      
+   {
       void TaglibTagger::ReadTags(String^ path)
       {
          if (!File::Exists(path))
@@ -35,6 +36,8 @@ namespace Luminescence
             ReadFlacFile(path);
          else if (String::Equals(extension, ".ogg", StringComparison::OrdinalIgnoreCase))
             ReadOggFile(path);
+         else if (String::Equals(extension, ".wma", StringComparison::OrdinalIgnoreCase))
+            ReadWmaFile(path);
          else
             throw gcnew NotSupportedException("The file format is not supported.");
 
@@ -56,6 +59,8 @@ namespace Luminescence
             return WriteFlacFile();
          else if (String::Equals(extension, ".ogg", StringComparison::OrdinalIgnoreCase))
             return WriteOggFile();
+         else if (String::Equals(extension, ".wma", StringComparison::OrdinalIgnoreCase))
+            return WriteWmaFile();
 
          return true;
       }
@@ -68,11 +73,11 @@ namespace Luminescence
          if (!file.isValid())
             throw gcnew IOException("The file is not a valid MP3 file.");
 
-         TagLib::MPEG::Properties *properties = file.audioProperties();
+         const TagLib::MPEG::Properties *properties = file.audioProperties();
          if (properties == NULL)
             throw gcnew FileFormatException("There is no audio properties in the file.");
 
-         codec = "MP3";
+         codec = codecVersion = "MP3";
 
          bitrate = properties->bitrate(); // in kb/s
          duration = properties->lengthInSeconds(); // in seconds
@@ -86,15 +91,18 @@ namespace Luminescence
             return;
 
          TagLib::ID3v2::Tag *tag = file.ID3v2Tag(false);
-         TagLib::ID3v2::FrameList arts = tag->frameListMap()["APIC"];
+         const TagLib::ID3v2::FrameList arts = tag->frameListMap()["APIC"];
          pictures = gcnew List<Picture^>(arts.size());
          for (auto it = arts.begin(); it != arts.end(); it++)
          {
             TagLib::ID3v2::Frame *frame = *it;
             TagLib::ID3v2::AttachedPictureFrame *pic = static_cast<TagLib::ID3v2::AttachedPictureFrame*>(frame);
 
-            array<byte>^ buffer = ConvertByteVectorToManagedArray(pic->picture().data());
-            pictures->Add(gcnew Picture(buffer, gcnew String(pic->mimeType().toCString()), (PictureType)pic->type(), gcnew String(pic->description().toCString())));
+            pictures->Add(gcnew Picture(
+               ConvertByteVectorToManagedArray(pic->picture().data()), 
+               gcnew String(pic->mimeType().toCString()), 
+               (PictureType)pic->type(), 
+               gcnew String(pic->description().toCString())));
          }
       }
 
@@ -106,18 +114,17 @@ namespace Luminescence
          if (!file.isValid())
             throw gcnew IOException("The file is not a valid FLAC file.");
 
-         TagLib::FLAC::Properties *properties = file.audioProperties();
+         const TagLib::FLAC::Properties *properties = file.audioProperties();
          if (properties == NULL)
             throw gcnew FileFormatException("There is no audio properties in the file.");
 
          if (!file.hasXiphComment())
             throw gcnew FileFormatException("There is no Xiph Comment in the file.");
 
-         codec = "FLAC";
          TagLib::Ogg::XiphComment *xiph = file.xiphComment();
          TagLib::StringList buffer = xiph->vendorID().split();
-         if (buffer.size() > 2)
-            codecVersion = gcnew String(buffer[2].toCWString());
+         codecVersion = buffer.size() > 2 ? "FLAC " + gcnew String(buffer[2].toCWString()) : "FLAC";
+         codec = "FLAC";
 
          bitrate = properties->bitrate(); // in kb/s
          duration = properties->lengthInSeconds(); // in seconds
@@ -133,8 +140,11 @@ namespace Luminescence
          {
             TagLib::FLAC::Picture *pic = *it;
 
-            array<byte>^ buffer = ConvertByteVectorToManagedArray(pic->data());
-            pictures->Add(gcnew Picture(buffer, gcnew String(pic->mimeType().toCString()), (PictureType)pic->type(), gcnew String(pic->description().toCString())));
+            pictures->Add(gcnew Picture(
+               ConvertByteVectorToManagedArray(pic->data()), 
+               gcnew String(pic->mimeType().toCString()), 
+               (PictureType)pic->type(), 
+               gcnew String(pic->description().toCString())));
          }
       }
 
@@ -146,34 +156,76 @@ namespace Luminescence
          if (!file.isValid())
             throw gcnew IOException("The file is not a valid Ogg Vorbis file.");
 
-         TagLib::Vorbis::Properties *properties = file.audioProperties();
+         const TagLib::Vorbis::Properties *properties = file.audioProperties();
          if (properties == NULL)
             throw gcnew FileFormatException("There is no audio properties in the file.");
 
-         codec = "Vorbis";
          TagLib::Ogg::XiphComment *xiph = file.tag();
          String^ vendor = gcnew String(xiph->vendorID().toCWString());
          codecVersion = GetVorbisVersionFromVendor(vendor);
+         codec = "Vorbis";
 
          bitrate = properties->bitrate(); // in kb/s
          duration = properties->lengthInSeconds(); // in seconds
          sampleRate = properties->sampleRate(); // in Hertz
          channels = (byte)properties->channels(); // number of audio channels
 
-         TagLib::StringList arts = xiph->fieldListMap()["METADATA_BLOCK_PICTURE"];
-         xiph->removeField("METADATA_BLOCK_PICTURE");
-         tags = MapToDictionary(file.properties());
-
+         const TagLib::StringList arts = xiph->fieldListMap()["METADATA_BLOCK_PICTURE"];
          pictures = gcnew List<Picture^>(arts.size());
          for (auto it = arts.begin(); it != arts.end(); it++)
          {
             TagLib::String base64 = *it;
 
             TagLib::FLAC::Picture pic(DecodeBase64(base64));
-            array<byte>^ buffer = ConvertByteVectorToManagedArray(pic.data());            
-            pictures->Add(gcnew Picture(buffer, gcnew String(pic.mimeType().toCString()), (PictureType)pic.type(), gcnew String(pic.description().toCString())));
+            pictures->Add(gcnew Picture(
+               ConvertByteVectorToManagedArray(pic.data()), 
+               gcnew String(pic.mimeType().toCString()), 
+               (PictureType)pic.type(), 
+               gcnew String(pic.description().toCString())));
          }
-      }      
+
+         xiph->removeField("METADATA_BLOCK_PICTURE");
+         tags = MapToDictionary(file.properties());
+      }
+
+      void TaglibTagger::ReadWmaFile(String^ path)
+      {
+         TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
+
+         TagLib::ASF::File file(fileName, true, TagLib::AudioProperties::ReadStyle::Average);
+         if (!file.isValid())
+            throw gcnew IOException("The file is not a valid WMA file.");
+
+         const TagLib::ASF::Properties *properties = file.audioProperties();
+         if (properties == NULL)
+            throw gcnew FileFormatException("There is no audio properties in the file.");
+
+         codecVersion = !properties->codecName().isEmpty() ? gcnew String(properties->codecName().toCString()) : "WMA";
+         codec = "WMA";
+
+         bitrate = properties->bitrate(); // in kb/s
+         duration = properties->lengthInSeconds(); // in seconds
+         sampleRate = properties->sampleRate(); // in Hertz
+         channels = (byte)properties->channels(); // number of audio channels
+         bitsPerSample = properties->bitsPerSample(); // in bits
+
+         tags = MapToDictionary(file.properties());
+
+         const TagLib::ASF::Tag* asf = file.tag();
+         const TagLib::ASF::AttributeList& arts = asf->attributeListMap()["WM/Picture"];
+         pictures = gcnew List<Picture^>(arts.size());
+         for (auto it = arts.begin(); it != arts.end(); it++)
+         {
+            TagLib::ASF::Attribute attr = *it;
+            const TagLib::ASF::Picture pic = attr.toPicture();
+
+            pictures->Add(gcnew Picture(
+               ConvertByteVectorToManagedArray(pic.picture()),
+               gcnew String(pic.mimeType().toCString()),
+               (PictureType)pic.type(),
+               gcnew String(pic.description().toCString())));
+         }
+      }
 
       bool TaglibTagger::WriteMp3File()
       {
@@ -186,6 +238,7 @@ namespace Luminescence
 
          TagLib::ID3v2::Tag *id3 = file.ID3v2Tag(true);
          id3->setProperties(DictionaryToMap(tags));
+         // ID3 implements the complete PropertyMap interface, so an empty map is always returned
 
          id3->removeFrames("APIC");
          for each(auto picture in pictures)
@@ -201,11 +254,11 @@ namespace Luminescence
             frame->setMimeType(msclr::interop::marshal_as<std::string>(picture->GetMimeType()).c_str());
             frame->setType((TagLib::ID3v2::AttachedPictureFrame::Type)picture->Type);
             if (picture->Description != nullptr)
-              frame->setDescription(msclr::interop::marshal_as<std::wstring>(picture->Description).c_str());
+               frame->setDescription(msclr::interop::marshal_as<std::wstring>(picture->Description).c_str());
 
             id3->addFrame(frame); // At this point the tag takes ownership of the frame and will handle freeing its memory.
          }
-         
+
          int tagVersion = id3->header()->majorVersion();
 
          int minVersion = (int)TaglibSettings::MinId3Version;
@@ -221,7 +274,7 @@ namespace Luminescence
       }
 
       bool TaglibTagger::WriteFlacFile()
-      {         
+      {
          String^ path = fullPath;
          TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
 
@@ -231,16 +284,7 @@ namespace Luminescence
 
          TagLib::Ogg::XiphComment *xiph = file.xiphComment(true);
          TagLib::PropertyMap map = xiph->setProperties(DictionaryToMap(tags));
-         if (!map.isEmpty())
-         {
-            auto invalidTags = gcnew List<String^>(map.size());
-            for (auto it = map.begin(); it != map.end(); ++it) 
-            {
-               invalidTags->Add(gcnew String(it->first.toCWString()));
-            }
-
-            throw gcnew InvalidOperationException(String::Format("The following tags are not supported in Xiph Comment tags: ", String::Join(", ", invalidTags)));
-         }
+         CheckIgnoredTags(map);
 
          file.removePictures();
          for each(auto picture in pictures)
@@ -250,7 +294,7 @@ namespace Luminescence
             pic->setMimeType(msclr::interop::marshal_as<std::string>(picture->GetMimeType()).c_str());
             pic->setType((TagLib::FLAC::Picture::Type)picture->Type);
             if (picture->Description != nullptr)
-              pic->setDescription(msclr::interop::marshal_as<std::wstring>(picture->Description).c_str());
+               pic->setDescription(msclr::interop::marshal_as<std::wstring>(picture->Description).c_str());
 
             file.addPicture(pic); //The file takes ownership of the picture and will handle freeing its memory.
          }
@@ -270,16 +314,7 @@ namespace Luminescence
 
          TagLib::Ogg::XiphComment *xiph = file.tag();
          TagLib::PropertyMap map = xiph->setProperties(DictionaryToMap(tags));
-         if (!map.isEmpty())
-         {
-            auto invalidTags = gcnew List<String^>(map.size());
-            for (auto it = map.begin(); it != map.end(); ++it)
-            {
-               invalidTags->Add(gcnew String(it->first.toCWString()));
-            }
-
-            throw gcnew InvalidOperationException(String::Format("The following tags are not supported in Xiph Comment tags: ", String::Join(", ", invalidTags)));
-         }
+         CheckIgnoredTags(map);
 
          xiph->removeField("METADATA_BLOCK_PICTURE");
          for each(auto picture in pictures)
@@ -297,9 +332,47 @@ namespace Luminescence
          return file.save();
       }
 
-      /*TagLib::ASF::File file = File("myfile.wma");
-      const TagLib::ASF::AttributeListMap& attrListMap = file->tag()->attributeListMap();
-      const TagLib::ASF::AttributeList& attrList = attrListMap["WM/Picture"];
-      TagLib::ASF::Picture pic = attrList[0].toPicture();*/      
+      bool TaglibTagger::WriteWmaFile()
+      {
+         String^ path = fullPath;
+         TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
+
+         TagLib::ASF::File file(fileName, false);
+         if (!file.isValid() || file.readOnly())
+            throw gcnew IOException("The file cannot be opened for writing.");
+
+         TagLib::PropertyMap map = file.setProperties(DictionaryToMap(tags));
+         CheckIgnoredTags(map);
+
+         TagLib::ASF::Tag* asf = file.tag();
+         asf->removeItem("WM/Picture");
+         for each(auto picture in pictures)
+         {
+            TagLib::ASF::Picture pic;
+            pic.setPicture(ConvertManagedArrayToByteVector(picture->Data));
+            pic.setMimeType(msclr::interop::marshal_as<std::string>(picture->GetMimeType()).c_str());
+            pic.setType((TagLib::ASF::Picture::Type)picture->Type);
+            if (picture->Description != nullptr)
+               pic.setDescription(msclr::interop::marshal_as<std::wstring>(picture->Description).c_str());
+
+            asf->addAttribute("WM/Picture", pic);
+         }
+
+         return file.save();
+      }
+
+      void TaglibTagger::CheckIgnoredTags(TagLib::PropertyMap& map)
+      {
+         if (!map.isEmpty())
+         {
+            auto invalidTags = gcnew List<String^>(map.size());
+            for (auto it = map.begin(); it != map.end(); ++it)
+            {
+               invalidTags->Add(gcnew String(it->first.toCWString()));
+            }
+
+            throw gcnew InvalidOperationException(String::Format("The following tags are not supported in {0} tags: {1}", codec, String::Join(", ", invalidTags)));
+         }
+      }
    }
 }

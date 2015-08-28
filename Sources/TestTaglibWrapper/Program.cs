@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Luminescence.Audio;
 
 namespace TestTaglibWrapper
@@ -16,7 +14,7 @@ namespace TestTaglibWrapper
          TaglibSettings.MaxId3Version = Id3Version.id3v24;
 
          bool workOnCopy = true;
-         bool writeTags = true;
+         bool writeTags = false;
          bool addCover = true;
          bool addExoticTag = false;
          var paths = new[]
@@ -26,7 +24,7 @@ namespace TestTaglibWrapper
             @"C:\Users\cyber\Downloads\Test\flac.flac",
             @"C:\Users\cyber\Downloads\Test\mp3.mp3",
             @"C:\Users\cyber\Downloads\Test\vorbis.ogg",
-            @"C:\Users\cyber\Downloads\Test\wma2.wma",
+            @"C:\Users\cyber\Downloads\Test\wma.wma",
             @"C:\Users\cyber\Downloads\Test\aac.m4a"
          };
 

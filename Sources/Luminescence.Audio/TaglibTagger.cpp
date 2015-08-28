@@ -14,6 +14,7 @@
 #include <id3v2tag.h>
 #include <vorbisfile.h>
 #include <asffile.h>
+#include <mp4file.h>
 
 #include "TaglibTagger.h"
 
@@ -38,13 +39,15 @@ namespace Luminescence
             ReadOggFile(path);
          else if (String::Equals(extension, ".wma", StringComparison::OrdinalIgnoreCase))
             ReadWmaFile(path);
+         else if (String::Equals(extension, ".m4a", StringComparison::OrdinalIgnoreCase))
+            ReadM4aFile(path);
          else
             throw gcnew NotSupportedException("The file format is not supported.");
 
          fullPath = path;
       }
 
-      bool TaglibTagger::SaveTags()
+      void TaglibTagger::SaveTags()
       {
          if (!File::Exists(fullPath))
             throw gcnew FileNotFoundException("The file is not found.", fullPath);
@@ -54,15 +57,15 @@ namespace Luminescence
 
          String^ extension = Path::GetExtension(fullPath);
          if (String::Equals(extension, ".mp3", StringComparison::OrdinalIgnoreCase))
-            return WriteMp3File();
+            WriteMp3File();
          else if (String::Equals(extension, ".flac", StringComparison::OrdinalIgnoreCase))
-            return WriteFlacFile();
+            WriteFlacFile();
          else if (String::Equals(extension, ".ogg", StringComparison::OrdinalIgnoreCase))
-            return WriteOggFile();
+            WriteOggFile();
          else if (String::Equals(extension, ".wma", StringComparison::OrdinalIgnoreCase))
-            return WriteWmaFile();
-
-         return true;
+            WriteWmaFile();
+         else if (String::Equals(extension, ".m4a", StringComparison::OrdinalIgnoreCase))
+            WriteM4aFile();
       }
 
       void TaglibTagger::ReadMp3File(String^ path)
@@ -73,7 +76,7 @@ namespace Luminescence
          if (!file.isValid())
             throw gcnew IOException("The file is not a valid MP3 file.");
 
-         const TagLib::MPEG::Properties *properties = file.audioProperties();
+         TagLib::MPEG::Properties *properties = file.audioProperties();
          if (properties == NULL)
             throw gcnew FileFormatException("There is no audio properties in the file.");
 
@@ -91,7 +94,7 @@ namespace Luminescence
             return;
 
          TagLib::ID3v2::Tag *tag = file.ID3v2Tag(false);
-         const TagLib::ID3v2::FrameList arts = tag->frameListMap()["APIC"];
+         TagLib::ID3v2::FrameList arts = tag->frameListMap()["APIC"];
          pictures = gcnew List<Picture^>(arts.size());
          for (auto it = arts.begin(); it != arts.end(); it++)
          {
@@ -99,9 +102,9 @@ namespace Luminescence
             TagLib::ID3v2::AttachedPictureFrame *pic = static_cast<TagLib::ID3v2::AttachedPictureFrame*>(frame);
 
             pictures->Add(gcnew Picture(
-               ConvertByteVectorToManagedArray(pic->picture().data()), 
-               gcnew String(pic->mimeType().toCString()), 
-               (PictureType)pic->type(), 
+               ConvertByteVectorToManagedArray(pic->picture().data()),
+               gcnew String(pic->mimeType().toCString()),
+               (PictureType)pic->type(),
                gcnew String(pic->description().toCString())));
          }
       }
@@ -114,7 +117,7 @@ namespace Luminescence
          if (!file.isValid())
             throw gcnew IOException("The file is not a valid FLAC file.");
 
-         const TagLib::FLAC::Properties *properties = file.audioProperties();
+         TagLib::FLAC::Properties *properties = file.audioProperties();
          if (properties == NULL)
             throw gcnew FileFormatException("There is no audio properties in the file.");
 
@@ -141,9 +144,9 @@ namespace Luminescence
             TagLib::FLAC::Picture *pic = *it;
 
             pictures->Add(gcnew Picture(
-               ConvertByteVectorToManagedArray(pic->data()), 
-               gcnew String(pic->mimeType().toCString()), 
-               (PictureType)pic->type(), 
+               ConvertByteVectorToManagedArray(pic->data()),
+               gcnew String(pic->mimeType().toCString()),
+               (PictureType)pic->type(),
                gcnew String(pic->description().toCString())));
          }
       }
@@ -156,7 +159,7 @@ namespace Luminescence
          if (!file.isValid())
             throw gcnew IOException("The file is not a valid Ogg Vorbis file.");
 
-         const TagLib::Vorbis::Properties *properties = file.audioProperties();
+         TagLib::Vorbis::Properties *properties = file.audioProperties();
          if (properties == NULL)
             throw gcnew FileFormatException("There is no audio properties in the file.");
 
@@ -170,7 +173,7 @@ namespace Luminescence
          sampleRate = properties->sampleRate(); // in Hertz
          channels = (byte)properties->channels(); // number of audio channels
 
-         const TagLib::StringList arts = xiph->fieldListMap()["METADATA_BLOCK_PICTURE"];
+         TagLib::StringList arts = xiph->fieldListMap()["METADATA_BLOCK_PICTURE"];
          pictures = gcnew List<Picture^>(arts.size());
          for (auto it = arts.begin(); it != arts.end(); it++)
          {
@@ -178,9 +181,9 @@ namespace Luminescence
 
             TagLib::FLAC::Picture pic(DecodeBase64(base64));
             pictures->Add(gcnew Picture(
-               ConvertByteVectorToManagedArray(pic.data()), 
-               gcnew String(pic.mimeType().toCString()), 
-               (PictureType)pic.type(), 
+               ConvertByteVectorToManagedArray(pic.data()),
+               gcnew String(pic.mimeType().toCString()),
+               (PictureType)pic.type(),
                gcnew String(pic.description().toCString())));
          }
 
@@ -196,7 +199,7 @@ namespace Luminescence
          if (!file.isValid())
             throw gcnew IOException("The file is not a valid WMA file.");
 
-         const TagLib::ASF::Properties *properties = file.audioProperties();
+         TagLib::ASF::Properties *properties = file.audioProperties();
          if (properties == NULL)
             throw gcnew FileFormatException("There is no audio properties in the file.");
 
@@ -211,13 +214,13 @@ namespace Luminescence
 
          tags = MapToDictionary(file.properties());
 
-         const TagLib::ASF::Tag* asf = file.tag();
-         const TagLib::ASF::AttributeList& arts = asf->attributeListMap()["WM/Picture"];
+         TagLib::ASF::Tag* asf = file.tag();
+         TagLib::ASF::AttributeList& arts = asf->attributeListMap()["WM/Picture"];
          pictures = gcnew List<Picture^>(arts.size());
          for (auto it = arts.begin(); it != arts.end(); it++)
          {
             TagLib::ASF::Attribute attr = *it;
-            const TagLib::ASF::Picture pic = attr.toPicture();
+            TagLib::ASF::Picture pic = attr.toPicture();
 
             pictures->Add(gcnew Picture(
                ConvertByteVectorToManagedArray(pic.picture()),
@@ -227,7 +230,54 @@ namespace Luminescence
          }
       }
 
-      bool TaglibTagger::WriteMp3File()
+      void TaglibTagger::ReadM4aFile(String^ path)
+      {
+         TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
+
+         TagLib::MP4::File file(fileName, true, TagLib::AudioProperties::ReadStyle::Average);
+         if (!file.isValid())
+            throw gcnew IOException("The file is not a valid M4A file.");
+
+         TagLib::MP4::Properties *properties = file.audioProperties();
+         if (properties == NULL)
+            throw gcnew FileFormatException("There is no audio properties in the file.");
+
+         switch (properties->codec())
+         {
+         case TagLib::MP4::Properties::Codec::AAC:
+            codec = codecVersion = "AAC";
+            break;
+         case TagLib::MP4::Properties::Codec::ALAC:
+            codec = codecVersion = "ALAC";
+            break;
+         case TagLib::MP4::Properties::Codec::Unknown:
+            throw gcnew IOException("The file is not a valid M4A file.");
+         }
+
+         bitrate = properties->bitrate(); // in kb/s
+         duration = properties->lengthInSeconds(); // in seconds
+         sampleRate = properties->sampleRate(); // in Hertz
+         channels = (byte)properties->channels(); // number of audio channels
+         bitsPerSample = properties->bitsPerSample(); // in bits
+
+         tags = MapToDictionary(file.properties());
+
+         TagLib::MP4::Tag *tag = file.tag();
+         TagLib::MP4::CoverArtList arts = tag->item("covr").toCoverArtList();
+         pictures = gcnew List<Picture^>(arts.size());
+         for (auto it = arts.begin(); it != arts.end(); it++)
+         {
+            TagLib::MP4::CoverArt pic = *it;
+
+            pictures->Add(gcnew Picture(
+               ConvertByteVectorToManagedArray(pic.data()),
+               (Format)pic.format(),
+               PictureType::FrontCover,
+               nullptr));
+         }
+      }
+
+      void TaglibTagger::WriteMp3File()
       {
          String^ path = fullPath;
          TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
@@ -246,10 +296,10 @@ namespace Luminescence
             array<byte>^ data = picture->Data;
             pin_ptr<byte> p = &data[0];
             unsigned char *pby = p;
-            const char *pch = reinterpret_cast<char*>(pby);
+            char *pch = reinterpret_cast<char*>(pby);
             TagLib::ByteVector buffer(pch, picture->Data->Length);
 
-            TagLib::ID3v2::AttachedPictureFrame *frame = new TagLib::ID3v2::AttachedPictureFrame;
+            TagLib::ID3v2::AttachedPictureFrame *frame = new TagLib::ID3v2::AttachedPictureFrame();
             frame->setPicture(buffer);
             frame->setMimeType(msclr::interop::marshal_as<std::string>(picture->GetMimeType()).c_str());
             frame->setType((TagLib::ID3v2::AttachedPictureFrame::Type)picture->Type);
@@ -270,10 +320,10 @@ namespace Luminescence
          if (tagVersion > maxVersion)
             tagVersion = maxVersion;
 
-         return file.save(2, true, tagVersion, false);
+         file.save(2, true, tagVersion, false);
       }
 
-      bool TaglibTagger::WriteFlacFile()
+      void TaglibTagger::WriteFlacFile()
       {
          String^ path = fullPath;
          TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
@@ -300,10 +350,10 @@ namespace Luminescence
          }
 
          //TODO : disallow ID3 tags saving in FLAC file      
-         return file.save();
+         file.save();
       }
 
-      bool TaglibTagger::WriteOggFile()
+      void TaglibTagger::WriteOggFile()
       {
          String^ path = fullPath;
          TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
@@ -329,10 +379,10 @@ namespace Luminescence
             xiph->addField("METADATA_BLOCK_PICTURE", EncodeBase64(pic.render()), false);
          }
 
-         return file.save();
+         file.save();
       }
 
-      bool TaglibTagger::WriteWmaFile()
+      void TaglibTagger::WriteWmaFile()
       {
          String^ path = fullPath;
          TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
@@ -358,21 +408,49 @@ namespace Luminescence
             asf->addAttribute("WM/Picture", pic);
          }
 
-         return file.save();
+         file.save();
+      }
+
+      void TaglibTagger::WriteM4aFile()
+      {
+         String^ path = fullPath;
+         TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
+
+         TagLib::MP4::File file(fileName, false);
+         if (!file.isValid() || file.readOnly())
+            throw gcnew IOException("The file cannot be opened for writing.");
+
+         TagLib::PropertyMap map = file.setProperties(DictionaryToMap(tags));
+         CheckIgnoredTags(map);
+
+         TagLib::MP4::Tag* atom = file.tag();
+         atom->removeItem("covr");
+         if (pictures->Count != 0)
+         {
+            TagLib::MP4::CoverArtList arts;
+            for each(auto picture in pictures)
+            {
+               TagLib::MP4::CoverArt pic((TagLib::MP4::CoverArt::Format)picture->PictureFormat, ConvertManagedArrayToByteVector(picture->Data));
+               arts.append(pic);
+            }
+
+            atom->setItem("covr", arts);
+         }
+
+         file.save();
       }
 
       void TaglibTagger::CheckIgnoredTags(TagLib::PropertyMap& map)
       {
-         if (!map.isEmpty())
-         {
-            auto invalidTags = gcnew List<String^>(map.size());
-            for (auto it = map.begin(); it != map.end(); ++it)
-            {
-               invalidTags->Add(gcnew String(it->first.toCWString()));
-            }
+         if (map.isEmpty()) return;
 
-            throw gcnew InvalidOperationException(String::Format("The following tags are not supported in {0} tags: {1}", codec, String::Join(", ", invalidTags)));
+         auto invalidTags = gcnew List<String^>(map.size());
+         for (auto it = map.begin(); it != map.end(); ++it)
+         {
+            invalidTags->Add(gcnew String(it->first.toCWString()));
          }
+
+         throw gcnew InvalidOperationException(String::Format("The following tags are not supported in {0} tags: {1}", codec, String::Join(", ", invalidTags)));
       }
    }
 }

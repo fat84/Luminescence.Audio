@@ -13,7 +13,7 @@ namespace Luminescence
       [FileFormat("FLAC (Free Lossless Audio Codec)", ".flac")]
       [FileFormat("Ogg Vorbis", ".ogg")]
       [FileFormat("WMA (Windows Media Audio)", ".wma")]
-      [FileFormat("AAC (Advanced Audio Coding)", ".m4a")]
+      [FileFormat("AAC (Advanced Audio Coding) - ALAC (Apple Lossless Audio Codec)", ".m4a")]
       public ref class TaglibTagger
       {
       private:
@@ -35,16 +35,19 @@ namespace Luminescence
          void ReadTags(String^ path);
 
          void ReadFlacFile(String^ path);
-         bool WriteFlacFile();
+         void WriteFlacFile();
 
          void ReadMp3File(String^ path);
-         bool WriteMp3File();
+         void WriteMp3File();
 
          void ReadOggFile(String^ path);
-         bool WriteOggFile();
+         void WriteOggFile();
 
          void ReadWmaFile(String^ path);
-         bool WriteWmaFile();
+         void WriteWmaFile();
+
+         void ReadM4aFile(String^ path);
+         void WriteM4aFile();
 
       public:
          TaglibTagger(String^ path) { ReadTags(path); }
@@ -70,7 +73,7 @@ namespace Luminescence
          property Dictionary<String^, List<String^>^>^ Tags { Dictionary<String^, List<String^>^>^ get() { return tags; } }
          property List<Picture^>^ Pictures { List<Picture^>^ get() { return pictures; } } // return nullptr if the format doesn't support cover, return empty collection if there is no cover
 
-         bool SaveTags();
+         void SaveTags();
       };
    }
 }

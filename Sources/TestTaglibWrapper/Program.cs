@@ -18,13 +18,16 @@ namespace TestTaglibWrapper
          bool workOnCopy = true;
          bool writeTags = true;
          bool addCover = true;
+         bool addExoticTag = false;
          var paths = new[]
          {
-            //@"C:\Users\cyber\Downloads\Test\03 - Hey Brother.flac",
-            //@"C:\Users\cyber\Downloads\Test\00 All that she wants.mp3",
-            //@"C:\Users\cyber\Downloads\Test\vorbis.ogg",
             //@"C:\Users\cyber\Downloads\Test\flac.ogg", // should crash because Ogg FLAC is not supported yet
+
+            @"C:\Users\cyber\Downloads\Test\flac.flac",
+            @"C:\Users\cyber\Downloads\Test\mp3.mp3",
+            @"C:\Users\cyber\Downloads\Test\vorbis.ogg",
             @"C:\Users\cyber\Downloads\Test\wma2.wma",
+            @"C:\Users\cyber\Downloads\Test\aac.m4a"
          };
 
          foreach (string path in paths)
@@ -34,7 +37,7 @@ namespace TestTaglibWrapper
             ReadAudioFile(realPath);
             if (writeTags)
             {
-               WriteAudioFile(realPath, addCover);
+               WriteAudioFile(realPath, addCover, addExoticTag);
                ReadAudioFile(realPath); 
             }
 
@@ -48,7 +51,7 @@ namespace TestTaglibWrapper
          Console.ReadKey();
       }
 
-      private static void WriteAudioFile(string path, bool addCover)
+      private static void WriteAudioFile(string path, bool addCover, bool addExoticTag)
       {
          Console.WriteLine($"Ecriture du fichier {path}");
 
@@ -61,8 +64,11 @@ namespace TestTaglibWrapper
          Console.WriteLine(@"Ajout: ARTIST=""artist 2""");
          AddTag(tags, "ARTIST", "artist 2");
 
-         //Console.WriteLine(@"Ajout: FAKE=""toto""");
-         //AddTag(tags, "FAKE", "toto");
+         if (addExoticTag)
+         {
+            Console.WriteLine(@"Ajout: FAKE=""toto""");
+            AddTag(tags, "FAKE", "toto"); 
+         }
 
          tagger.Pictures.Clear();
 
@@ -74,11 +80,9 @@ namespace TestTaglibWrapper
          }
 
          Console.WriteLine("Saving...");
-         bool result = tagger.SaveTags();
-         if (result)
-            Console.WriteLine("Saved with success.");
-         else
-            Console.WriteLine("Saved with problem.");
+         tagger.SaveTags();
+         Console.WriteLine("Saved.");
+
          Console.WriteLine();
       }
 

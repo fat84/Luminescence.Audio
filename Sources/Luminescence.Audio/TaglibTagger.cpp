@@ -461,7 +461,7 @@ namespace Luminescence
             invalidTags->Add(gcnew String(it->first.toCWString()));
          }
 
-         throw gcnew InvalidOperationException(String::Format("The following tags are not supported in {0} tags: {1}", codec, String::Join(", ", invalidTags)));
+         throw gcnew InvalidOperationException(String::Format("The following tags are not supported in {0} file: {1}", Path::GetExtension(fullPath)->TrimEnd('.')->ToUpperInvariant(), String::Join(", ", invalidTags)));
       }
    }
 }

@@ -12,11 +12,11 @@ using namespace System::Security::Permissions;
 // associées à un assembly.
 //
 [assembly:AssemblyTitleAttribute("Luminescence.Audio")];
-[assembly:AssemblyDescriptionAttribute("A C++/CLI assembly for playing (with FFmpeg and XAudio2) and fingerprinting (with Acoustid Chromaprint) audio files.")]
+[assembly:AssemblyDescriptionAttribute("A C++/CLI assembly for playing (with FFmpeg and XAudio2), tagging (with TagLib) and fingerprinting (with FFmpeg and Acoustid Chromaprint) audio files.")]
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("Luminescence Software")];
 [assembly:AssemblyProductAttribute("Luminescence.Audio")];
-[assembly:AssemblyCopyrightAttribute("Sylvain Rougeaux, © 2011-2014")];
+[assembly:AssemblyCopyrightAttribute("Sylvain Rougeaux, © 2011-2015")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 

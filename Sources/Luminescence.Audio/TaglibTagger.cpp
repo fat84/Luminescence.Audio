@@ -91,7 +91,10 @@ namespace Luminescence
          tags = MapToDictionary(file.properties());
 
          if (!file.hasID3v2Tag())
+         {
+            pictures = gcnew List<Picture^>(1);
             return;
+         }
 
          TagLib::ID3v2::Tag *tag = file.ID3v2Tag(false);
          TagLib::ID3v2::FrameList arts = tag->frameListMap()["APIC"];
@@ -187,7 +190,11 @@ namespace Luminescence
                gcnew String(pic.description().toCString())));
          }
 
-         xiph->removeField("METADATA_BLOCK_PICTURE");
+         //TODO: xiph->removeField("METADATA_BLOCK_PICTURE"); // void removeField(const String &key, const String &value = String::null);
+         /*TaglibTagger.obj : error LNK2020: unresolved token (0A000A93) "public: static class TagLib::String TagLib::String::null" (?null@String@TagLib@@2V12@A)
+         TaglibTagger.obj : error LNK2001: unresolved external symbol "public: static class TagLib::String TagLib::String::null" (?null@String@TagLib@@2V12@A)*/
+
+         xiph->properties().erase("METADATA_BLOCK_PICTURE");
          tags = MapToDictionary(file.properties());
       }
 
@@ -366,7 +373,11 @@ namespace Luminescence
          TagLib::PropertyMap map = xiph->setProperties(DictionaryToMap(tags));
          CheckIgnoredTags(map);
 
-         xiph->removeField("METADATA_BLOCK_PICTURE");
+         //TODO: xiph->removeField("METADATA_BLOCK_PICTURE"); // void removeField(const String &key, const String &value = String::null);
+         /*TaglibTagger.obj : error LNK2020: unresolved token (0A000A93) "public: static class TagLib::String TagLib::String::null" (?null@String@TagLib@@2V12@A)
+           TaglibTagger.obj : error LNK2001: unresolved external symbol "public: static class TagLib::String TagLib::String::null" (?null@String@TagLib@@2V12@A)*/
+         
+         xiph->properties().erase("METADATA_BLOCK_PICTURE");
          for each(auto picture in pictures)
          {
             TagLib::FLAC::Picture pic;

@@ -55,6 +55,7 @@
     <None Include="app.ico">
       <Filter>Fichiers de ressources</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">

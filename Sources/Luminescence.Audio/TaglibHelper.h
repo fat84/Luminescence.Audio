@@ -13,6 +13,9 @@ namespace Luminescence
 
       static array<byte>^ ConvertByteVectorToManagedArray(const TagLib::ByteVector& data)
       {
+         if (data.size() == 0) 
+            return gcnew array<byte>(0);
+
          array<byte>^ buffer = gcnew array<byte>(data.size());
          pin_ptr<byte> buffer_start = &buffer[0];
          memcpy(buffer_start, data.data(), buffer->Length);
@@ -21,6 +24,12 @@ namespace Luminescence
 
       static TagLib::ByteVector ConvertManagedArrayToByteVector(array<byte>^ data)
       {
+         if (data->Length == 0)
+         {
+            TagLib::ByteVector buffer;
+            return buffer;
+         }
+
          pin_ptr<byte> p = &data[0];
          unsigned char *pby = p;
          const char *pch = reinterpret_cast<char*>(pby);

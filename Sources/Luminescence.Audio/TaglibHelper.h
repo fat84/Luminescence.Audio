@@ -240,16 +240,17 @@ namespace Luminescence
 
          static Format GetFormatFromMimeType(String^ mime)
          {
-            if (String::Equals(mime, "image/jpeg", StringComparison::OrdinalIgnoreCase))
+            if (String::Equals(mime, "image/jpeg", StringComparison::OrdinalIgnoreCase) || String::Equals(mime, "jpeg", StringComparison::OrdinalIgnoreCase) || 
+                String::Equals(mime, "image/jpg",  StringComparison::OrdinalIgnoreCase) || String::Equals(mime, "jpg",  StringComparison::OrdinalIgnoreCase))
                return Format::JPEG;
 
-            if (String::Equals(mime, "image/png", StringComparison::OrdinalIgnoreCase))
+            if (String::Equals(mime, "image/png", StringComparison::OrdinalIgnoreCase) || String::Equals(mime, "png", StringComparison::OrdinalIgnoreCase))
                return Format::PNG;
 
-            if (String::Equals(mime, "image/gif", StringComparison::OrdinalIgnoreCase))
+            if (String::Equals(mime, "image/gif", StringComparison::OrdinalIgnoreCase) || String::Equals(mime, "gif", StringComparison::OrdinalIgnoreCase))
                return Format::GIF;
 
-            if (String::Equals(mime, "image/bmp", StringComparison::OrdinalIgnoreCase))
+            if (String::Equals(mime, "image/bmp", StringComparison::OrdinalIgnoreCase) || String::Equals(mime, "bmp", StringComparison::OrdinalIgnoreCase))
                return Format::BMP;
 
             throw gcnew NotSupportedException("The mime type is not supported");

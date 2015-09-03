@@ -105,7 +105,7 @@ namespace Luminescence
             TagLib::ID3v2::AttachedPictureFrame *pic = static_cast<TagLib::ID3v2::AttachedPictureFrame*>(frame);
 
             pictures->Add(gcnew Picture(
-               ConvertByteVectorToManagedArray(pic->picture().data()),
+               ConvertByteVectorToManagedArray(pic->picture()),
                gcnew String(pic->mimeType().toCString()),
                (PictureType)pic->type(),
                gcnew String(pic->description().toCString())));

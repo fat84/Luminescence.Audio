@@ -20,6 +20,7 @@
 
 using namespace System;
 using namespace System::IO;
+using namespace System::Linq;
 
 namespace Luminescence
 {
@@ -328,6 +329,10 @@ namespace Luminescence
 
          if (tagVersion > maxVersion)
             tagVersion = maxVersion;
+
+         array<String^>^ unsupportedFramesId3v23 = { "RELEASEDATE", "TAGGINGDATE", "MOOD", "PRODUCEDNOTICE", "ALBUMSORT", "TITLESORT", "ARTISTSORT" };
+         if (tagVersion < 4 && Enumerable::Any<String^>(unsupportedFramesId3v23, gcnew Func<String^, bool>(tags, &Dictionary<String^, List<String^>^>::ContainsKey)))
+            tagVersion = 4;
 
          file.save(2, true, tagVersion, false);
       }

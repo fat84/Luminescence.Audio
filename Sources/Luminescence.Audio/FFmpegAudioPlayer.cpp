@@ -111,7 +111,7 @@ namespace Luminescence
             throw gcnew FormatException("Failed to play file: couldn't find the needed codec.");
          }
 
-         if (codec_context->sample_fmt != AV_SAMPLE_FMT_S16)
+         if (codec_context->sample_fmt != AV_SAMPLE_FMT_S16 && codec_context->sample_fmt != AV_SAMPLE_FMT_S32)
          {
             uint64_t channel_layout = codec_context->channel_layout;
             if (!channel_layout)
@@ -122,16 +122,10 @@ namespace Luminescence
                channel_layout, codec_context->sample_fmt, codec_context->sample_rate, // in
                0, NULL);
 
-            if (!swr_ctx)
+            if (!swr_ctx || swr_init(swr_ctx) < 0)
             {
                CleanUpFFmpegResource();
-               throw gcnew FormatException("Failed to play file: couldn't allocate the audio converter.");
-            }
-
-            if (swr_init(swr_ctx) < 0)
-            {
-               CleanUpFFmpegResource();
-               throw gcnew FormatException("Failed to play file: couldn't initialize the audio converter.");
+               throw gcnew FormatException("Failed to play file: couldn't allocate or initialize the audio converter.");
             }
          }
 
@@ -139,8 +133,8 @@ namespace Luminescence
          wfx.Format.wFormatTag = WAVE_FORMAT_EXTENSIBLE;
          wfx.Format.nChannels = codec_context->channels;
          wfx.Format.nSamplesPerSec = codec_context->sample_rate;
-         wfx.Format.wBitsPerSample = codec_context->bits_per_raw_sample;
          wfx.Samples.wValidBitsPerSample = codec_context->bits_per_raw_sample;
+         wfx.Format.wBitsPerSample = codec_context->bits_per_raw_sample;
          if (wfx.Samples.wValidBitsPerSample == 0)
             wfx.Format.wBitsPerSample = wfx.Samples.wValidBitsPerSample = 16;
          else if (wfx.Samples.wValidBitsPerSample == 24)
@@ -260,17 +254,16 @@ namespace Luminescence
       {
          AVFrame* frame = av_frame_alloc();
          int got_frame, consumed, audio_buf_size;
-         AVPacket packet, packet_temp;
+         AVPacket readingPacket;
 
          uint8_t *audio_buf;
          std::vector<BYTE> bytes;
          int buffersQueued = 0;
          bool eofReached = false;
-         int max_dst_nb_samples = 0;
 
          while (buffersQueued < buffersToQueue)
          {
-            if (av_read_frame(container, &packet) < 0)
+            if (av_read_frame(container, &readingPacket) < 0)
             {
                // End of stream.
                eofReached = true;
@@ -295,28 +288,53 @@ namespace Luminescence
                break;
             }
 
-            if (packet.stream_index == audioStream)
+            if (readingPacket.stream_index == audioStream)
             {
-               packet_temp = packet;
-               while (packet_temp.size > 0)
+               AVPacket decodingPacket = readingPacket;
+               while (decodingPacket.size > 0)
                {
                   got_frame = 0;
-                  consumed = avcodec_decode_audio4(codec_context, frame, &got_frame, &packet_temp);
-                  if (consumed >= 0)// && got_frame != 0)
+                  consumed = avcodec_decode_audio4(codec_context, frame, &got_frame, &decodingPacket);
+                  if (consumed < 0)
                   {
-                     packet_temp.data += consumed;
-                     packet_temp.size -= consumed;
-
-                     audio_buf = frame->extended_data[0];
-                     audio_buf_size = frame->linesize[0];
-                     if (audio_buf_size > 0)
-                        bytes.insert(bytes.end(), &audio_buf[0], &audio_buf[audio_buf_size]);
-                  }
-                  else
-                  {
-                     av_free_packet(&packet);
+                     av_free_packet(&readingPacket);
                      av_frame_free(&frame);
                      throw gcnew Exception("Failed to play file: couldn't decode the audio frame.");
+                  }
+
+                  decodingPacket.data += consumed;
+                  decodingPacket.size -= consumed;
+
+                  if (got_frame)
+                  {
+                     if (swr_ctx != NULL)
+                     {
+                        if (av_samples_alloc(&audio_buf, &audio_buf_size, codec_context->channels, frame->nb_samples, AV_SAMPLE_FMT_S16, 0) < 0)
+                        {
+                           av_free_packet(&readingPacket);
+                           av_frame_free(&frame);
+                           throw gcnew Exception("Failed to play file: couldn't allocate a samples buffer.");
+                        }
+                        
+                        if (swr_convert(swr_ctx, &audio_buf, frame->nb_samples, (const uint8_t **)frame->extended_data, frame->nb_samples) < 0)
+                        {
+                           av_free_packet(&readingPacket);
+                           av_frame_free(&frame);
+                           av_freep(&audio_buf);
+                           throw gcnew Exception("Failed to play file: couldn't convert the audio frame.");
+                        }
+                     }
+                     else
+                     {
+                        audio_buf = frame->extended_data[0];
+                        audio_buf_size = frame->linesize[0];
+                     }
+
+                     if (audio_buf_size > 0)
+                        bytes.insert(bytes.end(), &audio_buf[0], &audio_buf[audio_buf_size]);
+
+                     if (swr_ctx != NULL)
+                        av_freep(&audio_buf);
                   }
                }
 
@@ -335,10 +353,10 @@ namespace Luminescence
                }
             }
 
-            av_free_packet(&packet);
+            av_free_packet(&readingPacket);
          }
 
-         av_free_packet(&packet);
+         av_free_packet(&readingPacket);
          av_frame_free(&frame);
 
          return eofReached;
@@ -377,7 +395,7 @@ namespace Luminescence
          buffersToRelease = new std::deque<XAUDIO2_BUFFER*>();
 
 #if defined(_DEBUG) && defined(DX_SDK_INSTALLED)
-         XAUDIO2_DEBUG_CONFIGURATION debug = {0};
+         XAUDIO2_DEBUG_CONFIGURATION debug = { 0 };
          debug.TraceMask = XAUDIO2_LOG_WARNINGS /*| XAUDIO2_LOG_API_CALLS | XAUDIO2_LOG_LOCKS | XAUDIO2_LOG_STREAMING | XAUDIO2_LOG_TIMING*/;
          debug.BreakMask = XAUDIO2_LOG_ERRORS;
          debug.LogTiming = 0;

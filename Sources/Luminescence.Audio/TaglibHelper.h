@@ -37,23 +37,6 @@ namespace Luminescence
          return buffer;
       }
 
-      static TagLib::String EncodeBase64(const TagLib::ByteVector& data)
-      {
-         array<byte>^ buffer = ConvertByteVectorToManagedArray(data);
-         String^ base64 = Convert::ToBase64String(buffer);
-         TagLib::String s(msclr::interop::marshal_as<std::string>(base64));
-         return s;
-      }
-
-      static TagLib::ByteVector DecodeBase64(const TagLib::String& base64)
-      {
-         String^ b64 = gcnew String(base64.toCString());
-         array<byte>^ bytes = Convert::FromBase64String(b64);
-         pin_ptr<byte> ubytes = &bytes[0];
-         TagLib::ByteVector bv(reinterpret_cast<char*>(ubytes), bytes->Length);
-         return bv;
-      }
-
       static TagLib::PropertyMap DictionaryToMap(Dictionary<String^, List<String^>^>^ dic)
       {
          TagLib::PropertyMap map;

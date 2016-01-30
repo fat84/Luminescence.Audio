@@ -179,25 +179,19 @@ namespace Luminescence
          sampleRate = properties->sampleRate(); // in Hertz
          channels = (byte)properties->channels(); // number of audio channels
 
-         TagLib::StringList arts = xiph->fieldListMap()["METADATA_BLOCK_PICTURE"];
+         TagLib::List<TagLib::FLAC::Picture*> arts = xiph->pictureList();
          pictures = gcnew List<Picture^>(arts.size());
          for (auto it = arts.begin(); it != arts.end(); it++)
          {
-            TagLib::String base64 = *it;
+            TagLib::FLAC::Picture *pic = *it;
 
-            TagLib::FLAC::Picture pic(DecodeBase64(base64));
             pictures->Add(gcnew Picture(
-               ConvertByteVectorToManagedArray(pic.data()),
-               gcnew String(pic.mimeType().toCString()),
-               (PictureType)pic.type(),
-               gcnew String(pic.description().toCString())));
+               ConvertByteVectorToManagedArray(pic->data()),
+               gcnew String(pic->mimeType().toCString()),
+               (PictureType)pic->type(),
+               gcnew String(pic->description().toCString())));
          }
 
-         //TODO: xiph->removeField("METADATA_BLOCK_PICTURE"); // void removeField(const String &key, const String &value = String::null);
-         /*TaglibTagger.obj : error LNK2020: unresolved token (0A000A93) "public: static class TagLib::String TagLib::String::null" (?null@String@TagLib@@2V12@A)
-         TaglibTagger.obj : error LNK2001: unresolved external symbol "public: static class TagLib::String TagLib::String::null" (?null@String@TagLib@@2V12@A)*/
-
-         xiph->properties().erase("METADATA_BLOCK_PICTURE");
          tags = MapToDictionary(file.properties());
       }
 
@@ -363,7 +357,7 @@ namespace Luminescence
             file.addPicture(pic); //The file takes ownership of the picture and will handle freeing its memory.
          }
 
-         //TODO : disallow ID3 tags saving in FLAC file      
+         file.strip(TagLib::FLAC::File::ID3v1 | TagLib::FLAC::File::ID3v2);
          file.save();
       }
 
@@ -379,22 +373,18 @@ namespace Luminescence
          TagLib::Ogg::XiphComment *xiph = file.tag();
          TagLib::PropertyMap map = xiph->setProperties(DictionaryToMap(tags));
          CheckIgnoredTags(map);
-
-         //TODO: xiph->removeField("METADATA_BLOCK_PICTURE"); // void removeField(const String &key, const String &value = String::null);
-         /*TaglibTagger.obj : error LNK2020: unresolved token (0A000A93) "public: static class TagLib::String TagLib::String::null" (?null@String@TagLib@@2V12@A)
-           TaglibTagger.obj : error LNK2001: unresolved external symbol "public: static class TagLib::String TagLib::String::null" (?null@String@TagLib@@2V12@A)*/
          
-         xiph->properties().erase("METADATA_BLOCK_PICTURE");
+         xiph->removeAllPictures();
          for each(auto picture in pictures)
          {
-            TagLib::FLAC::Picture pic;
-            pic.setData(ConvertManagedArrayToByteVector(picture->Data));
-            pic.setMimeType(msclr::interop::marshal_as<std::string>(picture->GetMimeType()).c_str());
-            pic.setType((TagLib::FLAC::Picture::Type)picture->Type);
+            TagLib::FLAC::Picture *pic = new TagLib::FLAC::Picture();
+            pic->setData(ConvertManagedArrayToByteVector(picture->Data));
+            pic->setMimeType(msclr::interop::marshal_as<std::string>(picture->GetMimeType()).c_str());
+            pic->setType((TagLib::FLAC::Picture::Type)picture->Type);
             if (picture->Description != nullptr)
-               pic.setDescription(msclr::interop::marshal_as<std::wstring>(picture->Description).c_str());
+               pic->setDescription(msclr::interop::marshal_as<std::wstring>(picture->Description).c_str());
 
-            xiph->addField("METADATA_BLOCK_PICTURE", EncodeBase64(pic.render()), false);
+            xiph->addPicture(pic); //The file takes ownership of the picture and will handle freeing its memory.
          }
 
          file.save();

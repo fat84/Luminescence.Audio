@@ -16,7 +16,7 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("Luminescence Software")];
 [assembly:AssemblyProductAttribute("Luminescence.Audio")];
-[assembly:AssemblyCopyrightAttribute("Sylvain Rougeaux, © 2011-2015")];
+[assembly:AssemblyCopyrightAttribute("Sylvain Rougeaux, © 2011-2016")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 
@@ -31,6 +31,6 @@ using namespace System::Security::Permissions;
 // Vous pouvez spécifier toutes les valeurs ou indiquer les numéros de révision et de build par défaut
 // en utilisant '*', comme indiqué ci-dessous :
 
-[assembly:AssemblyVersionAttribute("3.0.1.0")];
+[assembly:AssemblyVersionAttribute("3.0.2.0")];
 [assembly:ComVisible(false)];
 [assembly:CLSCompliantAttribute(true)];

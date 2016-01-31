@@ -101,6 +101,7 @@
   <ItemGroup>
     <ClInclude Include="FFmpegAudioPlayer.h" />
     <ClInclude Include="ChromaprintFingerprinter.h" />
+    <ClInclude Include="FFmpegHelper.h" />
     <ClInclude Include="TaglibHelper.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />

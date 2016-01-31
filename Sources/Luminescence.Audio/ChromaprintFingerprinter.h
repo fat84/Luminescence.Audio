@@ -1,7 +1,4 @@
-#pragma once
-
-#include <msclr\marshal.h>
-#include <msclr\marshal_cppstd.h>
+﻿#pragma once
 
 extern "C" 
 {
@@ -14,6 +11,7 @@ extern "C"
 #include "fingerprinter.h"
 #include "fingerprinter_configuration.h"
 #include "chromaprint.h"
+#include "FFmpegHelper.h"
 
 using namespace System;
 using namespace System::Runtime::InteropServices;
@@ -28,7 +26,7 @@ namespace Luminescence
          pin_ptr<int> buffer_start = &buffer[0];
          memcpy(buffer_start, data, size);
          return buffer;
-      }
+      }      
 
       public ref class ChromaprintFingerprinter abstract sealed
       {
@@ -40,12 +38,11 @@ namespace Luminescence
          static array<int>^ GetFingerprint(String^ path) { return GetFingerprint(path, 120); }
          static array<int>^ GetFingerprint(String^ path, int length)
          {
-            std::string file_name = msclr::interop::marshal_as<std::string>(path);
             ChromaprintContext* chromaprint_ctx = chromaprint_new(CHROMAPRINT_ALGORITHM_DEFAULT);
 
             String^ error = nullptr;
             int duration;
-            if (!decode_audio_file(chromaprint_ctx, file_name.c_str(), length, &duration, error))
+            if (!decode_audio_file(chromaprint_ctx, ConvertManagedPathToNativeString(path).c_str(), length, &duration, error))
             {
                chromaprint_free(chromaprint_ctx);
                throw gcnew Exception(error);

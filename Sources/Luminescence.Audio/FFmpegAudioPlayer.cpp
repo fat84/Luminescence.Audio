@@ -1,8 +1,6 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "FFmpegAudioPlayer.h"
-
-#include <msclr\marshal.h>
-#include <msclr\marshal_cppstd.h>
+#include "FFmpegHelper.h"
 
 //#define DX_SDK_INSTALLED  //the system must have the DirectX SDK Developer Runtime installed for debugging to be supported
 
@@ -81,10 +79,9 @@ namespace Luminescence
 
          Stop();
 
-         std::string file_name = msclr::interop::marshal_as<std::string>(path);
          pin_ptr<AVFormatContext*> _container = &container;
 
-         if (avformat_open_input(_container, file_name.c_str(), NULL, NULL) < 0)
+         if (avformat_open_input(_container, ConvertManagedPathToNativeString(path).c_str(), NULL, NULL) < 0)
             throw gcnew IOException("Failed to play file: the audio file couldn't be opened.");
 
          if (avformat_find_stream_info(container, NULL) < 0)
@@ -182,7 +179,7 @@ namespace Luminescence
          RaisePlayingEvent(path);
       }
 
-      // ATTENTION : exécution de la méthode dans un thread de travail
+      // ATTENTION : exÃ©cution de la mÃ©thode dans un thread de travail
       void FFmpegAudioPlayer::StopAudioEngine()
       {
          CleanUpSourceVoiceResource();
@@ -211,7 +208,7 @@ namespace Luminescence
          }
       }
 
-      // ATTENTION : exécution de la méthode dans un thread de travail
+      // ATTENTION : exÃ©cution de la mÃ©thode dans un thread de travail
       void FFmpegAudioPlayer::FeedSourceVoice()
       {
          CancellationToken^ token = cancellationToken->Token;

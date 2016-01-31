@@ -8,8 +8,7 @@ namespace Luminescence
 {
    namespace Audio 
    {
-      //https://bitbucket.org/acoustid/chromaprint/src/3a2cd633e0f220295239f0056a34c8ce0d51ce9a/examples/fpcalc.c?at=master 
-      //modifié le 22/07/14 : suppression des appels de fonction dépréciée
+      //https://bitbucket.org/acoustid/chromaprint/src/37092d380a28abcc63fa120499030a0f2b7df80f/examples/fpcalc.c 
       int ChromaprintFingerprinter::decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *file_name, int max_length, int *duration, String^% error)
 	   {
 		   int ok = 0, remaining, length, consumed, codec_ctx_opened = 0, got_frame, stream_index;

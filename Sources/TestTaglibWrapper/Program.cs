@@ -51,7 +51,7 @@ namespace TestTaglibWrapper
 
       private static void WriteAudioFile(string path, bool addCover, bool addExoticTag)
       {
-         Console.WriteLine($"Ecriture du fichier {path}");
+         Console.WriteLine($"Writing file {path}");
 
          TaglibTagger tagger = new TaglibTagger(path);
          var tags = tagger.Tags;
@@ -72,8 +72,9 @@ namespace TestTaglibWrapper
 
          if (addCover)
          {
-            Console.WriteLine("Ajout d'une pochette : FrontCover, JPEG, 385 918 octets, sans description");
-            string cover = @"C:\Users\cyber\Downloads\Test\folder.jpg";
+            string cover = @"C:\Users\cyber\Downloads\folder.jpg";
+            var fi = new FileInfo(cover);
+            Console.WriteLine($"Adding a cover : FrontCover, JPEG, {fi.Length} bytes, without description");
             tagger.Pictures.Add(new Picture(File.ReadAllBytes(cover), Format.JPEG, PictureType.FrontCover, null)); 
          }
 
@@ -86,7 +87,7 @@ namespace TestTaglibWrapper
 
       private static void ReadAudioFile(string path)
       {
-         Console.WriteLine($"Lecture du fichier {path}");
+         Console.WriteLine($"Reading file {path}");
 
          TaglibTagger tagger = new TaglibTagger(path);
          Console.WriteLine($"Codec = {tagger.Codec}");

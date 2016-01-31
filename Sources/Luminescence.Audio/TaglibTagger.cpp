@@ -109,7 +109,6 @@ namespace Luminescence
 
             pictures->Add(gcnew Picture(
                ConvertByteVectorToManagedArray(pic->picture()),
-               gcnew String(pic->mimeType().toCString()),
                (PictureType)pic->type(),
                gcnew String(pic->description().toCString())));
          }
@@ -151,7 +150,6 @@ namespace Luminescence
 
             pictures->Add(gcnew Picture(
                ConvertByteVectorToManagedArray(pic->data()),
-               gcnew String(pic->mimeType().toCString()),
                (PictureType)pic->type(),
                gcnew String(pic->description().toCString())));
          }
@@ -187,7 +185,6 @@ namespace Luminescence
 
             pictures->Add(gcnew Picture(
                ConvertByteVectorToManagedArray(pic->data()),
-               gcnew String(pic->mimeType().toCString()),
                (PictureType)pic->type(),
                gcnew String(pic->description().toCString())));
          }
@@ -228,7 +225,6 @@ namespace Luminescence
 
             pictures->Add(gcnew Picture(
                ConvertByteVectorToManagedArray(pic.picture()),
-               gcnew String(pic.mimeType().toCString()),
                (PictureType)pic.type(),
                gcnew String(pic.description().toCString())));
          }

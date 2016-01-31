@@ -13,7 +13,7 @@ namespace Luminescence
 
       static array<byte>^ ConvertByteVectorToManagedArray(const TagLib::ByteVector& data)
       {
-         if (data.size() == 0) 
+         if (data.size() == 0)
             return gcnew array<byte>(0);
 
          array<byte>^ buffer = gcnew array<byte>(data.size());
@@ -189,10 +189,10 @@ namespace Luminescence
             Description = description;
          }
 
-         Picture(array<byte>^ data, String^ mime, PictureType type, String^ description)
+         Picture(array<byte>^ data, PictureType type, String^ description)
          {
             Data = data;
-            PictureFormat = GetFormatFromMimeType(mime);
+            PictureFormat = GetFormatFromData(data);
             Type = type;
             Description = description;
          }
@@ -221,18 +221,37 @@ namespace Luminescence
             }
          }
 
-         static Format GetFormatFromMimeType(String^ mime)
+         static Format GetFormatFromData(array<byte>^ data)
          {
-            if (mime->IndexOf("jpeg", StringComparison::InvariantCultureIgnoreCase) != -1 || mime->IndexOf("jpg", StringComparison::InvariantCultureIgnoreCase) != -1)
+            // https://en.wikipedia.org/wiki/List_of_file_signatures
+
+            if (data->Length > 3 &&
+               data[0] == 0xFF &&
+               data[1] == 0xD8 &&
+               data[2] == 0xFF)
                return Format::JPEG;
 
-            if (mime->IndexOf("png", StringComparison::InvariantCultureIgnoreCase) != -1)
+            if (data->Length > 8 &&
+               data[0] == 0x89 &&
+               data[1] == 0x50 &&
+               data[2] == 0x4E &&
+               data[3] == 0x47 &&
+               data[4] == 0x0D &&
+               data[5] == 0x0A &&
+               data[6] == 0x1A &&
+               data[7] == 0x0A)
                return Format::PNG;
 
-            if (mime->IndexOf("gif", StringComparison::InvariantCultureIgnoreCase) != -1)
+            if (data->Length > 4 &&
+               data[0] == 0x47 &&
+               data[1] == 0x49 &&
+               data[2] == 0x46 &&
+               data[3] == 0x38)
                return Format::GIF;
 
-            if (mime->IndexOf("bmp", StringComparison::InvariantCultureIgnoreCase) != -1)
+            if (data->Length > 2 &&
+               data[0] == 0x42 &&
+               data[1] == 0x4D)
                return Format::BMP;
 
             throw gcnew NotSupportedException("The mime type is not supported");
@@ -260,6 +279,5 @@ namespace Luminescence
       };
 
       #pragma endregion
-
    }
 }

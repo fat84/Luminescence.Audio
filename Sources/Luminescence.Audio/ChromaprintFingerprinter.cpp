@@ -2,16 +2,16 @@
 #include "ChromaprintFingerprinter.h"
 
 #define HAVE_SWRESAMPLE
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 namespace Luminescence
 {
    namespace Audio 
    {
-      //https://bitbucket.org/acoustid/chromaprint/src/37092d380a28abcc63fa120499030a0f2b7df80f/examples/fpcalc.c 
+      //https://bitbucket.org/acoustid/chromaprint/src/9883c9187a68c98062666b86dd4cbedff63b2afa/examples/fpcalc.c
       int ChromaprintFingerprinter::decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *file_name, int max_length, int *duration, String^% error)
 	   {
-		   int ok = 0, remaining, length, consumed, codec_ctx_opened = 0, got_frame, stream_index;
+         int ok = 0, length, consumed, codec_ctx_opened = 0, got_frame, stream_index, last_chunk = 0;
+         unsigned long long remaining;
 		   AVFormatContext *format_ctx = NULL;
 		   AVCodecContext *codec_ctx = NULL;
 		   AVCodec *codec = NULL;
@@ -164,17 +164,22 @@ namespace Luminescence
 						   }
 						   data = dst_data;
 					   }
-					   length = MIN(remaining, frame->nb_samples * codec_ctx->channels);
+
+                  length = frame->nb_samples * codec_ctx->channels;
+                  if (max_length > 0) {
+                     if (remaining < length) {
+                        length = remaining;
+                        last_chunk = 1;
+                     }
+                  }
+
 					   if (!chromaprint_feed(chromaprint_ctx, data[0], length)) {
 						   goto done;
 					   }
 
-					   if (max_length) {
-						   remaining -= length;
-						   if (remaining <= 0) {
-							   goto finish;
-						   }
-					   }
+                  if (last_chunk) {
+                     goto finish;
+                  }
 				   }
 			   }
 			   av_free_packet(&packet);

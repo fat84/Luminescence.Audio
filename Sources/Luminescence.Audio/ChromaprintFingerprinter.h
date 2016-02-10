@@ -54,7 +54,7 @@ namespace Luminescence
             {
                chromaprint_dealloc(raw_fingerprint);
                chromaprint_free(chromaprint_ctx);
-               throw gcnew Exception("Not enough memory to get raw fingerprint.");
+               throw gcnew Exception("Unable to calculate fingerprint.");
             }
 
             array<int>^ mfp = ConvertNativeToManagedArray(raw_fingerprint, raw_fingerprint_size);

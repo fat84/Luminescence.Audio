@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MetatOGGer.Data
+namespace Metatogger.Data
 {
    public class AudioFile : IComparable<AudioFile>
    {

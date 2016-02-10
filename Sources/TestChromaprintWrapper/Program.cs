@@ -1,6 +1,6 @@
 ﻿using Luminescence.Audio;
-using MetatOGGer.Business;
-using MetatOGGer.Data;
+using Metatogger.Business;
+using Metatogger.Data;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -47,17 +47,39 @@ namespace TestChromaprintWrapper
 
       private static void TestFingerprinting()
       {
-         var l = Directory.EnumerateFiles(@"E:\NAS\music\FLAC\Adele\21", "*.flac").Select(s => new AudioFile(s)).ToList();
+         var files = Directory.EnumerateFiles(@"E:\NAS\music\FLAC\Adele\21", "*.flac").Select(s => new AudioFile(s)).ToList();
 
-         Fingerprinter.ComputeFingerprinting(l);
-         List<List<AudioFile>> dup1 = Fingerprinter.GetDuplicates(l, 0.7f);
-         foreach (List<AudioFile> files in dup1)
+         foreach (AudioFile file in files)
          {
-            foreach (AudioFile file in files)
-               Console.WriteLine(file.FullPath);
+            file.Fingerprint = ChromaprintFingerprinter.GetFingerprint(file.FullPath, 0);
+         }
 
-            Console.WriteLine("______________________________");
-         }         
+         int id = 1;
+         foreach (AudioFile file in files)
+         {
+            if (file.SimilarityGroupId == 0)
+            {
+               var duplicates = Fingerprinter.GetDuplicates(files, file, 0.7f);
+
+               if (duplicates.Count > 0)
+               {
+                  file.SimilarityGroupId = id;
+                  foreach (var af in duplicates)
+                     af.SimilarityGroupId = id;
+                  id++;
+               }
+            }
+         }
+
+         foreach (var group in files.GroupBy(af => af.SimilarityGroupId))
+         {
+            foreach (var file in group)
+            {
+               Console.WriteLine($"[{file.SimilarityGroupId}] {file.FullPath} ({file.Fingerprint.Length * 4} octets)");
+            }
+
+            Console.WriteLine("-----------------------------------------------");
+         }
       }
    }
 

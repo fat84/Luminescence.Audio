@@ -1,91 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using MetatOGGer.Data;
-using Luminescence.Audio;
+using System.Linq;
+using System.Threading.Tasks;
+using Metatogger.Data;
 
-namespace MetatOGGer.Business
+namespace Metatogger.Business
 {
    public static class Fingerprinter
    {
       private static readonly int[] bitcounts = InitializeBitcounts();
 
-      public static void ComputeFingerprinting(IList<AudioFile> fp)
+      public static List<AudioFile> GetDuplicates(List<AudioFile> files, AudioFile file, float level)
       {
-         foreach (AudioFile file in fp)
+         var candidates = files.AsParallel().Where(af =>
+                          af.SimilarityGroupId == 0 && af != file &&
+                          af.Fingerprint.Intersect(file.Fingerprint).FirstOrDefault() != 0).ToList();
+
+         if (candidates.Count == 0)
+            return candidates;
+
+         var dups = new List<AudioFile>();
+         var matrix = new float[candidates.Count];
+         Parallel.For(0, matrix.Length, j => { matrix[j] = ComputeScore(candidates[j].Fingerprint, file.Fingerprint); });
+         for (int j = 0; j < matrix.Length; j++)
          {
-            if (file.Fingerprint != null) continue;
-            //file.Fingerprint = FingerprintDatabase.Instance.GetFingerprint(file.FullPath);
-            
-            if (file.Fingerprint == null)
-            {
-               file.Fingerprint = ChromaprintFingerprinter.GetFingerprint(file.FullPath);
-
-               //Console.WriteLine(file.FullPath);
-               //Console.WriteLine(ChromaprintFingerprinter.EncodeFingerprint(file.Fingerprint));
-               //Console.WriteLine();
-
-               //FingerprintDatabase.Instance.InsertFingerprint(file.FullPath, file.Fingerprint);
-            }
-         }
-      }
-
-      public static List<List<AudioFile>> GetDuplicates(IList<AudioFile> fp, float level)
-      {
-         foreach (AudioFile file in fp)
-            file.SimilarityGroupId = 0;
-         
-         var duplicates = new List<List<AudioFile>>();
-         var indexes = new List<int>();
-         float[,] matrix = ComputeSimilarities(fp);
-         int id = 1;
-
-         for (int row = 0; row < fp.Count; row++)
-         {
-            if (indexes.Contains(row)) continue;
-            
-            var files = new List<AudioFile>();
-            for (int col = 0; col < fp.Count; col++)
-            {
-               if (matrix[row, col] >= level)
-               {
-                  files.Add(fp[col]);
-                  indexes.Add(col);
-               }
-            }
-
-            if (files.Count > 1)
-            {                              
-               foreach (AudioFile file in files)
-                 file.SimilarityGroupId = id;
-               
-               duplicates.Add(files);
-               id++;
-            }
+            if (matrix[j] >= level)
+               dups.Add(candidates[j]);
          }
 
-         return duplicates;
-      }
-
-      private static float[,] ComputeSimilarities(IList<AudioFile> fp)
-      {
-         var matrix = new float[fp.Count, fp.Count];
-
-         // initialisation de la matrice à -1
-         for (int row = 0; row < fp.Count; row++)
-            for (int col = 0; col < fp.Count; col++)
-               matrix[row, col] = -1f;
-
-         // remplissage de la diagonale de la matrice à 1
-         for (int i = 0; i < fp.Count; i++)
-            matrix[i, i] = 1f;
-
-         // comparaison des éléments
-         for (int i = 0; i < fp.Count; i++) //Parallel.For
-            for (int j = 0; j < fp.Count; j++)
-               if (matrix[i, j] == -1f)
-                  matrix[i, j] = matrix[j, i] = ComputeScore(fp[i].Fingerprint, fp[j].Fingerprint);
-         
-         return matrix;
+         return dups;
       }
 
       private static float ComputeScore(int[] a, int[] b)
@@ -123,18 +66,18 @@ namespace MetatOGGer.Business
       private static int[] InitializeBitcounts()
       {
          var bitcounts = new int[65536];
-         int position1 = -1;
-         int position2 = -1;
+         int p1 = -1;
+         int p2 = -1;
 
-         for (int i = 1; i < 65536; i++, position1++)
+         for (int i = 1; i < bitcounts.Length; i++, p1++)
          {
-            if (position1 == position2)
+            if (p1 == p2)
             {
-               position1 = 0;
-               position2 = i;
+               p1 = 0;
+               p2 = i;
             }
 
-            bitcounts[i] = bitcounts[position1] + 1;
+            bitcounts[i] = bitcounts[p1] + 1;
          }
 
          return bitcounts;

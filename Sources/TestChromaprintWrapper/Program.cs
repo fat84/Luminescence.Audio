@@ -59,7 +59,7 @@ namespace TestChromaprintWrapper
          {
             if (file.SimilarityGroupId == 0)
             {
-               var duplicates = Fingerprinter.GetDuplicates(files, file, 0.7f);
+               var duplicates = Fingerprinter.GetDuplicates(files, file, 0.8f);
 
                if (duplicates.Count > 0)
                {

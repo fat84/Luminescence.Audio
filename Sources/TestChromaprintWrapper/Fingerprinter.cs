@@ -12,9 +12,9 @@ namespace Metatogger.Business
 
       public static List<AudioFile> GetDuplicates(List<AudioFile> files, AudioFile file, float level)
       {
-         var candidates = files.AsParallel().Where(af =>
-                          af.SimilarityGroupId == 0 && af != file &&
-                          af.Fingerprint.Intersect(file.Fingerprint).FirstOrDefault() != 0).ToList();
+         var candidates = files/*.AsParallel()*/.Where(af =>
+                          af.SimilarityGroupId == 0 && af != file/* &&
+                          af.Fingerprint.Intersect(file.Fingerprint).FirstOrDefault() != 0*/).ToList();
 
          if (candidates.Count == 0)
             return candidates;

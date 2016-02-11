@@ -30,24 +30,22 @@ namespace Luminescence
          Dictionary<String^, List<String^>^>^ tags;
          List<Picture^>^ pictures;
 
-         void TaglibTagger::CheckIgnoredTags(TagLib::PropertyMap& map);
-
          void ReadTags(String^ path);
 
          void ReadFlacFile(String^ path);
-         void WriteFlacFile();
+         List<String^>^ WriteFlacFile();
 
          void ReadMp3File(String^ path);
-         void WriteMp3File();
+         List<String^>^ WriteMp3File();
 
          void ReadOggFile(String^ path);
-         void WriteOggFile();
+         List<String^>^ WriteOggFile();
 
          void ReadWmaFile(String^ path);
-         void WriteWmaFile();
+         List<String^>^ WriteWmaFile();
 
          void ReadM4aFile(String^ path);
-         void WriteM4aFile();
+         List<String^>^ WriteM4aFile();
 
       public:
          TaglibTagger(String^ path) { ReadTags(path); }
@@ -73,7 +71,7 @@ namespace Luminescence
          property Dictionary<String^, List<String^>^>^ Tags { Dictionary<String^, List<String^>^>^ get() { return tags; } }
          property List<Picture^>^ Pictures { List<Picture^>^ get() { return pictures; } } // return nullptr if the format doesn't support cover, return empty collection if there is no cover
 
-         void SaveTags();
+         List<String^>^ SaveTags();
       };
    }
 }

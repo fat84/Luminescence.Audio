@@ -22,6 +22,18 @@ namespace Luminescence
          return buffer;
       }
 
+      static List<String^>^ MapToTagList(TagLib::PropertyMap& map)
+      {
+         auto tags = gcnew List<String^>(map.size());
+
+         for (auto it = map.begin(); it != map.end(); it++)
+         {
+            tags->Add(gcnew String(it->first.toCWString()));
+         }
+
+         return tags;
+      }
+
       static TagLib::ByteVector ConvertManagedArrayToByteVector(array<byte>^ data)
       {
          if (data->Length == 0)

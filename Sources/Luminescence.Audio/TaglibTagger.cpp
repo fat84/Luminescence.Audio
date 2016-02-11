@@ -48,7 +48,7 @@ namespace Luminescence
          fullPath = path;
       }
 
-      void TaglibTagger::SaveTags()
+      List<String^>^ TaglibTagger::SaveTags()
       {
          if (!File::Exists(fullPath))
             throw gcnew FileNotFoundException("The file is not found.", fullPath);
@@ -58,15 +58,19 @@ namespace Luminescence
 
          String^ extension = Path::GetExtension(fullPath);
          if (String::Equals(extension, ".mp3", StringComparison::OrdinalIgnoreCase))
-            WriteMp3File();
-         else if (String::Equals(extension, ".flac", StringComparison::OrdinalIgnoreCase))
-            WriteFlacFile();
-         else if (String::Equals(extension, ".ogg", StringComparison::OrdinalIgnoreCase))
-            WriteOggFile();
-         else if (String::Equals(extension, ".wma", StringComparison::OrdinalIgnoreCase))
-            WriteWmaFile();
-         else if (String::Equals(extension, ".m4a", StringComparison::OrdinalIgnoreCase))
-            WriteM4aFile();
+            return WriteMp3File();
+         
+         if (String::Equals(extension, ".flac", StringComparison::OrdinalIgnoreCase))
+            return WriteFlacFile();
+         
+         if (String::Equals(extension, ".ogg", StringComparison::OrdinalIgnoreCase))
+            return WriteOggFile();
+         
+         if (String::Equals(extension, ".wma", StringComparison::OrdinalIgnoreCase))
+            return WriteWmaFile();
+         
+         if (String::Equals(extension, ".m4a", StringComparison::OrdinalIgnoreCase))
+            return WriteM4aFile();
       }
 
       void TaglibTagger::ReadMp3File(String^ path)
@@ -277,7 +281,7 @@ namespace Luminescence
          }
       }
 
-      void TaglibTagger::WriteMp3File()
+      List<String^>^ TaglibTagger::WriteMp3File()
       {
          String^ path = fullPath;
          TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
@@ -325,9 +329,10 @@ namespace Luminescence
             tagVersion = 4;
 
          file.save(2, true, tagVersion, false);
+         return nullptr;
       }
 
-      void TaglibTagger::WriteFlacFile()
+      List<String^>^ TaglibTagger::WriteFlacFile()
       {
          String^ path = fullPath;
          TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
@@ -338,7 +343,6 @@ namespace Luminescence
 
          TagLib::Ogg::XiphComment *xiph = file.xiphComment(true);
          TagLib::PropertyMap map = xiph->setProperties(DictionaryToMap(tags));
-         CheckIgnoredTags(map);
 
          file.removePictures();
          for each(auto picture in pictures)
@@ -355,9 +359,10 @@ namespace Luminescence
 
          file.strip(TagLib::FLAC::File::ID3v1 | TagLib::FLAC::File::ID3v2);
          file.save();
+         return MapToTagList(map);
       }
 
-      void TaglibTagger::WriteOggFile()
+      List<String^>^ TaglibTagger::WriteOggFile()
       {
          String^ path = fullPath;
          TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
@@ -368,7 +373,6 @@ namespace Luminescence
 
          TagLib::Ogg::XiphComment *xiph = file.tag();
          TagLib::PropertyMap map = xiph->setProperties(DictionaryToMap(tags));
-         CheckIgnoredTags(map);
          
          xiph->removeAllPictures();
          for each(auto picture in pictures)
@@ -384,9 +388,10 @@ namespace Luminescence
          }
 
          file.save();
+         return MapToTagList(map);
       }
 
-      void TaglibTagger::WriteWmaFile()
+      List<String^>^ TaglibTagger::WriteWmaFile()
       {
          String^ path = fullPath;
          TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
@@ -396,7 +401,6 @@ namespace Luminescence
             throw gcnew IOException("The file cannot be opened for writing.");
 
          TagLib::PropertyMap map = file.setProperties(DictionaryToMap(tags));
-         CheckIgnoredTags(map);
 
          TagLib::ASF::Tag* asf = file.tag();
          asf->removeItem("WM/Picture");
@@ -413,9 +417,10 @@ namespace Luminescence
          }
 
          file.save();
+         return MapToTagList(map);
       }
 
-      void TaglibTagger::WriteM4aFile()
+      List<String^>^ TaglibTagger::WriteM4aFile()
       {
          String^ path = fullPath;
          TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
@@ -425,7 +430,6 @@ namespace Luminescence
             throw gcnew IOException("The file cannot be opened for writing.");
 
          TagLib::PropertyMap map = file.setProperties(DictionaryToMap(tags));
-         CheckIgnoredTags(map);
 
          TagLib::MP4::Tag* atom = file.tag();
          atom->removeItem("covr");
@@ -442,19 +446,7 @@ namespace Luminescence
          }
 
          file.save();
-      }
-
-      void TaglibTagger::CheckIgnoredTags(TagLib::PropertyMap& map)
-      {
-         if (map.isEmpty()) return;
-
-         auto invalidTags = gcnew List<String^>(map.size());
-         for (auto it = map.begin(); it != map.end(); ++it)
-         {
-            invalidTags->Add(gcnew String(it->first.toCWString()));
-         }
-
-         throw gcnew InvalidOperationException(String::Format("The following tags are not supported in {0} file: {1}", Path::GetExtension(fullPath)->TrimStart('.')->ToUpperInvariant(), String::Join(", ", invalidTags)));
+         return MapToTagList(map);
       }
    }
 }

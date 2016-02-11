@@ -34,14 +34,19 @@ namespace Luminescence
          String^ extension = Path::GetExtension(path);
          if (String::Equals(extension, ".mp3", StringComparison::OrdinalIgnoreCase))
             ReadMp3File(path);
+
          else if (String::Equals(extension, ".flac", StringComparison::OrdinalIgnoreCase))
             ReadFlacFile(path);
+
          else if (String::Equals(extension, ".ogg", StringComparison::OrdinalIgnoreCase))
             ReadOggFile(path);
+
          else if (String::Equals(extension, ".wma", StringComparison::OrdinalIgnoreCase))
             ReadWmaFile(path);
+
          else if (String::Equals(extension, ".m4a", StringComparison::OrdinalIgnoreCase))
             ReadM4aFile(path);
+
          else
             throw gcnew NotSupportedException("The file format is not supported.");
 
@@ -71,6 +76,8 @@ namespace Luminescence
          
          if (String::Equals(extension, ".m4a", StringComparison::OrdinalIgnoreCase))
             return WriteM4aFile();
+
+         throw gcnew NotSupportedException("The file format is not supported.");
       }
 
       void TaglibTagger::ReadMp3File(String^ path)

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "mp4coverart.h"
 
@@ -112,8 +112,8 @@ namespace Luminescence
          if (vendor == "Xiph.Org libVorbis I 20100325 (Everywhere)") return "Vorbis 1.3.1";
          if (vendor == "Xiph.Org libVorbis I 20101101 (Schaufenugget)") return "Vorbis 1.3.2";
          if (vendor == "Xiph.Org libVorbis I 20120203 (Omnipresent)") return "Vorbis 1.3.3";
-         if (vendor == "Xiph.Org libVorbis I 20140122 (Turpak�r�jiin)") return "Vorbis 1.3.4";
-         if (vendor == "Xiph.Org libVorbis I 20150105 (????)") return "Vorbis 1.3.5";
+         if (vendor == "Xiph.Org libVorbis I 20140122 (Turpakäräjiin)") return "Vorbis 1.3.4";
+         if (vendor == L"Xiph.Org libVorbis I 20150105 (⛄⛄⛄⛄)") return "Vorbis 1.3.5";
 
          return nullptr;
       }

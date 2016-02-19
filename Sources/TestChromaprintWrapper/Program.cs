@@ -54,12 +54,15 @@ namespace TestChromaprintWrapper
             file.Fingerprint = ChromaprintFingerprinter.GetFingerprint(file.FullPath, 0);
          }
 
+         //float mf1 = FingerprintComparer.MatchFingerprints(files[0].Fingerprint, files[1].Fingerprint);
+         //float mf2 = FingerprintComparer.MatchFingerprints3(files[0].Fingerprint, files[1].Fingerprint);
+
          int id = 1;
          foreach (AudioFile file in files)
          {
             if (file.SimilarityGroupId == 0)
             {
-               var duplicates = Fingerprinter.GetDuplicates(files, file, 0.8f);
+               var duplicates = FingerprintComparer.GetDuplicates(files, file, 0.9f);
 
                if (duplicates.Count > 0)
                {

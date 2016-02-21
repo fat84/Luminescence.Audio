@@ -16,13 +16,37 @@ namespace TestChromaprintWrapper
    {
       static void Main(string[] args)
       {
-         TestFingerprinting();
+         //TestFingerprinting();
+         BenchmarkFingerprintComparer();
          //TestLookup();
 
          //var s = ChromaprintFingerprinter.EncodeFingerprint(new int[0]);
 
          Console.Write("Press any key to continue . . . ");
          Console.ReadKey(true);
+      }
+
+      private static void BenchmarkFingerprintComparer()
+      {
+         var sw = new Stopwatch();
+         var fingerprint1 = new int[1981];
+         var fingerprint2 = new int[2016];
+
+         sw.Start();
+         for (int i = 0; i < 100; i++)
+         {
+            FingerprintComparer.MatchFingerprints3(fingerprint1, fingerprint2);
+         }
+         sw.Stop();
+         Console.WriteLine(sw.ElapsedMilliseconds);
+
+         //sw.Restart();
+         //for (int i = 0; i < 100; i++)
+         //{
+         //   FingerprintComparer.MatchFingerprints4(fingerprint1, fingerprint2);
+         //}
+         //sw.Stop();
+         //Console.WriteLine(sw.ElapsedMilliseconds);
       }
 
       private static void TestLookup()

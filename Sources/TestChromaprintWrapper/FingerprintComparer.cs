@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Luminescence.Audio;
 using Metatogger.Data;
 
 namespace Metatogger.Business
@@ -23,7 +24,32 @@ namespace Metatogger.Business
          var dups = new List<AudioFile>();
          var matrix = new float[candidates.Count];
 
-         Parallel.For(0, matrix.Length, i => { matrix[i] = MatchFingerprints3(candidates[i].Fingerprint, file.Fingerprint); });
+         Parallel.For(0, matrix.Length, i => { matrix[i] = MatchFingerprints3(candidates[i].Fingerprint, file.Fingerprint, -1); });
+         for (int i = 0; i < matrix.Length; i++)
+         {
+            if (matrix[i] >= level)
+               dups.Add(candidates[i]);
+         }
+
+         return dups;
+      }
+
+      public static List<AudioFile> GetDuplicates2(List<AudioFile> files, AudioFile file, float level)
+      {
+         //int[] fingerprint = await GetFingerprintAsync(file.FullPath, 0);
+         //var candidates = await Task.Run(() =>
+         //  files.AsParallel().Where(af => af.SimilarityGroupId == 0 && af != file &&
+         //  GetFingerprintAsync(af.FullPath, 0).Result.Intersect(fingerprint).FirstOrDefault() != 0).ToList());
+
+         var candidates = files.Where(af => af.SimilarityGroupId == 0 && af != file).ToList();
+
+         if (candidates.Count == 0)
+            return candidates;
+
+         var dups = new List<AudioFile>();
+         var matrix = new float[candidates.Count];
+
+         Parallel.For(0, matrix.Length, i => { matrix[i] = ChromaprintFingerprinter.MatchFingerprints(candidates[i].Fingerprint, file.Fingerprint, -1); });
          for (int i = 0; i < matrix.Length; i++)
          {
             if (matrix[i] >= level)

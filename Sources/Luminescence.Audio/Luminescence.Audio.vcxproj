@@ -77,6 +77,8 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalIncludeDirectories>E:\Home\Important\Development\Library\Native\chromaprint\src\src;E:\Home\Important\Development\Library\Native\FFmpeg\bin\include;E:\Home\Important\Development\Library\Native\DXSDK_Jun10\Include</AdditionalIncludeDirectories>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -99,6 +101,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AcoustidComparer.h" />
+    <ClInclude Include="FFmpegAudioDecoder.h" />
     <ClInclude Include="FFmpegAudioPlayer.h" />
     <ClInclude Include="ChromaprintFingerprinter.h" />
     <ClInclude Include="FFmpegHelper.h" />

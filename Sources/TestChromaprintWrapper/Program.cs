@@ -16,8 +16,8 @@ namespace TestChromaprintWrapper
    {
       static void Main(string[] args)
       {
-         //TestFingerprinting();
-         BenchmarkFingerprintComparer();
+         TestFingerprinting();
+         //BenchmarkFingerprintComparer();
          //TestLookup();
 
          //var s = ChromaprintFingerprinter.EncodeFingerprint(new int[0]);
@@ -32,21 +32,26 @@ namespace TestChromaprintWrapper
          var fingerprint1 = new int[1981];
          var fingerprint2 = new int[2016];
 
-         sw.Start();
-         for (int i = 0; i < 100; i++)
+         for (int j = 0; j < 5; j++)
          {
-            FingerprintComparer.MatchFingerprints3(fingerprint1, fingerprint2);
-         }
-         sw.Stop();
-         Console.WriteLine(sw.ElapsedMilliseconds);
+            sw.Restart();
+            for (int i = 0; i < 100; i++)
+            {
+               FingerprintComparer.MatchFingerprints3(fingerprint1, fingerprint2, -1);
+            }
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds);
 
-         //sw.Restart();
-         //for (int i = 0; i < 100; i++)
-         //{
-         //   FingerprintComparer.MatchFingerprints4(fingerprint1, fingerprint2);
-         //}
-         //sw.Stop();
-         //Console.WriteLine(sw.ElapsedMilliseconds);
+            sw.Restart();
+            for (int i = 0; i < 100; i++)
+            {
+               ChromaprintFingerprinter.MatchFingerprints(fingerprint1, fingerprint2, -1);
+            }
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds);
+
+            Console.WriteLine();
+         }
       }
 
       private static void TestLookup()
@@ -82,9 +87,12 @@ namespace TestChromaprintWrapper
          //float mf2 = FingerprintComparer.MatchFingerprints3(files[0].Fingerprint, files[1].Fingerprint);
 
          int id = 1;
+         var sw = new Stopwatch();
+
+         sw.Start();
          foreach (AudioFile file in files)
          {
-            if (file.SimilarityGroupId == 0)
+            //if (file.SimilarityGroupId == 0)
             {
                var duplicates = FingerprintComparer.GetDuplicates(files, file, 0.9f);
 
@@ -97,6 +105,27 @@ namespace TestChromaprintWrapper
                }
             }
          }
+         sw.Stop();
+         Console.WriteLine(sw.ElapsedMilliseconds);
+
+         sw.Restart();
+         foreach (AudioFile file in files)
+         {
+            //if (file.SimilarityGroupId == 0)
+            {
+               var duplicates = FingerprintComparer.GetDuplicates2(files, file, 0.9f);
+
+               if (duplicates.Count > 0)
+               {
+                  file.SimilarityGroupId = id;
+                  foreach (var af in duplicates)
+                     af.SimilarityGroupId = id;
+                  id++;
+               }
+            }
+         }
+         sw.Stop();
+         Console.WriteLine(sw.ElapsedMilliseconds);
 
          foreach (var group in files.GroupBy(af => af.SimilarityGroupId))
          {

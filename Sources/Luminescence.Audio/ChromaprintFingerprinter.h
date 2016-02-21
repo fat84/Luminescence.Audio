@@ -12,6 +12,8 @@ extern "C"
 #include "fingerprinter_configuration.h"
 #include "chromaprint.h"
 #include "FFmpegHelper.h"
+#include "FFmpegAudioDecoder.h"
+#include "AcoustidComparer.h"
 
 using namespace System;
 using namespace System::Runtime::InteropServices;
@@ -31,7 +33,6 @@ namespace Luminescence
       public ref class ChromaprintFingerprinter abstract sealed
       {
       private:
-         static int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *file_name, int max_length, int *duration, String^% error);
          static ChromaprintFingerprinter() { av_register_all(); }
 
       public:                       
@@ -74,6 +75,19 @@ namespace Luminescence
             chromaprint_dealloc(encoded);
             return fp;
          };
+
+         static float MatchFingerprints(array<int>^ fingerprint1, array<int>^ fingerprint2) { return MatchFingerprints(fingerprint1, fingerprint2, -1); }
+         static float MatchFingerprints(array<int>^ fingerprint1, array<int>^ fingerprint2, int maxoffset)
+         {
+            pin_ptr<int> _fingerprint1 = &fingerprint1[0];
+            pin_ptr<int> _fingerprint2 = &fingerprint2[0];
+            return match_fingerprints3(_fingerprint1, fingerprint1->Length, _fingerprint2, fingerprint2->Length, maxoffset);
+         };
+
+         static float CompareFile(String^ path1, String^ path2)
+         {
+            return MatchFingerprints(GetFingerprint(path1, 0), GetFingerprint(path2, 0), -1);
+         }
 
          static property Version^ ChromaprintAlgorithmVersion
          {

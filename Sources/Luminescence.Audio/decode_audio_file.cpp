@@ -1,11 +1,19 @@
-#pragma once
-
 #include "stdafx.h"
+
+extern "C"
+{
+#include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
+#include <libavutil/avutil.h>
+#include <libswresample/swresample.h>
+}
+
+#include "chromaprint.h"
 
 #define HAVE_SWRESAMPLE
 
 //https://bitbucket.org/acoustid/chromaprint/src/aa58e30808545c57af15e712dd20aed640e8804d/examples/fpcalc.c (2016-02-10)
-static int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *file_name, int max_length, int *duration, String^% error)
+int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *file_name, int max_length, int *duration, System::String^% error)
 {
    int ok = 0, length, consumed, codec_ctx_opened = 0, got_frame, stream_index, last_chunk = 0;
    unsigned long long remaining;
@@ -23,10 +31,6 @@ static int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *fi
    uint8_t *dst_data[1] = { NULL };
    uint8_t **data;
    AVPacket packet;
-
-   /*if (!strcmp(file_name, "-")) {
-   file_name = "pipe:0";
-   }*/
 
    if (avformat_open_input(&format_ctx, file_name, NULL, NULL) != 0) {
       //fprintf(stderr, "ERROR: couldn't open the file\n");
@@ -158,7 +162,7 @@ static int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *fi
                   goto done;
                }
                data = dst_data;
-            }
+               }
 
             length = frame->nb_samples * codec_ctx->channels;
             if (max_length > 0) {
@@ -177,10 +181,10 @@ static int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *fi
             if (last_chunk) {
                goto finish;
             }
+            }
          }
-      }
       av_free_packet(&packet);
-   }
+      }
 
 finish:
    if (!chromaprint_finish(chromaprint_ctx)) {
@@ -212,4 +216,4 @@ done:
       avformat_close_input(&format_ctx);
    }
    return ok;
-}
+   }

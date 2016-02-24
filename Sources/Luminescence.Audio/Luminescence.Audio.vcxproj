@@ -79,6 +79,7 @@
       <AdditionalIncludeDirectories>E:\Home\Important\Development\Library\Native\chromaprint\src\src;E:\Home\Important\Development\Library\Native\FFmpeg\bin\include;E:\Home\Important\Development\Library\Native\DXSDK_Jun10\Include</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -101,24 +102,21 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AcoustidComparer.h" />
-    <ClInclude Include="FFmpegAudioDecoder.h" />
-    <ClInclude Include="FFmpegAudioPlayer.h" />
-    <ClInclude Include="ChromaprintFingerprinter.h" />
-    <ClInclude Include="FFmpegHelper.h" />
-    <ClInclude Include="TaglibHelper.h" />
+    <ClInclude Include="Interop.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
-    <ClInclude Include="TaglibTagger.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="decode_audio_file.cpp" />
     <ClCompile Include="FFmpegAudioPlayer.cpp" />
     <ClCompile Include="ChromaprintFingerprinter.cpp" />
+    <ClCompile Include="match_fingerprint.cpp" />
     <ClCompile Include="Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TaglibHelper.cpp" />
     <ClCompile Include="TaglibTagger.cpp" />
   </ItemGroup>
   <ItemGroup>

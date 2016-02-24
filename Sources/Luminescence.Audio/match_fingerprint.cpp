@@ -1,8 +1,6 @@
-#pragma once
-
 #include "stdafx.h"
 
-#include <stdlib.h> // calloc free malloc
+#include <stdlib.h> // calloc free
 #include <intrin.h>  // __popcnt
 
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))

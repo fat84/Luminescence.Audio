@@ -1,127 +1,46 @@
-﻿#pragma once
+﻿#include "stdafx.h"
 
-#include "mp4coverart.h"
+#include <taglib.h>
+#include <flacfile.h>
+#include <mp4file.h>
 
 using namespace System;
 using namespace System::Collections::Generic;
+
+static String^ GetVorbisVersionFromVendor(String^ vendor)
+{
+   if (vendor->StartsWith("AO; aoTuV")) return "Vorbis aoTuV";
+
+   if (vendor == "Xiphophorus libVorbis I 20000508") return "Vorbis 1.0 Beta 1/2";
+   if (vendor == "Xiphophorus libVorbis I 20001031") return "Vorbis 1.0 Beta 3";
+   if (vendor == "Xiphophorus libVorbis I 20010225") return "Vorbis 1.0 Beta 4";
+   if (vendor == "Xiphophorus libVorbis I 20010615") return "Vorbis 1.0 RC1";
+   if (vendor == "Xiphophorus libVorbis I 20010813") return "Vorbis 1.0 RC2";
+   if (vendor == "Xiphophorus libVorbis I 20011217") return "Vorbis 1.0 RC3";
+   if (vendor == "Xiphophorus libVorbis I 20011231") return "Vorbis 1.0 RC3";
+
+   // https://trac.xiph.org/browser/trunk/vorbis/CHANGES
+   if (vendor == "Xiph.Org libVorbis I 20020717") return "Vorbis 1.0.0";
+   if (vendor == "Xiph.Org libVorbis I 20030909") return "Vorbis 1.0.1";
+   if (vendor == "Xiph.Org libVorbis I 20040629") return "Vorbis 1.1.0";
+   if (vendor == "Xiph.Org libVorbis I 20050304") return "Vorbis 1.1.1/2";
+   if (vendor == "Xiph.Org libVorbis I 20070622") return "Vorbis 1.2.0";
+   if (vendor == "Xiph.Org libVorbis I 20080501") return "Vorbis 1.2.1";
+   if (vendor == "Xiph.Org libVorbis I 20090624") return "Vorbis 1.2.2";
+   if (vendor == "Xiph.Org libVorbis I 20090709") return "Vorbis 1.2.3";
+   if (vendor == "Xiph.Org libVorbis I 20100325 (Everywhere)") return "Vorbis 1.3.1";
+   if (vendor == "Xiph.Org libVorbis I 20101101 (Schaufenugget)") return "Vorbis 1.3.2";
+   if (vendor == "Xiph.Org libVorbis I 20120203 (Omnipresent)") return "Vorbis 1.3.3";
+   if (vendor == "Xiph.Org libVorbis I 20140122 (Turpakäräjiin)") return "Vorbis 1.3.4";
+   if (vendor == L"Xiph.Org libVorbis I 20150105 (⛄⛄⛄⛄)") return "Vorbis 1.3.5";
+
+   return nullptr;
+}
 
 namespace Luminescence
 {
    namespace Audio
    {
-      #pragma region Free functions
-
-      static array<byte>^ ConvertByteVectorToManagedArray(const TagLib::ByteVector& data)
-      {
-         if (data.size() == 0)
-            return gcnew array<byte>(0);
-
-         array<byte>^ buffer = gcnew array<byte>(data.size());
-         pin_ptr<byte> buffer_start = &buffer[0];
-         memcpy(buffer_start, data.data(), buffer->Length);
-         return buffer;
-      }
-
-      static List<String^>^ MapToTagList(TagLib::PropertyMap& map)
-      {
-         auto tags = gcnew List<String^>(map.size());
-
-         for (auto it = map.begin(); it != map.end(); it++)
-         {
-            tags->Add(gcnew String(it->first.toCWString()));
-         }
-
-         return tags;
-      }
-
-      static TagLib::ByteVector ConvertManagedArrayToByteVector(array<byte>^ data)
-      {
-         if (data->Length == 0)
-         {
-            TagLib::ByteVector buffer;
-            return buffer;
-         }
-
-         pin_ptr<byte> p = &data[0];
-         unsigned char *pby = p;
-         const char *pch = reinterpret_cast<char*>(pby);
-         TagLib::ByteVector buffer(pch, data->Length);
-         return buffer;
-      }
-
-      static TagLib::PropertyMap DictionaryToMap(Dictionary<String^, List<String^>^>^ dic)
-      {
-         TagLib::PropertyMap map;
-
-         for each(auto kvp in dic)
-         {
-            TagLib::String key = msclr::interop::marshal_as<std::wstring>(kvp.Key);
-            TagLib::StringList values;
-
-            for each(auto value in kvp.Value)
-            {
-               values.append(msclr::interop::marshal_as<std::wstring>(value));
-            }
-
-            map.insert(key, values);
-         }
-
-         return map;
-      }
-
-      static Dictionary<String^, List<String^>^>^ MapToDictionary(TagLib::PropertyMap map)
-      {
-         auto tags = gcnew Dictionary<String^, List<String^>^>(map.size());
-
-         for (auto it = map.begin(); it != map.end(); it++)
-         {
-            TagLib::String tag = it->first;
-            TagLib::StringList values = it->second;
-
-            auto ntag = gcnew String(tag.toCWString());
-            tags->Add(ntag, gcnew List<String^>(values.size()));
-
-            for (auto it2 = values.begin(); it2 != values.end(); it2++)
-               tags[ntag]->Add(gcnew String(it2->toCWString()));
-         }
-
-         return tags;
-      }
-
-      static String^ GetVorbisVersionFromVendor(String^ vendor)
-      {
-         if (vendor->StartsWith("AO; aoTuV")) return "Vorbis aoTuV";
-
-         if (vendor == "Xiphophorus libVorbis I 20000508") return "Vorbis 1.0 Beta 1/2";
-         if (vendor == "Xiphophorus libVorbis I 20001031") return "Vorbis 1.0 Beta 3";
-         if (vendor == "Xiphophorus libVorbis I 20010225") return "Vorbis 1.0 Beta 4";
-         if (vendor == "Xiphophorus libVorbis I 20010615") return "Vorbis 1.0 RC1";
-         if (vendor == "Xiphophorus libVorbis I 20010813") return "Vorbis 1.0 RC2";
-         if (vendor == "Xiphophorus libVorbis I 20011217") return "Vorbis 1.0 RC3";
-         if (vendor == "Xiphophorus libVorbis I 20011231") return "Vorbis 1.0 RC3";
-
-         // https://trac.xiph.org/browser/trunk/vorbis/CHANGES
-         if (vendor == "Xiph.Org libVorbis I 20020717") return "Vorbis 1.0.0";
-         if (vendor == "Xiph.Org libVorbis I 20030909") return "Vorbis 1.0.1";
-         if (vendor == "Xiph.Org libVorbis I 20040629") return "Vorbis 1.1.0";
-         if (vendor == "Xiph.Org libVorbis I 20050304") return "Vorbis 1.1.1/2";
-         if (vendor == "Xiph.Org libVorbis I 20070622") return "Vorbis 1.2.0";
-         if (vendor == "Xiph.Org libVorbis I 20080501") return "Vorbis 1.2.1";
-         if (vendor == "Xiph.Org libVorbis I 20090624") return "Vorbis 1.2.2";
-         if (vendor == "Xiph.Org libVorbis I 20090709") return "Vorbis 1.2.3";
-         if (vendor == "Xiph.Org libVorbis I 20100325 (Everywhere)") return "Vorbis 1.3.1";
-         if (vendor == "Xiph.Org libVorbis I 20101101 (Schaufenugget)") return "Vorbis 1.3.2";
-         if (vendor == "Xiph.Org libVorbis I 20120203 (Omnipresent)") return "Vorbis 1.3.3";
-         if (vendor == "Xiph.Org libVorbis I 20140122 (Turpakäräjiin)") return "Vorbis 1.3.4";
-         if (vendor == L"Xiph.Org libVorbis I 20150105 (⛄⛄⛄⛄)") return "Vorbis 1.3.5";
-
-         return nullptr;
-      }
-
-      #pragma endregion
-
-      #pragma region Managed classes
-
       public enum class Id3Version
       {
          id3v23 = 3,
@@ -289,7 +208,5 @@ namespace Luminescence
          property String^ Extension { String^ get() { return _extension; } }
          property String^ File { String^ get() { return _file; } }
       };
-
-      #pragma endregion
    }
 }

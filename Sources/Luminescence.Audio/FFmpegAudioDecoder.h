@@ -5,7 +5,7 @@
 #define HAVE_SWRESAMPLE
 
 //https://bitbucket.org/acoustid/chromaprint/src/aa58e30808545c57af15e712dd20aed640e8804d/examples/fpcalc.c (2016-02-10)
-int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *file_name, int max_length, int *duration, String^% error)
+static int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *file_name, int max_length, int *duration, String^% error)
 {
    int ok = 0, length, consumed, codec_ctx_opened = 0, got_frame, stream_index, last_chunk = 0;
    unsigned long long remaining;

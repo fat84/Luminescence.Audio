@@ -23,7 +23,7 @@ static array<byte>^ ByteVectorToManagedArray(const TagLib::ByteVector& data)
    return buffer;
 }
 
-static List<String^>^ PropertyMapToList(TagLib::PropertyMap& map)
+static List<String^>^ PropertyMapToManagedList(TagLib::PropertyMap& map)
 {
    auto tags = gcnew List<String^>(map.size());
 
@@ -50,7 +50,7 @@ static TagLib::ByteVector ManagedArrayToByteVector(array<byte>^ data)
    return buffer;
 }
 
-static TagLib::PropertyMap DictionaryToPropertyMap(Dictionary<String^, List<String^>^>^ dic)
+static TagLib::PropertyMap ManagedDictionaryToPropertyMap(Dictionary<String^, List<String^>^>^ dic)
 {
    TagLib::PropertyMap map;
 
@@ -70,7 +70,7 @@ static TagLib::PropertyMap DictionaryToPropertyMap(Dictionary<String^, List<Stri
    return map;
 }
 
-static Dictionary<String^, List<String^>^>^ PropertyMapToDictionary(TagLib::PropertyMap map)
+static Dictionary<String^, List<String^>^>^ PropertyMapToManagedDictionary(TagLib::PropertyMap map)
 {
    auto tags = gcnew Dictionary<String^, List<String^>^>(map.size());
 
@@ -89,16 +89,16 @@ static Dictionary<String^, List<String^>^>^ PropertyMapToDictionary(TagLib::Prop
    return tags;
 }
 
-static std::string ConvertManagedPathToNativeString(String^ path)
+static std::string ManagedStringToNativeUtf8One(String^ s)
 {
-   array<Byte>^ encodedBytes = Encoding::UTF8->GetBytes(path);
-   std::string file_name;
-   file_name.resize(encodedBytes->Length);
-   Marshal::Copy(encodedBytes, 0, IntPtr((void*)file_name.data()), encodedBytes->Length);
-   return file_name;
+   array<Byte>^ encodedBytes = Encoding::UTF8->GetBytes(s);
+   std::string utf8;
+   utf8.resize(encodedBytes->Length);
+   Marshal::Copy(encodedBytes, 0, IntPtr((void*)utf8.data()), encodedBytes->Length);
+   return utf8;
 }
 
-static array<int>^ ConvertNativeToManagedArray(const int* data, int size)
+static array<int>^ NativeIntArrayToManagedOne(const int* data, int size)
 {
    array<int>^ buffer = gcnew array<int>(size);
    pin_ptr<int> buffer_start = &buffer[0];

@@ -100,7 +100,7 @@ namespace Luminescence
             channels = (byte)properties->channels(); // number of audio channels
             bitsPerSample = properties->bitsPerSample(); // in bits
 
-            tags = PropertyMapToDictionary(file.properties());
+            tags = PropertyMapToManagedDictionary(file.properties());
 
             TagLib::List<TagLib::FLAC::Picture*> arts = file.pictureList();
             pictures = gcnew List<Picture^>(arts.size());
@@ -125,7 +125,7 @@ namespace Luminescence
                throw gcnew IOException("The file cannot be opened for writing.");
 
             TagLib::Ogg::XiphComment *xiph = file.xiphComment(true);
-            TagLib::PropertyMap map = xiph->setProperties(DictionaryToPropertyMap(tags));
+            TagLib::PropertyMap map = xiph->setProperties(ManagedDictionaryToPropertyMap(tags));
 
             file.removePictures();
             for each(auto picture in pictures)
@@ -142,7 +142,7 @@ namespace Luminescence
 
             file.strip(TagLib::FLAC::File::ID3v1 | TagLib::FLAC::File::ID3v2);
             file.save();
-            return PropertyMapToList(map);
+            return PropertyMapToManagedList(map);
          }
 
          void ReadMp3File(String^ path)
@@ -165,7 +165,7 @@ namespace Luminescence
             channels = (byte)properties->channels(); // number of audio channels
             bitsPerSample = 0; // in bits
 
-            tags = PropertyMapToDictionary(file.properties());
+            tags = PropertyMapToManagedDictionary(file.properties());
 
             if (!file.hasID3v2Tag())
             {
@@ -200,7 +200,7 @@ namespace Luminescence
                throw gcnew IOException("The file cannot be opened for writing.");
 
             TagLib::ID3v2::Tag *id3 = file.ID3v2Tag(true);
-            id3->setProperties(DictionaryToPropertyMap(tags));
+            id3->setProperties(ManagedDictionaryToPropertyMap(tags));
             // ID3 implements the complete PropertyMap interface, so an empty map is always returned
 
             id3->removeFrames("APIC");
@@ -275,7 +275,7 @@ namespace Luminescence
                   gcnew String(pic->description().toCString())));
             }
 
-            tags = PropertyMapToDictionary(file.properties());
+            tags = PropertyMapToManagedDictionary(file.properties());
          }
 
          List<String^>^ WriteOggFile()
@@ -288,7 +288,7 @@ namespace Luminescence
                throw gcnew IOException("The file cannot be opened for writing.");
 
             TagLib::Ogg::XiphComment *xiph = file.tag();
-            TagLib::PropertyMap map = xiph->setProperties(DictionaryToPropertyMap(tags));
+            TagLib::PropertyMap map = xiph->setProperties(ManagedDictionaryToPropertyMap(tags));
 
             xiph->removeAllPictures();
             for each(auto picture in pictures)
@@ -304,7 +304,7 @@ namespace Luminescence
             }
 
             file.save();
-            return PropertyMapToList(map);
+            return PropertyMapToManagedList(map);
          }
 
          void ReadWmaFile(String^ path)
@@ -328,7 +328,7 @@ namespace Luminescence
             channels = (byte)properties->channels(); // number of audio channels
             bitsPerSample = properties->bitsPerSample(); // in bits
 
-            tags = PropertyMapToDictionary(file.properties());
+            tags = PropertyMapToManagedDictionary(file.properties());
 
             TagLib::ASF::Tag* asf = file.tag();
             TagLib::ASF::AttributeList& arts = asf->attributeListMap()["WM/Picture"];
@@ -354,7 +354,7 @@ namespace Luminescence
             if (!file.isValid() || file.readOnly())
                throw gcnew IOException("The file cannot be opened for writing.");
 
-            TagLib::PropertyMap map = file.setProperties(DictionaryToPropertyMap(tags));
+            TagLib::PropertyMap map = file.setProperties(ManagedDictionaryToPropertyMap(tags));
 
             TagLib::ASF::Tag* asf = file.tag();
             asf->removeItem("WM/Picture");
@@ -371,7 +371,7 @@ namespace Luminescence
             }
 
             file.save();
-            return PropertyMapToList(map);
+            return PropertyMapToManagedList(map);
          }
 
          void ReadM4aFile(String^ path)
@@ -404,7 +404,7 @@ namespace Luminescence
             channels = (byte)properties->channels(); // number of audio channels
             bitsPerSample = properties->bitsPerSample(); // in bits
 
-            tags = PropertyMapToDictionary(file.properties());
+            tags = PropertyMapToManagedDictionary(file.properties());
 
             TagLib::MP4::Tag *tag = file.tag();
             TagLib::MP4::CoverArtList arts = tag->item("covr").toCoverArtList();
@@ -430,7 +430,7 @@ namespace Luminescence
             if (!file.isValid() || file.readOnly())
                throw gcnew IOException("The file cannot be opened for writing.");
 
-            TagLib::PropertyMap map = file.setProperties(DictionaryToPropertyMap(tags));
+            TagLib::PropertyMap map = file.setProperties(ManagedDictionaryToPropertyMap(tags));
 
             TagLib::MP4::Tag* atom = file.tag();
             atom->removeItem("covr");
@@ -447,7 +447,7 @@ namespace Luminescence
             }
 
             file.save();
-            return PropertyMapToList(map);
+            return PropertyMapToManagedList(map);
          }
 
       public:

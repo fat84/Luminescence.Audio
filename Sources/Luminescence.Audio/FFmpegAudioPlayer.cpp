@@ -388,7 +388,7 @@ namespace Luminescence
 
             pin_ptr<AVFormatContext*> _container = &container;
 
-            if (avformat_open_input(_container, ConvertManagedPathToNativeString(path).c_str(), NULL, NULL) < 0)
+            if (avformat_open_input(_container, ManagedStringToNativeUtf8One(path).c_str(), NULL, NULL) < 0)
                throw gcnew IOException("Failed to play file: the audio file couldn't be opened.");
 
             if (avformat_find_stream_info(container, NULL) < 0)

@@ -34,7 +34,7 @@ namespace Luminescence
 
             String^ error = nullptr;
             int duration;
-            if (!decode_audio_file(chromaprint_ctx, ConvertManagedPathToNativeString(path).c_str(), length, &duration, error))
+            if (!decode_audio_file(chromaprint_ctx, ManagedStringToNativeUtf8One(path).c_str(), length, &duration, error))
             {
                chromaprint_free(chromaprint_ctx);
                throw gcnew Exception(error);
@@ -49,7 +49,7 @@ namespace Luminescence
                throw gcnew Exception("Unable to calculate fingerprint.");
             }
 
-            array<int>^ mfp = ConvertNativeToManagedArray(raw_fingerprint, raw_fingerprint_size);
+            array<int>^ mfp = NativeIntArrayToManagedOne(raw_fingerprint, raw_fingerprint_size);
             chromaprint_dealloc(raw_fingerprint);
             chromaprint_free(chromaprint_ctx);
 

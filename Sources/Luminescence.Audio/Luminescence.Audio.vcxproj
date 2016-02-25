@@ -103,7 +103,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Interop.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -119,11 +118,7 @@
     <ClCompile Include="TaglibTagger.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.ico" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="app.rc" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="License.txt" />

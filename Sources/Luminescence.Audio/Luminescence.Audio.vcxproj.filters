@@ -47,9 +47,6 @@
     <ClCompile Include="match_fingerprint.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="TaglibHelper.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.ico">

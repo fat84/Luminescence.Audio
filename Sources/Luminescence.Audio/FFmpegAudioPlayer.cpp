@@ -28,6 +28,8 @@ namespace Luminescence
 {
    namespace Audio
    {
+      #pragma region Helper
+
       public ref class PathEventArgs : EventArgs
       {
       private:
@@ -44,6 +46,8 @@ namespace Luminescence
             String^ get() { return path; }
          }
       };
+
+      #pragma endregion
 
       public ref class FFmpegAudioPlayer
       {

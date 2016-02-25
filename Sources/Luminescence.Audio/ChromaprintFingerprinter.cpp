@@ -7,7 +7,9 @@ extern "C"
 
 #include "fingerprinter.h"
 #include "fingerprinter_configuration.h"
+
 #include "Interop.h"
+#include "ResourceStrings.h"
 
 using namespace System;
 
@@ -46,7 +48,7 @@ namespace Luminescence
             {
                chromaprint_dealloc(raw_fingerprint);
                chromaprint_free(chromaprint_ctx);
-               throw gcnew Exception("Unable to calculate fingerprint.");
+               throw gcnew Exception(String::Format(ResourceStrings::GetString("CannotCalculateFingerprint"), "chromaprint_get_raw_fingerprint"));
             }
 
             array<int>^ mfp = NativeIntArrayToManagedOne(raw_fingerprint, raw_fingerprint_size);

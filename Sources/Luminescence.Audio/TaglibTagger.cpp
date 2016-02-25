@@ -14,6 +14,7 @@
 #include <mp4file.h>
 
 #include "Interop.h"
+#include "ResourceStrings.h"
 
 using namespace System;
 using namespace System::IO;
@@ -162,7 +163,7 @@ namespace Luminescence
             case Format::BMP:
                return "image/bmp";
             default:
-               throw gcnew NotSupportedException("The picture format is not supported.");
+               throw gcnew NotSupportedException(ResourceStrings::GetString("PictureFormatNotSupported"));
             }
          }
 
@@ -199,7 +200,7 @@ namespace Luminescence
                data[1] == 0x4D)
                return Format::BMP;
 
-            throw gcnew NotSupportedException("The mime type is not supported");
+            throw gcnew NotSupportedException(ResourceStrings::GetString("PictureFormatNotSupported"));
          }
 
          byte GetAtomDataType() { return (byte)PictureFormat; }
@@ -249,7 +250,7 @@ namespace Luminescence
          void ReadTags(String^ path)
          {
             if (!File::Exists(path))
-               throw gcnew FileNotFoundException("The file is not found.", path);
+               throw gcnew FileNotFoundException(ResourceStrings::GetString("FileNotFound"), path);
 
             String^ extension = Path::GetExtension(path);
             if (String::Equals(extension, ".mp3", StringComparison::OrdinalIgnoreCase))
@@ -268,7 +269,7 @@ namespace Luminescence
                ReadM4aFile(path);
 
             else
-               throw gcnew NotSupportedException("The file format is not supported.");
+               throw gcnew NotSupportedException(ResourceStrings::GetString("FileFormatNotSupported"));
 
             fullPath = path;
          }
@@ -279,14 +280,14 @@ namespace Luminescence
 
             TagLib::FLAC::File file(fileName, true, TagLib::AudioProperties::ReadStyle::Average);
             if (!file.isValid())
-               throw gcnew IOException("The file is not a valid FLAC file.");
+               throw gcnew IOException(ResourceStrings::GetString("CannotOpenFileReading"));
 
             TagLib::FLAC::Properties *properties = file.audioProperties();
             if (properties == NULL)
-               throw gcnew FileFormatException("There is no audio properties in the file.");
+               throw gcnew FileFormatException(ResourceStrings::GetString("InvalidAudioFile"));
 
             if (!file.hasXiphComment())
-               throw gcnew FileFormatException("There is no Xiph Comment in the file.");
+               throw gcnew FileFormatException(ResourceStrings::GetString("InvalidAudioFile"));
 
             TagLib::Ogg::XiphComment *xiph = file.xiphComment();
             TagLib::StringList buffer = xiph->vendorID().split();
@@ -321,7 +322,7 @@ namespace Luminescence
 
             TagLib::FLAC::File file(fileName, false);
             if (!file.isValid() || file.readOnly())
-               throw gcnew IOException("The file cannot be opened for writing.");
+               throw gcnew IOException(ResourceStrings::GetString("CannotOpenFileWriting"));
 
             TagLib::Ogg::XiphComment *xiph = file.xiphComment(true);
             TagLib::PropertyMap map = xiph->setProperties(ManagedDictionaryToPropertyMap(tags));
@@ -350,11 +351,11 @@ namespace Luminescence
 
             TagLib::MPEG::File file(fileName, true, TagLib::AudioProperties::ReadStyle::Average);
             if (!file.isValid())
-               throw gcnew IOException("The file is not a valid MP3 file.");
+               throw gcnew IOException(ResourceStrings::GetString("CannotOpenFileReading"));
 
             TagLib::MPEG::Properties *properties = file.audioProperties();
             if (properties == NULL)
-               throw gcnew FileFormatException("There is no audio properties in the file.");
+               throw gcnew FileFormatException(ResourceStrings::GetString("InvalidAudioFile"));
 
             codec = codecVersion = "MP3";
 
@@ -396,7 +397,7 @@ namespace Luminescence
 
             TagLib::MPEG::File file(fileName, false);
             if (!file.isValid() || file.readOnly())
-               throw gcnew IOException("The file cannot be opened for writing.");
+               throw gcnew IOException(ResourceStrings::GetString("CannotOpenFileWriting"));
 
             TagLib::ID3v2::Tag *id3 = file.ID3v2Tag(true);
             id3->setProperties(ManagedDictionaryToPropertyMap(tags));
@@ -446,11 +447,11 @@ namespace Luminescence
 
             TagLib::Vorbis::File file(fileName, true, TagLib::AudioProperties::ReadStyle::Average);
             if (!file.isValid())
-               throw gcnew IOException("The file is not a valid Ogg Vorbis file.");
+               throw gcnew IOException(ResourceStrings::GetString("CannotOpenFileReading"));
 
             TagLib::Vorbis::Properties *properties = file.audioProperties();
             if (properties == NULL)
-               throw gcnew FileFormatException("There is no audio properties in the file.");
+               throw gcnew FileFormatException(ResourceStrings::GetString("InvalidAudioFile"));
 
             TagLib::Ogg::XiphComment *xiph = file.tag();
             String^ vendor = gcnew String(xiph->vendorID().toCWString());
@@ -484,7 +485,7 @@ namespace Luminescence
 
             TagLib::Vorbis::File file(fileName, false);
             if (!file.isValid() || file.readOnly())
-               throw gcnew IOException("The file cannot be opened for writing.");
+               throw gcnew IOException(ResourceStrings::GetString("CannotOpenFileWriting"));
 
             TagLib::Ogg::XiphComment *xiph = file.tag();
             TagLib::PropertyMap map = xiph->setProperties(ManagedDictionaryToPropertyMap(tags));
@@ -512,11 +513,11 @@ namespace Luminescence
 
             TagLib::ASF::File file(fileName, true, TagLib::AudioProperties::ReadStyle::Average);
             if (!file.isValid())
-               throw gcnew IOException("The file is not a valid WMA file.");
+               throw gcnew IOException(ResourceStrings::GetString("CannotOpenFileReading"));
 
             TagLib::ASF::Properties *properties = file.audioProperties();
             if (properties == NULL)
-               throw gcnew FileFormatException("There is no audio properties in the file.");
+               throw gcnew FileFormatException(ResourceStrings::GetString("InvalidAudioFile"));
 
             codecVersion = !properties->codecName().isEmpty() ? gcnew String(properties->codecName().toCString()) : "WMA";
             codec = "WMA";
@@ -551,7 +552,7 @@ namespace Luminescence
 
             TagLib::ASF::File file(fileName, false);
             if (!file.isValid() || file.readOnly())
-               throw gcnew IOException("The file cannot be opened for writing.");
+               throw gcnew IOException(ResourceStrings::GetString("CannotOpenFileWriting"));
 
             TagLib::PropertyMap map = file.setProperties(ManagedDictionaryToPropertyMap(tags));
 
@@ -579,11 +580,11 @@ namespace Luminescence
 
             TagLib::MP4::File file(fileName, true, TagLib::AudioProperties::ReadStyle::Average);
             if (!file.isValid())
-               throw gcnew IOException("The file is not a valid M4A file.");
+               throw gcnew IOException(ResourceStrings::GetString("CannotOpenFileReading"));
 
             TagLib::MP4::Properties *properties = file.audioProperties();
             if (properties == NULL)
-               throw gcnew FileFormatException("There is no audio properties in the file.");
+               throw gcnew FileFormatException(ResourceStrings::GetString("InvalidAudioFile"));
 
             switch (properties->codec())
             {
@@ -594,7 +595,7 @@ namespace Luminescence
                codec = codecVersion = "ALAC";
                break;
             case TagLib::MP4::Properties::Codec::Unknown:
-               throw gcnew IOException("The file is not a valid M4A file.");
+               throw gcnew IOException(ResourceStrings::GetString("InvalidAudioFile"));
             }
 
             bitrate = properties->bitrate(); // in kb/s
@@ -627,7 +628,7 @@ namespace Luminescence
 
             TagLib::MP4::File file(fileName, false);
             if (!file.isValid() || file.readOnly())
-               throw gcnew IOException("The file cannot be opened for writing.");
+               throw gcnew IOException(ResourceStrings::GetString("CannotOpenFileWriting"));
 
             TagLib::PropertyMap map = file.setProperties(ManagedDictionaryToPropertyMap(tags));
 
@@ -676,7 +677,7 @@ namespace Luminescence
          List<String^>^ SaveTags()
          {
             if (!File::Exists(fullPath))
-               throw gcnew FileNotFoundException("The file is not found.", fullPath);
+               throw gcnew FileNotFoundException(ResourceStrings::GetString("FileNotFound"), fullPath);
 
             if ((File::GetAttributes(fullPath) & FileAttributes::ReadOnly) == FileAttributes::ReadOnly)
                File::SetAttributes(fullPath, FileAttributes::Normal);
@@ -697,7 +698,7 @@ namespace Luminescence
             if (String::Equals(extension, ".m4a", StringComparison::OrdinalIgnoreCase))
                return WriteM4aFile();
 
-            throw gcnew NotSupportedException("The file format is not supported.");
+            throw gcnew NotSupportedException(ResourceStrings::GetString("FileFormatNotSupported"));
          }
       };
    }

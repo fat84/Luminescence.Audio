@@ -14,6 +14,7 @@ extern "C"
 }
 
 #include "Interop.h"
+#include "ResourceStrings.h"
 
 #define XAUDIO2_QUEUED_BUFFERS 3
 #define XAUDIO2_BUFFER_SECONDS 3
@@ -91,14 +92,14 @@ namespace Luminescence
             HRESULT hr;
             pin_ptr<IXAudio2*> _pXAudio2 = &pXAudio2;
             if (FAILED(hr = XAudio2Create(_pXAudio2, flags)))
-               throw gcnew Exception(String::Format("Failed to init XAudio2 engine ({0:X}).", hr));
+               throw gcnew Exception(String::Format(ResourceStrings::GetString("CannotUseAudioEngine"), "XAudio2Create", hr));
 
             pin_ptr<IXAudio2MasteringVoice*> _pMasteringVoice = &pMasteringVoice;
             if (FAILED(hr = pXAudio2->CreateMasteringVoice(_pMasteringVoice)))
             {
                pXAudio2->Release();
                pXAudio2 = NULL;
-               throw gcnew Exception(String::Format("Failed to create XAudio2 mastering voice ({0:X}).", hr));
+               throw gcnew Exception(String::Format(ResourceStrings::GetString("CannotUseAudioEngine"), "IXAudio2::CreateMasteringVoice", hr));
             }
 
             buffersToRelease = new std::deque<XAUDIO2_BUFFER*>();
@@ -275,7 +276,7 @@ namespace Luminescence
                      {
                         av_free_packet(&readingPacket);
                         av_frame_free(&frame);
-                        throw gcnew Exception("Failed to play file: couldn't decode the audio frame.");
+                        throw gcnew Exception(String::Format(ResourceStrings::GetString("CannotDecodeAudio"), "avcodec_decode_audio4"));
                      }
 
                      decodingPacket.data += consumed;
@@ -289,7 +290,7 @@ namespace Luminescence
                            {
                               av_free_packet(&readingPacket);
                               av_frame_free(&frame);
-                              throw gcnew Exception("Failed to play file: couldn't allocate a samples buffer.");
+                              throw gcnew Exception(String::Format(ResourceStrings::GetString("CannotDecodeAudio"), "av_samples_alloc"));
                            }
 
                            if (swr_convert(swr_ctx, &audio_buf, frame->nb_samples, (const uint8_t **)frame->extended_data, frame->nb_samples) < 0)
@@ -297,7 +298,7 @@ namespace Luminescence
                               av_free_packet(&readingPacket);
                               av_frame_free(&frame);
                               av_freep(&audio_buf);
-                              throw gcnew Exception("Failed to play file: couldn't convert the audio frame.");
+                              throw gcnew Exception(String::Format(ResourceStrings::GetString("CannotDecodeAudio"), "swr_convert"));
                            }
                         }
                         else
@@ -386,19 +387,19 @@ namespace Luminescence
          void Play(String^ path)
          {
             if (pXAudio2 == NULL)
-               throw gcnew ObjectDisposedException("You cannot use this instance of audio player because it has been disposed.");
+               throw gcnew ObjectDisposedException("pXAudio2");
 
             Stop();
 
             pin_ptr<AVFormatContext*> _container = &container;
 
             if (avformat_open_input(_container, ManagedStringToNativeUtf8One(path).c_str(), NULL, NULL) < 0)
-               throw gcnew IOException("Failed to play file: the audio file couldn't be opened.");
+               throw gcnew IOException(String::Format(ResourceStrings::GetString("CannotDecodeAudio"), "avformat_open_input"));
 
             if (avformat_find_stream_info(container, NULL) < 0)
             {
                CleanUpFFmpegResource();
-               throw gcnew FormatException("Failed to play file: the audio file doesn't contain any file info.");
+               throw gcnew FormatException(String::Format(ResourceStrings::GetString("CannotDecodeAudio"), "avformat_find_stream_info"));
             }
 
             AVCodec* codec;
@@ -407,7 +408,7 @@ namespace Luminescence
             if (audioStream < 0)
             {
                CleanUpFFmpegResource();
-               throw gcnew FormatException("Failed to play file: the audio file doesn't contain any audio stream.");
+               throw gcnew FormatException(String::Format(ResourceStrings::GetString("CannotDecodeAudio"), "av_find_best_stream"));
             }
 
             codec_context = container->streams[audioStream]->codec;
@@ -416,7 +417,7 @@ namespace Luminescence
             if (avcodec_open2(codec_context, codec, NULL) < 0)
             {
                CleanUpFFmpegResource();
-               throw gcnew FormatException("Failed to play file: couldn't find the needed codec.");
+               throw gcnew FormatException(String::Format(ResourceStrings::GetString("CannotDecodeAudio"), "avcodec_open2"));
             }
 
             if (codec_context->sample_fmt != AV_SAMPLE_FMT_S16 && codec_context->sample_fmt != AV_SAMPLE_FMT_S32)
@@ -433,7 +434,7 @@ namespace Luminescence
                if (!swr_ctx || swr_init(swr_ctx) < 0)
                {
                   CleanUpFFmpegResource();
-                  throw gcnew FormatException("Failed to play file: couldn't allocate or initialize the audio converter.");
+                  throw gcnew FormatException(String::Format(ResourceStrings::GetString("CannotDecodeAudio"), "swr_alloc_set_opts, swr_init"));
                }
             }
 
@@ -460,7 +461,7 @@ namespace Luminescence
             if (FAILED(hr = pXAudio2->CreateSourceVoice(_pSourceVoice, (WAVEFORMATEX*)&wfx, XAUDIO2_VOICE_NOPITCH)))
             {
                CleanUpFFmpegResource();
-               throw gcnew Exception(String::Format("Failed to create XAudio2 source voice ({0:X}).", hr));
+               throw gcnew Exception(String::Format(ResourceStrings::GetString("CannotUseAudioEngine"), "IXAudio2::CreateSourceVoice", hr));
             }
 
             try
@@ -478,7 +479,7 @@ namespace Luminescence
             {
                CleanUpSourceVoiceResource();
                CleanUpFFmpegResource();
-               throw gcnew Exception(String::Format("Failed to start XAudio2 source voice ({0:X}).", hr));
+               throw gcnew Exception(String::Format(ResourceStrings::GetString("CannotUseAudioEngine"), "IXAudio2SourceVoice::Start", hr));
             }
 
             file = path;
@@ -515,7 +516,7 @@ namespace Luminescence
                // A volume level of 1.0 means there is no attenuation or gain and 0 means silence. 
                // Negative levels can be used to invert the audio's phase.
                if (pMasteringVoice == NULL)
-                  throw gcnew ObjectDisposedException("You cannot use this instance of audio player because it has been disposed.");
+                  throw gcnew ObjectDisposedException("pMasteringVoice");
 
                if (value < 0) value = 0;
                if (value > XAUDIO2_MAX_VOLUME_LEVEL) value = XAUDIO2_MAX_VOLUME_LEVEL;
@@ -532,7 +533,7 @@ namespace Luminescence
             void set(bool value)
             {
                if (pMasteringVoice == NULL)
-                  throw gcnew ObjectDisposedException("You cannot use this instance of audio player because it has been disposed.");
+                  throw gcnew ObjectDisposedException("pMasteringVoice");
 
                if (value == isMuted) return;
 
@@ -553,7 +554,7 @@ namespace Luminescence
                if (value == isPaused) return;
 
                if (pSourceVoice == NULL)
-                  throw gcnew InvalidOperationException("You cannot pause the player because it doesn't play anything.");
+                  throw gcnew ObjectDisposedException("pSourceVoice");
 
                if (value)
                   pSourceVoice->Stop();

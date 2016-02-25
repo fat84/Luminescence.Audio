@@ -14,7 +14,7 @@
     <ProjectGuid>{680E3C60-AE7F-4119-BBC7-FDAFA1130954}</ProjectGuid>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <Keyword>ManagedCProj</Keyword>
-    <RootNamespace>ChromaprintWrapper</RootNamespace>
+    <RootNamespace>Luminescence.Audio</RootNamespace>
     <ProjectName>Luminescence.Audio</ProjectName>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Interop.h" />
+    <ClInclude Include="ResourceStrings.h" />
     <ClInclude Include="Stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +123,10 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="License.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AudioResourceStrings.fr.resx" />
+    <EmbeddedResource Include="AudioResourceStrings.resx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

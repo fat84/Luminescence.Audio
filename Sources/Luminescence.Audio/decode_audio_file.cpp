@@ -10,6 +10,10 @@ extern "C"
 
 #include "chromaprint.h"
 
+#include "ResourceStrings.h"
+
+using namespace System;
+
 #define HAVE_SWRESAMPLE
 
 //https://bitbucket.org/acoustid/chromaprint/src/aa58e30808545c57af15e712dd20aed640e8804d/examples/fpcalc.c (2016-02-10)
@@ -34,20 +38,20 @@ int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *file_name
 
    if (avformat_open_input(&format_ctx, file_name, NULL, NULL) != 0) {
       //fprintf(stderr, "ERROR: couldn't open the file\n");
-      error = "Couldn't open the file.";
+      error = String::Format(ResourceStrings::GetString("CannotDecodeAudioFingerprint"), "avformat_open_input");
       goto done;
    }
 
    if (avformat_find_stream_info(format_ctx, NULL) < 0) {
       //fprintf(stderr, "ERROR: couldn't find stream information in the file\n");
-      error = "Couldn't find stream information in the file.";
+      error = String::Format(ResourceStrings::GetString("CannotDecodeAudioFingerprint"), "avformat_find_stream_info");
       goto done;
    }
 
    stream_index = av_find_best_stream(format_ctx, AVMEDIA_TYPE_AUDIO, -1, -1, &codec, 0);
    if (stream_index < 0) {
       //fprintf(stderr, "ERROR: couldn't find any audio stream in the file\n");
-      error = "Couldn't find any audio stream in the file.";
+      error = String::Format(ResourceStrings::GetString("CannotDecodeAudioFingerprint"), "av_find_best_stream");
       goto done;
    }
 
@@ -58,14 +62,14 @@ int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *file_name
 
    if (avcodec_open2(codec_ctx, codec, NULL) < 0) {
       //fprintf(stderr, "ERROR: couldn't open the codec\n");
-      error = "Couldn't open the codec.";
+      error = String::Format(ResourceStrings::GetString("CannotDecodeAudioFingerprint"), "avcodec_open2");
       goto done;
    }
    codec_ctx_opened = 1;
 
    if (codec_ctx->channels <= 0) {
       //fprintf(stderr, "ERROR: no channels found in the audio stream\n");
-      error = "No channels found in the audio stream.";
+      error = String::Format(ResourceStrings::GetString("CannotDecodeAudioFingerprint"), "no channels found in the audio stream");
       goto done;
    }
 
@@ -81,12 +85,12 @@ int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *file_name
          0, NULL);
       if (!convert_ctx) {
          //fprintf(stderr, "ERROR: couldn't allocate audio converter\n");
-         error = "Couldn't allocate audio converter.";
+         error = String::Format(ResourceStrings::GetString("CannotDecodeAudioFingerprint"), "swr_alloc_set_opts");
          goto done;
       }
       if (swr_init(convert_ctx) < 0) {
          //fprintf(stderr, "ERROR: couldn't initialize the audio converter\n");
-         error = "Couldn't initialize the audio converter.";
+         error = String::Format(ResourceStrings::GetString("CannotDecodeAudioFingerprint"), "swr_init");
          goto done;
       }
 #elif defined(HAVE_AVRESAMPLE)
@@ -116,7 +120,7 @@ int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *file_name
    }
    else {
       //fprintf(stderr, "ERROR: couldn't detect the audio duration\n");
-      error = "Couldn't detect the audio duration.";
+      error = String::Format(ResourceStrings::GetString("CannotDecodeAudioFingerprint"), "unable to detect the audio duration");
       goto done;
    }
 
@@ -147,7 +151,7 @@ int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *file_name
                   av_freep(&dst_data[0]);
                   if (av_samples_alloc(dst_data, &dst_linsize, codec_ctx->channels, frame->nb_samples, AV_SAMPLE_FMT_S16, 1) < 0) {
                      //fprintf(stderr, "ERROR: couldn't allocate audio converter buffer\n");
-                     error = "Couldn't allocate audio converter buffer.";
+                     error = String::Format(ResourceStrings::GetString("CannotDecodeAudioFingerprint"), "av_samples_alloc");
                      goto done;
                   }
                   max_dst_nb_samples = frame->nb_samples;
@@ -158,7 +162,7 @@ int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *file_name
                if (avresample_convert(convert_ctx, dst_data, 0, frame->nb_samples, (uint8_t **)frame->data, 0, frame->nb_samples) < 0) {
 #endif
                   //fprintf(stderr, "ERROR: couldn't convert the audio\n");
-                  error = "Couldn't convert the audio data.";
+                  error = String::Format(ResourceStrings::GetString("CannotDecodeAudioFingerprint"), "swr_convert");
                   goto done;
                }
                data = dst_data;
@@ -189,7 +193,7 @@ int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *file_name
 finish:
    if (!chromaprint_finish(chromaprint_ctx)) {
       //fprintf(stderr, "ERROR: fingerprint calculation failed\n");
-      error = "Couldn't calculate fingerprint.";
+      error = String::Format(ResourceStrings::GetString("CannotCalculateFingerprint"), "chromaprint_finish");
       goto done;
    }
 

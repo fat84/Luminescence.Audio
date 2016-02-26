@@ -125,7 +125,9 @@
     <Text Include="License.txt" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AudioResourceStrings.es.resx" />
     <EmbeddedResource Include="AudioResourceStrings.fr.resx" />
+    <EmbeddedResource Include="AudioResourceStrings.it.resx" />
     <EmbeddedResource Include="AudioResourceStrings.resx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

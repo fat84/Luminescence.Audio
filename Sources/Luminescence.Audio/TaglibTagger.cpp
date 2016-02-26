@@ -239,7 +239,7 @@ namespace Luminescence
          String^ codec;
          String^ codecVersion;
          byte channels;
-         int duration;
+         TimeSpan duration;
          int bitrate;
          int sampleRate;
          byte bitsPerSample;
@@ -295,7 +295,7 @@ namespace Luminescence
             codec = "FLAC";
 
             bitrate = properties->bitrate(); // in kb/s
-            duration = properties->lengthInSeconds(); // in seconds
+            duration = TimeSpan::FromMilliseconds(properties->lengthInMilliseconds());
             sampleRate = properties->sampleRate(); // in Hertz
             channels = (byte)properties->channels(); // number of audio channels
             bitsPerSample = properties->bitsPerSample(); // in bits
@@ -360,7 +360,7 @@ namespace Luminescence
             codec = codecVersion = "MP3";
 
             bitrate = properties->bitrate(); // in kb/s
-            duration = properties->lengthInSeconds(); // in seconds
+            duration = TimeSpan::FromMilliseconds(properties->lengthInMilliseconds());
             sampleRate = properties->sampleRate(); // in Hertz
             channels = (byte)properties->channels(); // number of audio channels
             bitsPerSample = 0; // in bits
@@ -459,7 +459,7 @@ namespace Luminescence
             codec = "Vorbis";
 
             bitrate = properties->bitrate(); // in kb/s
-            duration = properties->lengthInSeconds(); // in seconds
+            duration = TimeSpan::FromMilliseconds(properties->lengthInMilliseconds());
             sampleRate = properties->sampleRate(); // in Hertz
             channels = (byte)properties->channels(); // number of audio channels
 
@@ -523,7 +523,7 @@ namespace Luminescence
             codec = "WMA";
 
             bitrate = properties->bitrate(); // in kb/s
-            duration = properties->lengthInSeconds(); // in seconds
+            duration = TimeSpan::FromMilliseconds(properties->lengthInMilliseconds());
             sampleRate = properties->sampleRate(); // in Hertz
             channels = (byte)properties->channels(); // number of audio channels
             bitsPerSample = properties->bitsPerSample(); // in bits
@@ -599,7 +599,7 @@ namespace Luminescence
             }
 
             bitrate = properties->bitrate(); // in kb/s
-            duration = properties->lengthInSeconds(); // in seconds
+            duration = TimeSpan::FromMilliseconds(properties->lengthInMilliseconds());
             sampleRate = properties->sampleRate(); // in Hertz
             channels = (byte)properties->channels(); // number of audio channels
             bitsPerSample = properties->bitsPerSample(); // in bits
@@ -666,7 +666,7 @@ namespace Luminescence
          property String^ Codec { String^ get() { return codec; } }
          property String^ CodecVersion { String^ get() { return codecVersion; } }
          property byte Channels { byte get() { return channels; } }
-         property int Duration { int get() { return duration; } }
+         property TimeSpan Duration { TimeSpan get() { return duration; } }
          property int Bitrate { int get() { return bitrate; } }
          property int SampleRate { int get() { return sampleRate; } }
          property byte BitsPerSample { byte get() { return bitsPerSample; } }

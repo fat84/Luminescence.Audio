@@ -54,18 +54,14 @@ namespace TestTaglibWrapper
          Console.WriteLine($"Writing file {path}");
 
          TaglibTagger tagger = new TaglibTagger(path);
-         var tags = tagger.Tags;
 
-         tags.Remove("ARTIST");
-         Console.WriteLine(@"Ajout: ARTIST=""artist 1""");
-         AddTag(tags, "ARTIST", "artist 1");
-         Console.WriteLine(@"Ajout: ARTIST=""artist 2""");
-         AddTag(tags, "ARTIST", "artist 2");
+         Console.WriteLine(@"Ajout: ARTIST=""artist 1"" ARTIST=""artist 2""");
+         tagger.ReplaceTag(TagNameKey.Artist, "artist 1", "artist 2");
 
          if (addExoticTag)
          {
             Console.WriteLine(@"Ajout: FAKE=""toto""");
-            AddTag(tags, "FAKE", "toto"); 
+            tagger.AddTag("FAKE", "toto"); 
          }
 
          tagger.Pictures.Clear();
@@ -131,19 +127,6 @@ namespace TestTaglibWrapper
 
          File.Copy(path, newPath, false);
          return newPath;
-      }
-
-      private static void AddTag(IDictionary<string, List<string>> tags, string name, string content)
-      {
-         if (tags.ContainsKey(name))
-         {
-            if (!tags[name].Contains(content))
-               tags[name].Add(content);
-         }
-         else
-         {
-            tags.Add(name, new List<string>(new[] { content }));
-         }
       }
    }
 }

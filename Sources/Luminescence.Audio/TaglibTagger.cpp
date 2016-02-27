@@ -115,6 +115,33 @@ namespace Luminescence
          PublisherLogo = TagLib::FLAC::Picture::Type::PublisherLogo
       };
 
+      public ref class TagNameKey abstract sealed
+      {
+      public:
+         static const String^ Artist = "ARTIST";
+         static const String^ Title = "TITLE";
+         static const String^ Date = "DATE";
+         static const String^ Album = "ALBUM";
+         static const String^ Genre = "GENRE";
+         static const String^ TrackNumber = "TRACKNUMBER";
+       
+         static const String^ AlbumArtist = "ALBUMARTIST";
+         static const String^ DiscNumber = "DISCNUMBER";
+         static const String^ Lyricist = "LYRICIST";
+         static const String^ Composer = "COMPOSER";
+         static const String^ Language = "LANGUAGE";
+         static const String^ OriginalAlbum = "ORIGINALALBUM";
+         static const String^ OriginalArtist = "ORIGINALARTIST";
+         static const String^ OriginalDate = "ORIGINALDATE";
+         static const String^ AlbumSort = "ALBUMSORT";
+         static const String^ ArtistSort = "ARTISTSORT";
+         static const String^ AlbumArtistSort = "ALBUMARTISTSORT";
+         static const String^ TitleSort = "TITLESORT";
+         static const String^ Label = "LABEL";
+         static const String^ Comment = "COMMENT";
+         static const String^ Lyrics = "LYRICS";
+      };
+
       public enum class Format
       {
          //Unknown = TagLib::MP4::CoverArt::Format::Unknown,
@@ -699,6 +726,57 @@ namespace Luminescence
                return WriteM4aFile();
 
             throw gcnew NotSupportedException(ResourceStrings::GetString("FileFormatNotSupported"));
+         }
+
+         bool RemoveTag(String^ tag)
+         {
+            return tags->Remove(tag);
+         }
+
+         IEnumerable<String^>^ GetTagValues(String^ tag)
+         {
+             return tags->ContainsKey(tag) ? tags[tag] : Enumerable::Empty<String^>();
+         }
+
+         void ReplaceTag(String^ tag, ...array<String^>^ values)
+         {
+            RemoveTag(tag);
+            AddTag(tag, values);
+         }
+
+         void ReplaceTag(String^ tag, String^ value)
+         {
+            RemoveTag(tag);
+            AddTag(tag, value);
+         }
+
+         void AddTag(String^ tag, ...array<String^>^ values)
+         {
+            if (tags->ContainsKey(tag))
+            {
+               for each (String^ value in values)
+               {
+                  if (!tags[tag]->Contains(value))
+                    tags[tag]->Add(value);
+               }
+            }
+            else
+               tags->Add(tag, gcnew List<String^>(Enumerable::Distinct<String^>(values)));
+         }
+
+         void AddTag(String^ tag, String^ value)
+         {
+            if (tags->ContainsKey(tag))
+            {
+               if (!tags[tag]->Contains(value))
+                  tags[tag]->Add(value);
+            }
+            else
+            {
+               auto values = gcnew List<String^>(1);
+               values->Add(value);
+               tags->Add(tag, values);
+            }
          }
       };
    }

@@ -97,7 +97,7 @@ The Luminescence.Audio requires the following native dependencies to run (in 32 
 - taglib.dll (use at least the version 1.11 using this [NuGet package](https://www.nuget.org/packages/taglibcpp/))
 - avcodec-56.dll, avformat-56.dll, avutil-54.dll, swresample-1.dll (an audio-only optimized build is available [here](http://www.luminescence-software.org/download/audio/ffmpeg_audio.zip))
 - chromaprint.dll (use at least the 1.3.1 that you can download [here](http://www.luminescence-software.org/download/audio/chromaprint.zip))
-- xaudio2_7.dll (you can download the redistribuable [here](http://www.luminescence-software.org/download/metatogger/audio/Jun2010_XAudio_x86.exe)
+- xaudio2_7.dll (you can download the redistribuable [here](http://www.luminescence-software.org/download/audio/Jun2010_XAudio_x86.exe))
 - the Visual C++ 2015 runtime (you can download the redistribuable [here](http://www.luminescence-software.org/download/audio/vcredist_x86.exe))
 
 ## Licence

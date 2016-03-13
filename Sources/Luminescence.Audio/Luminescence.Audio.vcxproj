@@ -63,7 +63,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>chromaprint.lib;avcodec.lib;avutil.lib;avformat.lib;swresample.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>chromaprintd.lib;avcodec.lib;avutil.lib;avformat.lib;swresample.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutputPath);E:\Home\Important\Development\Library\Native\chromaprint\bin;E:\Home\Important\Development\Library\Native\FFmpeg\bin\bin</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4248 %(AdditionalOptions)</AdditionalOptions>
     </Link>

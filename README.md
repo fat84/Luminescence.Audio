@@ -94,10 +94,10 @@ bool sameFile2 = ChromaprintFingerprinter.CompareFile(@"C:\MyFolder\MyAudioFile3
 ## Native dependencies required
 
 The Luminescence.Audio requires the following native dependencies to run (in 32 bits only):
-- taglib.dll (use at least the version 1.11 using this [NuGet package](https://www.nuget.org/packages/taglibcpp/))
-- avcodec-56.dll, avformat-56.dll, avutil-54.dll, swresample-1.dll (an audio-only optimized build is available [here](http://www.luminescence-software.org/download/metatogger/audio/ffmpeg_audio.zip))
-- chromaprint.dll (use at least the 1.3.1 that you can download [here](http://www.luminescence-software.org/download/metatogger/audio/chromaprint.zip))
-- xaudio2_7.dll (you can download the redistribuable [here](http://www.luminescence-software.org/download/metatogger/audio/Jun2010_XAudio_x86.exe)
+- TagLib 1.11 : taglib.dll (use this [NuGet package](https://www.nuget.org/packages/taglibcpp/))
+- FFmpeg 3.0 : avcodec-57.dll, avformat-57.dll, avutil-55.dll, swresample-2.dll (an audio-only optimized build is available [here](http://www.luminescence-software.org/download/metatogger/audio/ffmpeg_audio.zip))
+- Chromparint 1.3.1 : use the static version of the chromaprint library (that you can download [here](http://www.luminescence-software.org/download/metatogger/audio/chromaprint_static_library.zip))
+- XAudio 2.7 : xaudio2_7.dll (you can download the redistribuable [here](http://www.luminescence-software.org/download/metatogger/audio/Jun2010_XAudio_x86.exe)
 - the Visual C++ 2015 runtime (you can download the redistribuable [here](http://www.luminescence-software.org/download/metatogger/audio/vcredist_x86.exe))
 
 ## Licence

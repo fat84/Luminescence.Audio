@@ -187,7 +187,7 @@ int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *file_name
             }
             }
          }
-      av_free_packet(&packet);
+      av_packet_unref(&packet);
       }
 
 finish:

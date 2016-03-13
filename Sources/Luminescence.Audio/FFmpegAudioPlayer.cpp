@@ -274,7 +274,7 @@ namespace Luminescence
                      consumed = avcodec_decode_audio4(codec_context, frame, &got_frame, &decodingPacket);
                      if (consumed < 0)
                      {
-                        av_free_packet(&readingPacket);
+                        av_packet_unref(&readingPacket);
                         av_frame_free(&frame);
                         throw gcnew Exception(String::Format(ResourceStrings::GetString("CannotDecodeAudio"), "avcodec_decode_audio4"));
                      }
@@ -288,14 +288,14 @@ namespace Luminescence
                         {
                            if (av_samples_alloc(&audio_buf, &audio_buf_size, codec_context->channels, frame->nb_samples, AV_SAMPLE_FMT_S16, 0) < 0)
                            {
-                              av_free_packet(&readingPacket);
+                              av_packet_unref(&readingPacket);
                               av_frame_free(&frame);
                               throw gcnew Exception(String::Format(ResourceStrings::GetString("CannotDecodeAudio"), "av_samples_alloc"));
                            }
 
                            if (swr_convert(swr_ctx, &audio_buf, frame->nb_samples, (const uint8_t **)frame->extended_data, frame->nb_samples) < 0)
                            {
-                              av_free_packet(&readingPacket);
+                              av_packet_unref(&readingPacket);
                               av_frame_free(&frame);
                               av_freep(&audio_buf);
                               throw gcnew Exception(String::Format(ResourceStrings::GetString("CannotDecodeAudio"), "swr_convert"));
@@ -330,10 +330,10 @@ namespace Luminescence
                   }
                }
 
-               av_free_packet(&readingPacket);
+               av_packet_unref(&readingPacket);
             }
 
-            av_free_packet(&readingPacket);
+            av_packet_unref(&readingPacket);
             av_frame_free(&frame);
 
             return eofReached;

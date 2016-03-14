@@ -8,7 +8,7 @@ extern "C"
 #include <libswresample/swresample.h>
 }
 
-#include "chromaprint.h"
+#include "../../chromaprint/src/chromaprint.h"
 
 #include "ResourceStrings.h"
 

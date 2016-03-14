@@ -59,12 +59,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>E:\Home\Important\Development\Library\Native\chromaprint\src\src;E:\Home\Important\Development\Library\Native\FFmpeg\bin\include;E:\Home\Important\Development\Library\Native\DXSDK_Jun10\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Home\Important\Development\Library\Native\FFmpeg\bin\include;E:\Home\Important\Development\Library\Native\DXSDK_Jun10\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>chromaprintd.lib;avcodec.lib;avutil.lib;avformat.lib;swresample.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(OutputPath);E:\Home\Important\Development\Library\Native\chromaprint\bin;E:\Home\Important\Development\Library\Native\FFmpeg\bin\bin</AdditionalLibraryDirectories>
+      <AdditionalDependencies>avcodec.lib;avutil.lib;avformat.lib;swresample.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutputPath);E:\Home\Important\Development\Library\Native\FFmpeg\bin\bin</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4248 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
@@ -77,15 +77,15 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>E:\Home\Important\Development\Library\Native\chromaprint\src\src;E:\Home\Important\Development\Library\Native\FFmpeg\bin\include;E:\Home\Important\Development\Library\Native\DXSDK_Jun10\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Home\Important\Development\Library\Native\FFmpeg\bin\include;E:\Home\Important\Development\Library\Native\DXSDK_Jun10\Include</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>chromaprint.lib;avcodec.lib;avutil.lib;avformat.lib;swresample.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(OutputPath);E:\Home\Important\Development\Library\Native\chromaprint\bin;E:\Home\Important\Development\Library\Native\FFmpeg\bin\bin</AdditionalLibraryDirectories>
+      <AdditionalDependencies>avcodec.lib;avutil.lib;avformat.lib;swresample.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutputPath);E:\Home\Important\Development\Library\Native\FFmpeg\bin\bin</AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers />
       <OptimizeReferences>
       </OptimizeReferences>
@@ -131,6 +131,11 @@
     <EmbeddedResource Include="AudioResourceStrings.fr.resx" />
     <EmbeddedResource Include="AudioResourceStrings.it.resx" />
     <EmbeddedResource Include="AudioResourceStrings.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\chromaprint\chromaprint.vcxproj">
+      <Project>{11bc4863-e9f9-4f03-b237-37eca83d5515}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

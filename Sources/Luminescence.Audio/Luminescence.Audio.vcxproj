@@ -59,12 +59,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>E:\Home\Important\Development\Library\Native\FFmpeg\bin\include;E:\Home\Important\Development\Library\Native\DXSDK_Jun10\Include;..\..\taglib\taglib;..\..\taglib\taglib\toolkit;..\..\taglib\taglib\asf;..\..\taglib\taglib\mpeg;..\..\taglib\taglib\ogg;..\..\taglib\taglib\flac;..\..\taglib\taglib\ogg\flac;..\..\taglib\taglib\mpc;..\..\taglib\taglib\mp4;..\..\taglib\taglib\ogg\vorbis;..\..\taglib\taglib\ogg\speex;..\..\taglib\taglib\ogg\opus;..\..\taglib\taglib\mpeg\id3v2;..\..\taglib\taglib\mpeg\id3v2\frames;..\..\taglib\taglib\mpeg\id3v1;..\..\taglib\taglib\ape;..\..\taglib\taglib\wavpack;..\..\taglib\taglib\trueaudio;..\..\taglib\taglib\riff;..\..\taglib\taglib\riff\aiff;..\..\taglib\taglib\riff\wav;..\..\taglib\taglib\mod;..\..\taglib\taglib\s3m;..\..\taglib\taglib\it;..\..\taglib\taglib\xm;..\taglib;..\..\chromaprint\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\ffmpeg\include;..\..\xaudio27\include;..\..\taglib\taglib;..\..\taglib\taglib\toolkit;..\..\taglib\taglib\asf;..\..\taglib\taglib\mpeg;..\..\taglib\taglib\ogg;..\..\taglib\taglib\flac;..\..\taglib\taglib\ogg\flac;..\..\taglib\taglib\mpc;..\..\taglib\taglib\mp4;..\..\taglib\taglib\ogg\vorbis;..\..\taglib\taglib\ogg\speex;..\..\taglib\taglib\ogg\opus;..\..\taglib\taglib\mpeg\id3v2;..\..\taglib\taglib\mpeg\id3v2\frames;..\..\taglib\taglib\mpeg\id3v1;..\..\taglib\taglib\ape;..\..\taglib\taglib\wavpack;..\..\taglib\taglib\trueaudio;..\..\taglib\taglib\riff;..\..\taglib\taglib\riff\aiff;..\..\taglib\taglib\riff\wav;..\..\taglib\taglib\mod;..\..\taglib\taglib\s3m;..\..\taglib\taglib\it;..\..\taglib\taglib\xm;..\taglib;..\..\chromaprint\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>avcodec.lib;avutil.lib;avformat.lib;swresample.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(OutputPath);E:\Home\Important\Development\Library\Native\FFmpeg\bin\bin</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutputPath);..\..\ffmpeg\lib</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4248 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
@@ -81,7 +81,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>E:\Home\Important\Development\Library\Native\FFmpeg\bin\include;E:\Home\Important\Development\Library\Native\DXSDK_Jun10\Include;..\..\taglib\taglib;..\..\taglib\taglib\toolkit;..\..\taglib\taglib\asf;..\..\taglib\taglib\mpeg;..\..\taglib\taglib\ogg;..\..\taglib\taglib\flac;..\..\taglib\taglib\ogg\flac;..\..\taglib\taglib\mpc;..\..\taglib\taglib\mp4;..\..\taglib\taglib\ogg\vorbis;..\..\taglib\taglib\ogg\speex;..\..\taglib\taglib\ogg\opus;..\..\taglib\taglib\mpeg\id3v2;..\..\taglib\taglib\mpeg\id3v2\frames;..\..\taglib\taglib\mpeg\id3v1;..\..\taglib\taglib\ape;..\..\taglib\taglib\wavpack;..\..\taglib\taglib\trueaudio;..\..\taglib\taglib\riff;..\..\taglib\taglib\riff\aiff;..\..\taglib\taglib\riff\wav;..\..\taglib\taglib\mod;..\..\taglib\taglib\s3m;..\..\taglib\taglib\it;..\..\taglib\taglib\xm;..\taglib;..\..\chromaprint\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\ffmpeg\include;..\..\xaudio27\include;..\..\taglib\taglib;..\..\taglib\taglib\toolkit;..\..\taglib\taglib\asf;..\..\taglib\taglib\mpeg;..\..\taglib\taglib\ogg;..\..\taglib\taglib\flac;..\..\taglib\taglib\ogg\flac;..\..\taglib\taglib\mpc;..\..\taglib\taglib\mp4;..\..\taglib\taglib\ogg\vorbis;..\..\taglib\taglib\ogg\speex;..\..\taglib\taglib\ogg\opus;..\..\taglib\taglib\mpeg\id3v2;..\..\taglib\taglib\mpeg\id3v2\frames;..\..\taglib\taglib\mpeg\id3v1;..\..\taglib\taglib\ape;..\..\taglib\taglib\wavpack;..\..\taglib\taglib\trueaudio;..\..\taglib\taglib\riff;..\..\taglib\taglib\riff\aiff;..\..\taglib\taglib\riff\wav;..\..\taglib\taglib\mod;..\..\taglib\taglib\s3m;..\..\taglib\taglib\it;..\..\taglib\taglib\xm;..\taglib;..\..\chromaprint\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -89,7 +89,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>avcodec.lib;avutil.lib;avformat.lib;swresample.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(OutputPath);E:\Home\Important\Development\Library\Native\FFmpeg\bin\bin</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutputPath);..\..\ffmpeg\lib</AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers />
       <OptimizeReferences>
       </OptimizeReferences>

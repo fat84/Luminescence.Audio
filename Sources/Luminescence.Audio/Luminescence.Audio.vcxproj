@@ -59,7 +59,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>E:\Home\Important\Development\Library\Native\FFmpeg\bin\include;E:\Home\Important\Development\Library\Native\DXSDK_Jun10\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Home\Important\Development\Library\Native\FFmpeg\bin\include;E:\Home\Important\Development\Library\Native\DXSDK_Jun10\Include;..\..\taglib\taglib;..\..\taglib\taglib\toolkit;..\..\taglib\taglib\asf;..\..\taglib\taglib\mpeg;..\..\taglib\taglib\ogg;..\..\taglib\taglib\flac;..\..\taglib\taglib\ogg\flac;..\..\taglib\taglib\mpc;..\..\taglib\taglib\mp4;..\..\taglib\taglib\ogg\vorbis;..\..\taglib\taglib\ogg\speex;..\..\taglib\taglib\ogg\opus;..\..\taglib\taglib\mpeg\id3v2;..\..\taglib\taglib\mpeg\id3v2\frames;..\..\taglib\taglib\mpeg\id3v1;..\..\taglib\taglib\ape;..\..\taglib\taglib\wavpack;..\..\taglib\taglib\trueaudio;..\..\taglib\taglib\riff;..\..\taglib\taglib\riff\aiff;..\..\taglib\taglib\riff\wav;..\..\taglib\taglib\mod;..\..\taglib\taglib\s3m;..\..\taglib\taglib\it;..\..\taglib\taglib\xm;..\taglib;..\..\chromaprint\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -71,13 +71,17 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>
+      </UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>E:\Home\Important\Development\Library\Native\FFmpeg\bin\include;E:\Home\Important\Development\Library\Native\DXSDK_Jun10\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Home\Important\Development\Library\Native\FFmpeg\bin\include;E:\Home\Important\Development\Library\Native\DXSDK_Jun10\Include;..\..\taglib\taglib;..\..\taglib\taglib\toolkit;..\..\taglib\taglib\asf;..\..\taglib\taglib\mpeg;..\..\taglib\taglib\ogg;..\..\taglib\taglib\flac;..\..\taglib\taglib\ogg\flac;..\..\taglib\taglib\mpc;..\..\taglib\taglib\mp4;..\..\taglib\taglib\ogg\vorbis;..\..\taglib\taglib\ogg\speex;..\..\taglib\taglib\ogg\opus;..\..\taglib\taglib\mpeg\id3v2;..\..\taglib\taglib\mpeg\id3v2\frames;..\..\taglib\taglib\mpeg\id3v1;..\..\taglib\taglib\ape;..\..\taglib\taglib\wavpack;..\..\taglib\taglib\trueaudio;..\..\taglib\taglib\riff;..\..\taglib\taglib\riff\aiff;..\..\taglib\taglib\riff\wav;..\..\taglib\taglib\mod;..\..\taglib\taglib\s3m;..\..\taglib\taglib\it;..\..\taglib\taglib\xm;..\taglib;..\..\chromaprint\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -95,6 +99,10 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>
+      </UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -121,9 +129,6 @@
     <ClCompile Include="TaglibTagger.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="License.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -136,15 +141,10 @@
     <ProjectReference Include="..\chromaprint\chromaprint.vcxproj">
       <Project>{11bc4863-e9f9-4f03-b237-37eca83d5515}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\taglib\taglib.vcxproj">
+      <Project>{83f1725c-21c8-4d28-affb-f314ed20d2c8}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\taglibcpp.1.11-BETA\build\native\taglibcpp.targets" Condition="Exists('..\packages\taglibcpp.1.11-BETA\build\native\taglibcpp.targets')" />
-  </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\taglibcpp.1.11-BETA\build\native\taglibcpp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\taglibcpp.1.11-BETA\build\native\taglibcpp.targets'))" />
-  </Target>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

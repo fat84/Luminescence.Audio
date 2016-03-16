@@ -5,8 +5,8 @@ extern "C"
 #include <libavformat/avformat.h>
 }
 
-#include "../../chromaprint/src/fingerprinter.h"
-#include "../../chromaprint/src/fingerprinter_configuration.h"
+#include <fingerprinter.h>
+#include <fingerprinter_configuration.h>
 
 #include "Interop.h"
 #include "ResourceStrings.h"

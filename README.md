@@ -93,12 +93,9 @@ bool sameFile2 = ChromaprintFingerprinter.CompareFile(@"C:\MyFolder\MyAudioFile3
 
 ## Native dependencies required
 
-The Luminescence.Audio requires the following native dependencies to run (in 32 bits only):
-- TagLib 1.11 : taglib.dll (use this [NuGet package](https://www.nuget.org/packages/taglibcpp/))
-- FFmpeg 3.0 : avcodec-57.dll, avformat-57.dll, avutil-55.dll, swresample-2.dll (an audio-only optimized build is available [here](http://www.luminescence-software.org/download/audio/ffmpeg_audio.zip))
-- Chromparint 1.3.1 : use the static version of the chromaprint library (that you can download [here](http://www.luminescence-software.org/download/audio/chromaprint_static_library.zip))
-- XAudio 2.7 : xaudio2_7.dll (you can download the redistribuable [here](http://www.luminescence-software.org/download/audio/Jun2010_XAudio_x86.exe)
-- The Visual C++ 2015 runtime (that you can download [here](http://www.luminescence-software.org/download/audio/vcredist_x86.exe))
+The Luminescence.Audio requires the following redistribuables to run (in 32 bits):
+- The XAudio 2.7 redistribuable that you can download [here](http://www.luminescence-software.org/download/audio/dx_sdk_jun10_xaudio27.zip) (contains the developer and end-user XAudio2 runtimes) (54 MB)
+- The Visual C++ 2015 x86 runtime that you can download [here](http://www.luminescence-software.org/download/audio/vcredist_x86.exe) (13 MB)
 
 ## Licence
 

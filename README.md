@@ -1,6 +1,8 @@
-# Luminescence.Audio README
+# Luminescence.Audio
 
-Luminescence.Audio is a C++/CLI library for playing (with [FFmpeg](https://github.com/FFmpeg/FFmpeg) and [XAudio2](https://msdn.microsoft.com/en-us/library/windows/desktop/ee415764.aspx)), tagging (with [TagLib](https://github.com/taglib/taglib)) and fingerprinting (with [FFmpeg](https://github.com/FFmpeg/FFmpeg) and [Acoustid Chromaprint](https://bitbucket.org/acoustid/chromaprint/overview)) audio files, in managed code.
+Luminescence.Audio is a C++/CLI library for playing (with [FFmpeg 3.0](https://github.com/FFmpeg/FFmpeg) and [XAudio 2.7](https://msdn.microsoft.com/en-us/library/windows/desktop/ee415764.aspx)), tagging (with [TagLib 1.11 b2](https://github.com/taglib/taglib)) and fingerprinting (with [FFmpeg 3.0](https://github.com/FFmpeg/FFmpeg) and [Acoustid Chromaprint 1.3.1](https://bitbucket.org/acoustid/chromaprint/overview)) audio files, in managed code.
+
+**Luminescence.Audio is available as [NuGet package](https://www.nuget.org/packages/Luminescence.Audio.x86/). Do not forget to install all [required runtimes](#native-dependencies-required).**
 
 This library has been written to be used by my tags editor, [Metatogger](http://www.luminescence-software.org/metatogger.html).
 

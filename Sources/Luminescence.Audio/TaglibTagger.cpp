@@ -372,6 +372,20 @@ namespace Luminescence
             return PropertyMapToManagedList(map);
          }
 
+         static bool IsEmptyByteVector(TagLib::ByteVector bv)
+         {
+            if (bv.isEmpty()) 
+               return true;
+
+            for (auto it = bv.begin(); it != bv.end(); it++)
+            {
+               if (*it != 0)
+                  return false;
+            }
+
+            return true;
+         }
+
          void ReadMp3File(String^ path)
          {
             TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
@@ -408,7 +422,7 @@ namespace Luminescence
                TagLib::ID3v2::Frame *frame = *it;
                TagLib::ID3v2::AttachedPictureFrame *pic = static_cast<TagLib::ID3v2::AttachedPictureFrame*>(frame);
 
-               if (pic->picture().size() == 0) continue;
+               if (IsEmptyByteVector(pic->picture())) continue;
 
                pictures->Add(gcnew Picture(
                   ByteVectorToManagedArray(pic->picture()),

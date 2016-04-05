@@ -50,6 +50,20 @@ static String^ GetVorbisVersionFromVendor(String^ vendor)
    return nullptr;
 }
 
+static bool IsEmptyByteVector(const TagLib::ByteVector& bv)
+{
+   if (bv.isEmpty())
+      return true;
+
+   for (auto it = bv.begin(); it != bv.end(); it++)
+   {
+      if (*it != 0)
+         return false;
+   }
+
+   return true;
+}
+
 namespace Luminescence
 {
    namespace Audio
@@ -370,21 +384,7 @@ namespace Luminescence
             file.strip(TagLib::FLAC::File::ID3v1 | TagLib::FLAC::File::ID3v2);
             file.save();
             return PropertyMapToManagedList(map);
-         }
-
-         static bool IsEmptyByteVector(TagLib::ByteVector bv)
-         {
-            if (bv.isEmpty()) 
-               return true;
-
-            for (auto it = bv.begin(); it != bv.end(); it++)
-            {
-               if (*it != 0)
-                  return false;
-            }
-
-            return true;
-         }
+         }         
 
          void ReadMp3File(String^ path)
          {

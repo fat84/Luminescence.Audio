@@ -23,7 +23,7 @@ static array<byte>^ ByteVectorToManagedArray(const TagLib::ByteVector& data)
    return buffer;
 }
 
-static List<String^>^ PropertyMapToManagedList(TagLib::PropertyMap& map)
+static List<String^>^ PropertyMapToManagedList(const TagLib::PropertyMap& map)
 {
    auto tags = gcnew List<String^>(map.size());
 
@@ -70,7 +70,7 @@ static TagLib::PropertyMap ManagedDictionaryToPropertyMap(Dictionary<String^, Li
    return map;
 }
 
-static Dictionary<String^, List<String^>^>^ PropertyMapToManagedDictionary(TagLib::PropertyMap map)
+static Dictionary<String^, List<String^>^>^ PropertyMapToManagedDictionary(const TagLib::PropertyMap& map)
 {
    auto tags = gcnew Dictionary<String^, List<String^>^>(map.size());
 

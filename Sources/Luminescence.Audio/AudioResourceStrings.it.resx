@@ -117,21 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-
   <data name="CannotCalculateFingerprint" xml:space="preserve">
-    <value>L&#39;impronta acustica non può essere calcolata ({0}).</value>
+    <value>L'impronta acustica non può essere calcolata ({0}).</value>
   </data>
   <data name="CannotDecodeAudio" xml:space="preserve">
     <value>Il dato audio non può essere decodificato per la riproduzione ({0}).</value>
   </data>
   <data name="CannotDecodeAudioFingerprint" xml:space="preserve">
-    <value>Il dato audio non può essere decodificato per l&#39;impronta ({0}).</value>
+    <value>Il dato audio non può essere decodificato per l'impronta ({0}).</value>
   </data>
   <data name="CannotOpenFileReading" xml:space="preserve">
-    <value>Il file non può essere aperto per la scrittura dei tag.</value>
+    <value>Il file non può essere aperto per la lettura dei tag.</value>
   </data>
   <data name="CannotOpenFileWriting" xml:space="preserve">
-    <value>Il file non può essere aperto per la lettura dei tag.</value>
+    <value>Il file non può essere aperto per la scrittura dei tag.</value>
   </data>
   <data name="CannotUseAudioEngine" xml:space="preserve">
     <value>Il motore di riproduzione audio non è disponibile ({0}, {1: X}).</value>

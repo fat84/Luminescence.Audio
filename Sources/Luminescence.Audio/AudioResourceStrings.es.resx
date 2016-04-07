@@ -117,7 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-
   <data name="CannotCalculateFingerprint" xml:space="preserve">
     <value>La huella acústica no se puede calcular ({0}).</value>
   </data>
@@ -128,10 +127,10 @@
     <value>Los datos de audio no pueden ser decodificados para la huella dactilar ({0}).</value>
   </data>
   <data name="CannotOpenFileReading" xml:space="preserve">
-    <value>El archivo no se puede abrir para escribir etiquetas.</value>
+    <value>El archivo no se puede abrir para leer etiquetas.</value>
   </data>
   <data name="CannotOpenFileWriting" xml:space="preserve">
-    <value>El archivo no se puede abrir para leer  etiquetas.</value>
+    <value>El archivo no se puede abrir para escribir etiquetas.</value>
   </data>
   <data name="CannotUseAudioEngine" xml:space="preserve">
     <value>El motor de reproducción de audio no está disponible ({0}, {1: X}).</value>

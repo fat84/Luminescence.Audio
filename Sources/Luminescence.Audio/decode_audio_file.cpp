@@ -135,13 +135,12 @@ int decode_audio_file(ChromaprintContext *chromaprint_ctx, const char *file_name
       }
 
       if (packet.stream_index == stream_index) {
-         av_frame_unref(frame);
-
          got_frame = 0;
          consumed = avcodec_decode_audio4(codec_ctx, frame, &got_frame, &packet);
          if (consumed < 0) {
-            //fprintf(stderr, "WARNING: error decoding audio\n");
-            continue;
+            //fprintf(stderr, "ERROR: error decoding audio\n");
+            error = String::Format(ResourceStrings::GetString("CannotDecodeAudioFingerprint"), "avcodec_decode_audio4");
+            goto done;
          }
 
          if (got_frame) {

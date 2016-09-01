@@ -132,6 +132,7 @@
     <Text Include="License.txt" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AudioResourceStrings.de.resx" />
     <EmbeddedResource Include="AudioResourceStrings.es.resx" />
     <EmbeddedResource Include="AudioResourceStrings.fr.resx" />
     <EmbeddedResource Include="AudioResourceStrings.it.resx" />

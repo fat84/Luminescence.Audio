@@ -64,5 +64,8 @@
     <EmbeddedResource Include="AudioResourceStrings.it.resx">
       <Filter>Fichiers de ressources</Filter>
     </EmbeddedResource>
+    <EmbeddedResource Include="AudioResourceStrings.de.resx">
+      <Filter>Fichiers de ressources</Filter>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

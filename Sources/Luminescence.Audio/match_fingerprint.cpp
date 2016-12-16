@@ -26,7 +26,7 @@ static inline unsigned int popcount(unsigned int i)
 }
 
 // https://bitbucket.org/acoustid/pg_acoustid  -->  acoustid_compare.c
-float match_fingerprints3(int *a, int asize, int *b, int bsize, int maxoffset)
+float match_fingerprints3(unsigned int *a, int asize, unsigned int *b, int bsize, int maxoffset)
 {
    int jbegin = 0;
    int jend = bsize;

@@ -59,7 +59,7 @@ namespace Metatogger.Business
          return dups;
       }
 
-      public static float MatchFingerprints(int[] a, int[] b)
+      public static float MatchFingerprints(uint[] a, uint[] b)
       {
          const int ACOUSTID_MAX_BIT_ERROR = 2;
          const int ACOUSTID_MAX_ALIGN_OFFSET = 120;
@@ -74,7 +74,7 @@ namespace Metatogger.Business
             int jend = Math.Min(b.Length, i + ACOUSTID_MAX_ALIGN_OFFSET);
             for (int j = jbegin; j < jend; j++)
             {
-               int biterror = PopCount(a[i] ^ b[j]);
+               uint biterror = PopCount(a[i] ^ b[j]);
                if (biterror <= ACOUSTID_MAX_BIT_ERROR)
                {
                   int offset = i - j + maxsize;
@@ -92,7 +92,7 @@ namespace Metatogger.Business
       }
 
       // http://stackoverflow.com/questions/109023/how-to-count-the-number-of-set-bits-in-a-32-bit-integer
-      private static int PopCount(int i)
+      private static uint PopCount(uint i)
       {
          i = i - ((i >> 1) & 0x55555555);
          i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
@@ -100,12 +100,12 @@ namespace Metatogger.Business
       }
 
       // https://bitbucket.org/acoustid/pg_acoustid  -->  acoustid_compare.c
-      public static float MatchFingerprints3(int[] a, int[] b, int maxoffset = -1)
+      public static float MatchFingerprints3(uint[] a, uint[] b, int maxoffset = -1)
       {
          int jbegin = 0;
          int jend = b.Length;
          int numcounts = a.Length + b.Length + 1;
-         var counts = new int[numcounts];
+         var counts = new uint[numcounts];
 
          for (int i = 0; i < a.Length; i++)
          {
@@ -117,14 +117,14 @@ namespace Metatogger.Business
 
             for (int j = jbegin; j < jend; j++)
             {
-               int biterror = PopCount(a[i] ^ b[j]);
+               uint biterror = PopCount(a[i] ^ b[j]);
                // Randomly selected blocks share around half their bits, so only count errors less than 16 bits
                if (biterror < 16)
                   counts[i - j + b.Length] += 16 - biterror;
             }
          }
 
-         int topcount = 0;
+         uint topcount = 0;
          for (int i = 0; i < numcounts; i++)
          {
             if (counts[i] > topcount)

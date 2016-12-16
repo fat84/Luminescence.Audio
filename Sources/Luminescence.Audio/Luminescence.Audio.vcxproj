@@ -57,7 +57,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;TAGLIB_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;TAGLIB_STATIC;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalIncludeDirectories>..\..\ffmpeg\include;..\..\xaudio27\include;..\..\taglib\taglib;..\..\taglib\taglib\toolkit;..\..\taglib\taglib\asf;..\..\taglib\taglib\mpeg;..\..\taglib\taglib\ogg;..\..\taglib\taglib\flac;..\..\taglib\taglib\ogg\flac;..\..\taglib\taglib\mpc;..\..\taglib\taglib\mp4;..\..\taglib\taglib\ogg\vorbis;..\..\taglib\taglib\ogg\speex;..\..\taglib\taglib\ogg\opus;..\..\taglib\taglib\mpeg\id3v2;..\..\taglib\taglib\mpeg\id3v2\frames;..\..\taglib\taglib\mpeg\id3v1;..\..\taglib\taglib\ape;..\..\taglib\taglib\wavpack;..\..\taglib\taglib\trueaudio;..\..\taglib\taglib\riff;..\..\taglib\taglib\riff\aiff;..\..\taglib\taglib\riff\wav;..\..\taglib\taglib\mod;..\..\taglib\taglib\s3m;..\..\taglib\taglib\it;..\..\taglib\taglib\xm;..\taglib;..\..\chromaprint\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -118,7 +118,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
-    <ClCompile Include="decode_audio_file.cpp" />
     <ClCompile Include="FFmpegAudioPlayer.cpp" />
     <ClCompile Include="ChromaprintFingerprinter.cpp" />
     <ClCompile Include="match_fingerprint.cpp" />
@@ -137,6 +136,7 @@
     <EmbeddedResource Include="AudioResourceStrings.fr.resx" />
     <EmbeddedResource Include="AudioResourceStrings.it.resx" />
     <EmbeddedResource Include="AudioResourceStrings.resx" />
+    <EmbeddedResource Include="AudioResourceStrings.ru.resx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\chromaprint\chromaprint.vcxproj">

@@ -19,7 +19,8 @@ static array<byte>^ ByteVectorToManagedArray(const TagLib::ByteVector& data)
 
    array<byte>^ buffer = gcnew array<byte>(data.size());
    pin_ptr<byte> buffer_start = &buffer[0];
-   memcpy(buffer_start, data.data(), buffer->Length);
+   byte *dest = buffer_start;
+   std::copy(data.begin(), data.end(), dest);
    return buffer;
 }
 
@@ -27,10 +28,8 @@ static List<String^>^ PropertyMapToManagedList(const TagLib::PropertyMap& map)
 {
    auto tags = gcnew List<String^>(map.size());
 
-   for (auto it = map.begin(); it != map.end(); it++)
-   {
+   for (auto it = map.begin(); it != map.end(); it++)   
       tags->Add(gcnew String(it->first.toCWString()));
-   }
 
    return tags;
 }
@@ -60,9 +59,7 @@ static TagLib::PropertyMap ManagedDictionaryToPropertyMap(Dictionary<String^, Li
       TagLib::StringList values;
 
       for each(auto value in kvp.Value)
-      {
          values.append(msclr::interop::marshal_as<std::wstring>(value));
-      }
 
       map.insert(key, values);
    }
@@ -98,10 +95,14 @@ static std::string ManagedStringToNativeUtf8One(String^ s)
    return utf8;
 }
 
-static array<int>^ NativeIntArrayToManagedOne(const int* data, int size)
+static array<uint32_t>^ NativeIntArrayToManagedOne(const uint32_t* data, int size)
 {
-   array<int>^ buffer = gcnew array<int>(size);
-   pin_ptr<int> buffer_start = &buffer[0];
-   memcpy(buffer_start, data, size);
+   if (size == 0)
+      return gcnew array<uint32_t>(0);
+
+   array<uint32_t>^ buffer = gcnew array<uint32_t>(size);
+   pin_ptr<uint32_t> buffer_start = &buffer[0];
+   uint32_t *dest = buffer_start;
+   std::copy(data, data + size, dest);
    return buffer;
 }

@@ -70,6 +70,24 @@ namespace Luminescence
    {
       #pragma region Helper
 
+      class LocalStringHandler : public TagLib::ID3v2::Latin1StringHandler
+      {
+      private:
+         int codepage;
+
+      public:
+         LocalStringHandler(int cp = 0) : codepage(cp) { }
+
+         TagLib::String parse(const TagLib::ByteVector &data) const
+         {
+            std::wstring utf16;
+            const int utf16Length = MultiByteToWideChar(codepage, 0, data.data(), data.size(), nullptr, 0);
+            utf16.resize(utf16Length);
+            MultiByteToWideChar(codepage, 0, data.data(), data.size(), &utf16[0], utf16Length);
+            return utf16;
+         }
+      };
+
       public enum class Id3Version
       {
          id3v23 = 3,
@@ -81,6 +99,8 @@ namespace Luminescence
       public:
          static Id3Version MinId3Version = Id3Version::id3v23;
          static Id3Version MaxId3Version = Id3Version::id3v24;
+         static bool OverrideID3v2Latin1EncodingCodepage = true;
+         static int ID3v2Latin1CodePage = 0;
       };
 
       public enum class PictureType
@@ -138,7 +158,7 @@ namespace Luminescence
          static const String^ Album = "ALBUM";
          static const String^ Genre = "GENRE";
          static const String^ TrackNumber = "TRACKNUMBER";
-       
+
          static const String^ AlbumArtist = "ALBUMARTIST";
          static const String^ DiscNumber = "DISCNUMBER";
          static const String^ Lyricist = "LYRICIST";
@@ -324,7 +344,7 @@ namespace Luminescence
                throw gcnew IOException(ResourceStrings::GetString("CannotOpenFileReading"));
 
             TagLib::FLAC::Properties *properties = file.audioProperties();
-            if (properties == NULL)
+            if (properties == nullptr)
                throw gcnew FileFormatException(ResourceStrings::GetString("InvalidAudioFile"));
 
             if (!file.hasXiphComment())
@@ -384,7 +404,7 @@ namespace Luminescence
             file.strip(TagLib::FLAC::File::ID3v1 | TagLib::FLAC::File::ID3v2);
             file.save();
             return PropertyMapToManagedList(map);
-         }         
+         }
 
          void ReadMp3File(String^ path)
          {
@@ -395,7 +415,7 @@ namespace Luminescence
                throw gcnew IOException(ResourceStrings::GetString("CannotOpenFileReading"));
 
             TagLib::MPEG::Properties *properties = file.audioProperties();
-            if (properties == NULL)
+            if (properties == nullptr)
                throw gcnew FileFormatException(ResourceStrings::GetString("InvalidAudioFile"));
 
             codec = codecVersion = "MP3";
@@ -406,28 +426,42 @@ namespace Luminescence
             channels = (byte)properties->channels(); // number of audio channels
             bitsPerSample = 0; // in bits
 
+            LocalStringHandler *stringHandler = nullptr;
+            if (TaglibSettings::OverrideID3v2Latin1EncodingCodepage)
+            {
+               stringHandler = new LocalStringHandler(TaglibSettings::ID3v2Latin1CodePage);
+               TagLib::ID3v2::Tag::setLatin1StringHandler(stringHandler);
+            }
+
             tags = PropertyMapToManagedDictionary(file.properties());
 
             if (!file.hasID3v2Tag())
             {
                pictures = gcnew List<Picture^>(1);
-               return;
+            }
+            else
+            {
+               TagLib::ID3v2::Tag *tag = file.ID3v2Tag(false);
+               TagLib::ID3v2::FrameList arts = tag->frameListMap()["APIC"];
+               pictures = gcnew List<Picture^>(arts.size());
+               for (auto it = arts.begin(); it != arts.end(); it++)
+               {
+                  TagLib::ID3v2::Frame *frame = *it;
+                  TagLib::ID3v2::AttachedPictureFrame *pic = static_cast<TagLib::ID3v2::AttachedPictureFrame*>(frame);
+
+                  if (IsEmptyByteVector(pic->picture())) continue;
+
+                  pictures->Add(gcnew Picture(
+                     ByteVectorToManagedArray(pic->picture()),
+                     (PictureType)pic->type(),
+                     gcnew String(pic->description().toCString())));
+               }
             }
 
-            TagLib::ID3v2::Tag *tag = file.ID3v2Tag(false);
-            TagLib::ID3v2::FrameList arts = tag->frameListMap()["APIC"];
-            pictures = gcnew List<Picture^>(arts.size());
-            for (auto it = arts.begin(); it != arts.end(); it++)
+            if (stringHandler != nullptr)
             {
-               TagLib::ID3v2::Frame *frame = *it;
-               TagLib::ID3v2::AttachedPictureFrame *pic = static_cast<TagLib::ID3v2::AttachedPictureFrame*>(frame);
-
-               if (IsEmptyByteVector(pic->picture())) continue;
-
-               pictures->Add(gcnew Picture(
-                  ByteVectorToManagedArray(pic->picture()),
-                  (PictureType)pic->type(),
-                  gcnew String(pic->description().toCString())));
+               TagLib::ID3v2::Tag::setLatin1StringHandler(nullptr);
+               delete stringHandler;
             }
          }
 
@@ -491,7 +525,7 @@ namespace Luminescence
                throw gcnew IOException(ResourceStrings::GetString("CannotOpenFileReading"));
 
             TagLib::Vorbis::Properties *properties = file.audioProperties();
-            if (properties == NULL)
+            if (properties == nullptr)
                throw gcnew FileFormatException(ResourceStrings::GetString("InvalidAudioFile"));
 
             TagLib::Ogg::XiphComment *xiph = file.tag();
@@ -557,7 +591,7 @@ namespace Luminescence
                throw gcnew IOException(ResourceStrings::GetString("CannotOpenFileReading"));
 
             TagLib::ASF::Properties *properties = file.audioProperties();
-            if (properties == NULL)
+            if (properties == nullptr)
                throw gcnew FileFormatException(ResourceStrings::GetString("InvalidAudioFile"));
 
             codecVersion = !properties->codecName().isEmpty() ? gcnew String(properties->codecName().toCString()) : "WMA";
@@ -624,7 +658,7 @@ namespace Luminescence
                throw gcnew IOException(ResourceStrings::GetString("CannotOpenFileReading"));
 
             TagLib::MP4::Properties *properties = file.audioProperties();
-            if (properties == NULL)
+            if (properties == nullptr)
                throw gcnew FileFormatException(ResourceStrings::GetString("InvalidAudioFile"));
 
             switch (properties->codec())
@@ -749,7 +783,7 @@ namespace Luminescence
 
          IEnumerable<String^>^ GetTagValues(String^ tag)
          {
-             return tags->ContainsKey(tag) ? tags[tag] : Enumerable::Empty<String^>();
+            return tags->ContainsKey(tag) ? tags[tag] : Enumerable::Empty<String^>();
          }
 
          void ReplaceTag(String^ tag, ...array<String^>^ values)
@@ -771,7 +805,7 @@ namespace Luminescence
                for each (String^ value in values)
                {
                   if (!tags[tag]->Contains(value))
-                    tags[tag]->Add(value);
+                     tags[tag]->Add(value);
                }
             }
             else

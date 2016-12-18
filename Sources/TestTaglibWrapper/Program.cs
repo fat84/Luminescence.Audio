@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Luminescence.Audio;
 
 namespace TestTaglibWrapper
@@ -10,6 +11,8 @@ namespace TestTaglibWrapper
    {
       static void Main(string[] args)
       {
+         Console.OutputEncoding = Encoding.UTF8;
+
          TaglibSettings.MinId3Version = Id3Version.id3v23;
          TaglibSettings.MaxId3Version = Id3Version.id3v24;
 
@@ -21,11 +24,12 @@ namespace TestTaglibWrapper
          {
             //@"C:\Users\cyber\Downloads\Test\flac.ogg", // should crash because Ogg FLAC is not supported yet
 
-            @"C:\Users\cyber\Downloads\Test\flac.flac",
-            @"C:\Users\cyber\Downloads\Test\mp3.mp3",
-            @"C:\Users\cyber\Downloads\Test\vorbis.ogg",
-            @"C:\Users\cyber\Downloads\Test\wma.wma",
-            @"C:\Users\cyber\Downloads\Test\aac.m4a"
+            //@"C:\Users\cyber\Downloads\Test\flac.flac",
+            //@"C:\Users\cyber\Downloads\Test\mp3.mp3",
+            //@"C:\Users\cyber\Downloads\Test\vorbis.ogg",
+            //@"C:\Users\cyber\Downloads\Test\wma.wma",
+            //@"C:\Users\cyber\Downloads\Test\aac.m4a"
+            @"C:\Users\cyber\Downloads\MP3EncTestSuite\rus-23-iso8859-1.mp3"
          };
 
          foreach (string path in paths)

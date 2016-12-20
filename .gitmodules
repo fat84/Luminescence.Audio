@@ -1,6 +1,6 @@
 [submodule "chromaprint"]
 	path = chromaprint
-	url = https://bitbucket.org/acoustid/chromaprint.git
+	url = https://github.com/acoustid/chromaprint.git
 [submodule "taglib"]
 	path = taglib
 	url = https://github.com/taglib/taglib.git

@@ -100,7 +100,7 @@ namespace Luminescence
          static Id3Version MinId3Version = Id3Version::id3v23;
          static Id3Version MaxId3Version = Id3Version::id3v24;
          static bool OverrideID3v2Latin1EncodingCodepage = true;
-         static int ID3v2Latin1CodePage = 0;
+         static Encoding^ ID3v2Latin1Encoding = Encoding::GetEncoding(0);
       };
 
       public enum class PictureType
@@ -429,7 +429,7 @@ namespace Luminescence
             LocalStringHandler *stringHandler = nullptr;
             if (TaglibSettings::OverrideID3v2Latin1EncodingCodepage)
             {
-               stringHandler = new LocalStringHandler(TaglibSettings::ID3v2Latin1CodePage);
+               stringHandler = new LocalStringHandler(TaglibSettings::ID3v2Latin1Encoding->CodePage);
                TagLib::ID3v2::Tag::setLatin1StringHandler(stringHandler);
             }
 

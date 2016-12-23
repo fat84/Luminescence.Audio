@@ -408,6 +408,13 @@ namespace Luminescence
 
          void ReadMp3File(String^ path)
          {
+            LocalStringHandler *stringHandler = nullptr;
+            if (TaglibSettings::OverrideID3v2Latin1EncodingCodepage)
+            {
+               stringHandler = new LocalStringHandler(TaglibSettings::ID3v2Latin1Encoding->CodePage);
+               TagLib::ID3v2::Tag::setLatin1StringHandler(stringHandler);
+            }
+
             TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
 
             TagLib::MPEG::File file(fileName, true, TagLib::AudioProperties::ReadStyle::Average);
@@ -425,13 +432,6 @@ namespace Luminescence
             sampleRate = properties->sampleRate(); // in Hertz
             channels = (byte)properties->channels(); // number of audio channels
             bitsPerSample = 0; // in bits
-
-            LocalStringHandler *stringHandler = nullptr;
-            if (TaglibSettings::OverrideID3v2Latin1EncodingCodepage)
-            {
-               stringHandler = new LocalStringHandler(TaglibSettings::ID3v2Latin1Encoding->CodePage);
-               TagLib::ID3v2::Tag::setLatin1StringHandler(stringHandler);
-            }
 
             tags = PropertyMapToManagedDictionary(file.properties());
 

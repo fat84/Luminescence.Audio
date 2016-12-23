@@ -8,6 +8,7 @@
 #include <xiphcomment.h>
 #include <mpegfile.h>
 #include <attachedpictureframe.h>
+#include <id3v1tag.h>
 #include <id3v2tag.h>
 #include <vorbisfile.h>
 #include <asffile.h>
@@ -64,27 +65,46 @@ static bool IsEmptyByteVector(const TagLib::ByteVector& bv)
    return true;
 }
 
+static std::wstring ConvertEncoding(const char* data, unsigned int size, int codepage)
+{
+   std::wstring utf16;
+   const int utf16Length = MultiByteToWideChar(codepage, 0, data, size, nullptr, 0);
+   utf16.resize(utf16Length);
+   MultiByteToWideChar(codepage, 0, data, size, &utf16[0], utf16Length);
+   return utf16;
+}
+
 namespace Luminescence
 {
    namespace Audio
    {
       #pragma region Helper
 
-      class LocalStringHandler : public TagLib::ID3v2::Latin1StringHandler
+      class ID3v2StringHandler : public TagLib::ID3v2::Latin1StringHandler
       {
       private:
          int codepage;
 
       public:
-         LocalStringHandler(int cp = 0) : codepage(cp) { }
+         ID3v2StringHandler(int cp = 0) : codepage(cp) { }
 
          TagLib::String parse(const TagLib::ByteVector &data) const
          {
-            std::wstring utf16;
-            const int utf16Length = MultiByteToWideChar(codepage, 0, data.data(), data.size(), nullptr, 0);
-            utf16.resize(utf16Length);
-            MultiByteToWideChar(codepage, 0, data.data(), data.size(), &utf16[0], utf16Length);
-            return utf16;
+            return ConvertEncoding(data.data(), data.size(), codepage);
+         }
+      };
+
+      class ID3v1StringHandler : public TagLib::ID3v1::StringHandler
+      {
+      private:
+         int codepage;
+
+      public:
+         ID3v1StringHandler(int cp = 0) : codepage(cp) { }
+
+         TagLib::String parse(const TagLib::ByteVector &data) const
+         {
+            return ConvertEncoding(data.data(), data.size(), codepage);
          }
       };
 
@@ -99,8 +119,8 @@ namespace Luminescence
       public:
          static Id3Version MinId3Version = Id3Version::id3v23;
          static Id3Version MaxId3Version = Id3Version::id3v24;
-         static bool OverrideID3v2Latin1EncodingCodepage = true;
-         static Encoding^ ID3v2Latin1Encoding = Encoding::GetEncoding(0);
+         static bool OverrideID3Latin1EncodingCodepage = true;
+         static Encoding^ ID3Latin1Encoding = Encoding::GetEncoding(0);
       };
 
       public enum class PictureType
@@ -408,11 +428,17 @@ namespace Luminescence
 
          void ReadMp3File(String^ path)
          {
-            LocalStringHandler *stringHandler = nullptr;
-            if (TaglibSettings::OverrideID3v2Latin1EncodingCodepage)
+            ID3v2StringHandler id3v2StringHandler(TaglibSettings::ID3Latin1Encoding->CodePage);
+            ID3v1StringHandler id3v1StringHandler(TaglibSettings::ID3Latin1Encoding->CodePage);
+            if (TaglibSettings::OverrideID3Latin1EncodingCodepage)
             {
-               stringHandler = new LocalStringHandler(TaglibSettings::ID3v2Latin1Encoding->CodePage);
-               TagLib::ID3v2::Tag::setLatin1StringHandler(stringHandler);
+               TagLib::ID3v2::Tag::setLatin1StringHandler(&id3v2StringHandler);
+               TagLib::ID3v1::Tag::setStringHandler(&id3v1StringHandler);
+            }
+            else
+            {
+               TagLib::ID3v2::Tag::setLatin1StringHandler(nullptr);
+               TagLib::ID3v1::Tag::setStringHandler(nullptr);
             }
 
             TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
@@ -435,11 +461,7 @@ namespace Luminescence
 
             tags = PropertyMapToManagedDictionary(file.properties());
 
-            if (!file.hasID3v2Tag())
-            {
-               pictures = gcnew List<Picture^>(1);
-            }
-            else
+            if (file.hasID3v2Tag())
             {
                TagLib::ID3v2::Tag *tag = file.ID3v2Tag(false);
                TagLib::ID3v2::FrameList arts = tag->frameListMap()["APIC"];
@@ -457,12 +479,8 @@ namespace Luminescence
                      gcnew String(pic->description().toCString())));
                }
             }
-
-            if (stringHandler != nullptr)
-            {
-               TagLib::ID3v2::Tag::setLatin1StringHandler(nullptr);
-               delete stringHandler;
-            }
+            else
+               pictures = gcnew List<Picture^>(1);
          }
 
          List<String^>^ WriteMp3File()

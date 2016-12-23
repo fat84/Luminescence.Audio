@@ -15,7 +15,7 @@ namespace TestTaglibWrapper
 
          TaglibSettings.MinId3Version = Id3Version.id3v23;
          TaglibSettings.MaxId3Version = Id3Version.id3v24;
-         TaglibSettings.ID3v2Latin1Encoding = Encoding.GetEncoding(1251);
+         TaglibSettings.ID3Latin1Encoding = Encoding.GetEncoding(1251);
 
          bool workOnCopy = true;
          bool writeTags = false;
@@ -33,6 +33,14 @@ namespace TestTaglibWrapper
             @"C:\Users\cyber\Downloads\MP3EncTestSuite\rus-23-iso8859-1.mp3"
          };
 
+         DoWork(workOnCopy, writeTags, addCover, addExoticTag, paths);
+
+         Console.WriteLine("Press any key to exit...");
+         Console.ReadKey();
+      }
+
+      private static void DoWork(bool workOnCopy, bool writeTags, bool addCover, bool addExoticTag, string[] paths)
+      {
          foreach (string path in paths)
          {
             string realPath = workOnCopy && writeTags ? WorkOnCopy(path) : path;
@@ -41,7 +49,7 @@ namespace TestTaglibWrapper
             if (writeTags)
             {
                WriteAudioFile(realPath, addCover, addExoticTag);
-               ReadAudioFile(realPath); 
+               ReadAudioFile(realPath);
             }
 
             if (workOnCopy && writeTags)
@@ -49,9 +57,6 @@ namespace TestTaglibWrapper
 
             Console.WriteLine("----------------------------------------");
          }
-
-         Console.WriteLine("Press any key to exit...");
-         Console.ReadKey();
       }
 
       private static void WriteAudioFile(string path, bool addCover, bool addExoticTag)

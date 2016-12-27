@@ -29,7 +29,8 @@ namespace TestTaglibWrapper
             //@"C:\Users\cyber\Downloads\Test\mp3.mp3",
             //@"C:\Users\cyber\Downloads\Test\vorbis.ogg",
             //@"C:\Users\cyber\Downloads\Test\wma.wma",
-            //@"C:\Users\cyber\Downloads\Test\aac.m4a"
+            //@"C:\Users\cyber\Downloads\Test\aac.m4a",
+            @"C:\Users\cyber\Downloads\MP3EncTestSuite\rus-1-iso8859-1.mp3",
             @"C:\Users\cyber\Downloads\MP3EncTestSuite\rus-23-iso8859-1.mp3"
          };
 

@@ -65,47 +65,35 @@ static bool IsEmptyByteVector(const TagLib::ByteVector& bv)
    return true;
 }
 
-static std::wstring ConvertEncoding(const char* data, unsigned int size, int codepage)
-{
-   std::wstring utf16;
-   const int utf16Length = MultiByteToWideChar(codepage, 0, data, size, nullptr, 0);
-   utf16.resize(utf16Length);
-   MultiByteToWideChar(codepage, 0, data, size, &utf16[0], utf16Length);
-   return utf16;
-}
-
 namespace Luminescence
 {
    namespace Audio
    {
       #pragma region Helper
 
-      class ID3v2StringHandler : public TagLib::ID3v2::Latin1StringHandler
+      class ID3StringHandler : public TagLib::ID3v2::Latin1StringHandler, public TagLib::ID3v1::StringHandler
       {
       private:
          int codepage;
 
-      public:
-         ID3v2StringHandler(int cp = 0) : codepage(cp) { }
+         static std::wstring ConvertEncoding(const char* data, unsigned int size, int codepage)
+         {
+            std::wstring utf16;
+            const int utf16Length = MultiByteToWideChar(codepage, 0, data, size, nullptr, 0);
+            utf16.resize(utf16Length);
+            MultiByteToWideChar(codepage, 0, data, size, &utf16[0], utf16Length);
+            return utf16;
+         }
 
-         TagLib::String parse(const TagLib::ByteVector &data) const
+      public:
+         ID3StringHandler(int cp = 0) : codepage(cp) { }
+
+         TagLib::String parse(const TagLib::ByteVector &data) const override
          {
             return ConvertEncoding(data.data(), data.size(), codepage);
          }
-      };
 
-      class ID3v1StringHandler : public TagLib::ID3v1::StringHandler
-      {
-      private:
-         int codepage;
-
-      public:
-         ID3v1StringHandler(int cp = 0) : codepage(cp) { }
-
-         TagLib::String parse(const TagLib::ByteVector &data) const
-         {
-            return ConvertEncoding(data.data(), data.size(), codepage);
-         }
+         int getCodepage() const { return codepage; }
       };
 
       public enum class Id3Version
@@ -428,12 +416,11 @@ namespace Luminescence
 
          void ReadMp3File(String^ path)
          {
-            ID3v2StringHandler id3v2StringHandler(TaglibSettings::ID3Latin1Encoding->CodePage);
-            ID3v1StringHandler id3v1StringHandler(TaglibSettings::ID3Latin1Encoding->CodePage);
+            ID3StringHandler id3StringHandler(TaglibSettings::ID3Latin1Encoding->CodePage);
             if (TaglibSettings::OverrideID3Latin1EncodingCodepage)
             {
-               TagLib::ID3v2::Tag::setLatin1StringHandler(&id3v2StringHandler);
-               TagLib::ID3v1::Tag::setStringHandler(&id3v1StringHandler);
+               TagLib::ID3v2::Tag::setLatin1StringHandler(&id3StringHandler);
+               TagLib::ID3v1::Tag::setStringHandler(&id3StringHandler);
             }
             else
             {

@@ -1,10 +1,5 @@
 #include "stdafx.h"
 
-extern "C"
-{
-#include <libavformat/avformat.h>
-}
-
 #define USE_SWRESAMPLE
 #define HAVE_AV_PACKET_UNREF
 #define HAVE_AV_FRAME_ALLOC
@@ -31,8 +26,6 @@ namespace Luminescence
       public ref class ChromaprintFingerprinter abstract sealed
       {
       private:
-         static ChromaprintFingerprinter() { av_register_all(); }
-
          static void ThrowCannotDecodeAudioFingerprintException(const char* message)
          {
             throw gcnew Exception(String::Format(ResourceStrings::GetString("CannotDecodeAudioFingerprint"), gcnew String(message)));

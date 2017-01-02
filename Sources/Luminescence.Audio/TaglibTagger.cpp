@@ -323,22 +323,44 @@ namespace Luminescence
 
             String^ extension = Path::GetExtension(path);
             if (String::Equals(extension, ".mp3", StringComparison::OrdinalIgnoreCase))
-               ReadMp3File(path);
+            {
+               ID3StringHandler id3StringHandler(TaglibSettings::ID3Latin1Encoding->CodePage);
+               if (TaglibSettings::OverrideID3Latin1EncodingCodepage)
+               {
+                  TagLib::ID3v2::Tag::setLatin1StringHandler(&id3StringHandler);
+                  TagLib::ID3v1::Tag::setStringHandler(&id3StringHandler);
+               }
 
+               try
+               {
+                  ReadMp3File(path);
+               }
+               finally
+               {
+                  TagLib::ID3v2::Tag::setLatin1StringHandler(nullptr);
+                  TagLib::ID3v1::Tag::setStringHandler(nullptr);
+               }
+            }
             else if (String::Equals(extension, ".flac", StringComparison::OrdinalIgnoreCase))
+            {
                ReadFlacFile(path);
-
+            }
             else if (String::Equals(extension, ".ogg", StringComparison::OrdinalIgnoreCase))
+            {
                ReadOggFile(path);
-
+            }
             else if (String::Equals(extension, ".wma", StringComparison::OrdinalIgnoreCase))
+            {
                ReadWmaFile(path);
-
+            }
             else if (String::Equals(extension, ".m4a", StringComparison::OrdinalIgnoreCase))
+            {
                ReadM4aFile(path);
-
+            }
             else
+            {
                throw gcnew NotSupportedException(ResourceStrings::GetString("FileFormatNotSupported"));
+            }
 
             fullPath = path;
          }
@@ -416,18 +438,6 @@ namespace Luminescence
 
          void ReadMp3File(String^ path)
          {
-            ID3StringHandler id3StringHandler(TaglibSettings::ID3Latin1Encoding->CodePage);
-            if (TaglibSettings::OverrideID3Latin1EncodingCodepage)
-            {
-               TagLib::ID3v2::Tag::setLatin1StringHandler(&id3StringHandler);
-               TagLib::ID3v1::Tag::setStringHandler(&id3StringHandler);
-            }
-            else
-            {
-               TagLib::ID3v2::Tag::setLatin1StringHandler(nullptr);
-               TagLib::ID3v1::Tag::setStringHandler(nullptr);
-            }
-
             TagLib::FileName fileName(msclr::interop::marshal_as<std::wstring>(path).c_str());
 
             TagLib::MPEG::File file(fileName, true, TagLib::AudioProperties::ReadStyle::Average);

@@ -81,14 +81,14 @@ using Luminescence.Audio;
 
 // all audio formats supported by FFmpeg can be fingerprinted
 int lengthToFingerprintInSeconds = 120; // 0 to fingerprint all the file
-int[] fingerprint1 = ChromaprintFingerprinter.GetFingerprint(@"C:\MyFolder\MyAudioFile1.flac", lengthToFingerprintInSeconds);
-int[] fingerprint2 = ChromaprintFingerprinter.GetFingerprint(@"C:\MyFolder\MyAudioFile2.flac", lengthToFingerprintInSeconds);
+int[] fingerprint1 = ChromaprintFingerprinter.GetRawFingerprint(@"C:\MyFolder\MyAudioFile1.flac", lengthToFingerprintInSeconds);
+int[] fingerprint2 = ChromaprintFingerprinter.GetRawFingerprint(@"C:\MyFolder\MyAudioFile2.flac", lengthToFingerprintInSeconds);
 
 float comparison = ChromaprintFingerprinter.MatchFingerprints(fingerprint1, fingerprint2);
 float concordanceLevel = 0.9; // the file should be the same if the concordance level is > 0.9
 bool sameFile = comparison > concordanceLevel;
 
-string readableFingerprint = ChromaprintFingerprinter.EncodeFingerprint(fingerprint1);
+string readableFingerprint = ChromaprintFingerprinter.EncodeFingerprintBase64(fingerprint1);
 
 bool sameFile2 = ChromaprintFingerprinter.CompareFile(@"C:\MyFolder\MyAudioFile3.flac", @"C:\MyFolder\MyAudioFile4.flac") > concordanceLevel;
 ```

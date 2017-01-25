@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Luminescence.Audio", "Luminescence.Audio\Luminescence.Audio.vcxproj", "{680E3C60-AE7F-4119-BBC7-FDAFA1130954}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -17,6 +17,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "chromaprint", "chromaprint\chromaprint.vcxproj", "{11BC4863-E9F9-4F03-B237-37ECA83D5515}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "taglib", "taglib\taglib.vcxproj", "{83F1725C-21C8-4D28-AFFB-F314ED20D2C8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B0849A31-485E-44C2-BD00-2BD2A9EFAB90}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -16,7 +16,7 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("Luminescence Software")];
 [assembly:AssemblyProductAttribute("Luminescence.Audio")];
-[assembly:AssemblyCopyrightAttribute("Sylvain Rougeaux, © 2011-2016")];
+[assembly:AssemblyCopyrightAttribute("Sylvain Rougeaux, © 2011-2017")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 

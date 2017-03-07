@@ -109,7 +109,7 @@ namespace TestTaglibWrapper
          foreach (var tag in tagger.Tags)
          {
             Console.WriteLine($"{tag.Key}:");
-            foreach (var value in tag.Value)
+            foreach (string value in tag.Value)
                Console.WriteLine($"   {value}");
 
             Console.WriteLine();

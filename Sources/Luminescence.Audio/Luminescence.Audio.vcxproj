@@ -57,14 +57,14 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;TAGLIB_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;TAGLIB_STATIC;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>..\..\ffmpeg\include;..\..\xaudio27\include;..\..\taglib\taglib;..\..\taglib\taglib\toolkit;..\..\taglib\taglib\asf;..\..\taglib\taglib\mpeg;..\..\taglib\taglib\ogg;..\..\taglib\taglib\flac;..\..\taglib\taglib\ogg\flac;..\..\taglib\taglib\mpc;..\..\taglib\taglib\mp4;..\..\taglib\taglib\ogg\vorbis;..\..\taglib\taglib\ogg\speex;..\..\taglib\taglib\ogg\opus;..\..\taglib\taglib\mpeg\id3v2;..\..\taglib\taglib\mpeg\id3v2\frames;..\..\taglib\taglib\mpeg\id3v1;..\..\taglib\taglib\ape;..\..\taglib\taglib\wavpack;..\..\taglib\taglib\trueaudio;..\..\taglib\taglib\riff;..\..\taglib\taglib\riff\aiff;..\..\taglib\taglib\riff\wav;..\..\taglib\taglib\mod;..\..\taglib\taglib\s3m;..\..\taglib\taglib\it;..\..\taglib\taglib\xm;..\taglib;..\..\chromaprint\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\lib\submodules\chromaprint\src;..\..\lib\ffmpeg\include;..\..\lib\xaudio27;..\..\lib\bin\x86-Debug\taglib\include\taglib;..\..\lib\src\chromaprint\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
-      <AdditionalDependencies>avcodec.lib;avutil.lib;avformat.lib;swresample.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(OutputPath);..\..\ffmpeg\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>avcodec.lib;avutil.lib;avformat.lib;swresample.lib;tag.lib;chromaprint.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutputPath);..\..\lib\ffmpeg\lib;..\..\lib\bin\x86-Debug\chromaprint\lib;..\..\lib\bin\x86-Debug\taglib\lib</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4248 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
@@ -79,17 +79,17 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;NDEBUG;TAGLIB_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;TAGLIB_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>..\..\ffmpeg\include;..\..\xaudio27\include;..\..\taglib\taglib;..\..\taglib\taglib\toolkit;..\..\taglib\taglib\asf;..\..\taglib\taglib\mpeg;..\..\taglib\taglib\ogg;..\..\taglib\taglib\flac;..\..\taglib\taglib\ogg\flac;..\..\taglib\taglib\mpc;..\..\taglib\taglib\mp4;..\..\taglib\taglib\ogg\vorbis;..\..\taglib\taglib\ogg\speex;..\..\taglib\taglib\ogg\opus;..\..\taglib\taglib\mpeg\id3v2;..\..\taglib\taglib\mpeg\id3v2\frames;..\..\taglib\taglib\mpeg\id3v1;..\..\taglib\taglib\ape;..\..\taglib\taglib\wavpack;..\..\taglib\taglib\trueaudio;..\..\taglib\taglib\riff;..\..\taglib\taglib\riff\aiff;..\..\taglib\taglib\riff\wav;..\..\taglib\taglib\mod;..\..\taglib\taglib\s3m;..\..\taglib\taglib\it;..\..\taglib\taglib\xm;..\taglib;..\..\chromaprint\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\lib\submodules\chromaprint\src;..\..\lib\ffmpeg\include;..\..\lib\xaudio27;..\..\lib\bin\x86-Release\taglib\include\taglib;..\..\lib\src\chromaprint\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
-      <AdditionalDependencies>avcodec.lib;avutil.lib;avformat.lib;swresample.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(OutputPath);..\..\ffmpeg\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>avcodec.lib;avutil.lib;avformat.lib;swresample.lib;tag.lib;chromaprint.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutputPath);..\..\lib\ffmpeg\lib;..\..\lib\bin\x86-Release\taglib\lib;..\..\lib\bin\x86-Release\chromaprint\lib;..\..\lib\bin\ffmpeg\lib</AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers />
       <OptimizeReferences>
       </OptimizeReferences>
@@ -137,14 +137,6 @@
     <EmbeddedResource Include="AudioResourceStrings.it.resx" />
     <EmbeddedResource Include="AudioResourceStrings.resx" />
     <EmbeddedResource Include="AudioResourceStrings.ru.resx" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\chromaprint\chromaprint.vcxproj">
-      <Project>{11bc4863-e9f9-4f03-b237-37eca83d5515}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\taglib\taglib.vcxproj">
-      <Project>{83f1725c-21c8-4d28-affb-f314ed20d2c8}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

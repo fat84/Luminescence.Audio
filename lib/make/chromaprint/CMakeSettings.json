@@ -1,0 +1,109 @@
+{
+  // See https://go.microsoft.com//fwlink//?linkid=834763 for more information about this file.
+  "configurations": [
+    {
+      "name": "x86-Debug",
+      "generator": "Visual Studio 15 2017",
+      "configurationType": "Debug",
+      "buildRoot": "${env.LOCALAPPDATA}\\CMakeBuild\\${workspaceHash}\\build\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-m -v:minimal",
+      "variables": [
+        {
+          "name": "FFT_LIB",
+          "value": "avfft"
+        },
+        {
+          "name": "FFMPEG_ROOT:PATH",
+          "value": "${thisFileDir}\\..\\..\\ffmpeg"
+        },
+        {
+          "name": "BUILD_SHARED_LIBS",
+          "value": "OFF"
+        },
+        {
+          "name": "CMAKE_INSTALL_PREFIX:PATH",
+          "value": "${thisFileDir}\\..\\..\\bin\\${name}\\chromaprint"
+        }
+      ]
+    },
+    {
+      "name": "x86-Release",
+      "generator": "Visual Studio 15 2017",
+      "configurationType": "Release",
+      "buildRoot": "${env.LOCALAPPDATA}\\CMakeBuild\\${workspaceHash}\\build\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-m -v:minimal",
+      "variables": [
+        {
+          "name": "FFT_LIB",
+          "value": "avfft"
+        },
+        {
+          "name": "FFMPEG_ROOT:PATH",
+          "value": "${thisFileDir}\\..\\..\\ffmpeg"
+        },
+        {
+          "name": "BUILD_SHARED_LIBS",
+          "value": "OFF"
+        },
+        {
+          "name": "CMAKE_INSTALL_PREFIX:PATH",
+          "value": "${thisFileDir}\\..\\..\\bin\\${name}\\chromaprint"
+        }
+      ]
+    },
+    {
+      "name": "x64-Debug",
+      "generator": "Visual Studio 15 2017 Win64",
+      "configurationType": "Debug",
+      "buildRoot": "${env.LOCALAPPDATA}\\CMakeBuild\\${workspaceHash}\\build\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-m -v:minimal",
+      "variables": [
+        {
+          "name": "FFT_LIB",
+          "value": "avfft"
+        },
+        {
+          "name": "FFMPEG_ROOT:PATH",
+          "value": "${thisFileDir}\\..\\..\\ffmpeg"
+        },
+        {
+          "name": "BUILD_SHARED_LIBS",
+          "value": "OFF"
+        },
+        {
+          "name": "CMAKE_INSTALL_PREFIX:PATH",
+          "value": "${thisFileDir}\\..\\..\\bin\\${name}\\chromaprint"
+        }
+      ]
+    },
+    {
+      "name": "x64-Release",
+      "generator": "Visual Studio 15 2017 Win64",
+      "configurationType": "Release",
+      "buildRoot": "${env.LOCALAPPDATA}\\CMakeBuild\\${workspaceHash}\\build\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-m -v:minimal",
+      "variables": [
+        {
+          "name": "FFT_LIB",
+          "value": "avfft"
+        },
+        {
+          "name": "FFMPEG_ROOT:PATH",
+          "value": "${thisFileDir}\\..\\..\\ffmpeg"
+        },
+        {
+          "name": "BUILD_SHARED_LIBS",
+          "value": "OFF"
+        },
+        {
+          "name": "CMAKE_INSTALL_PREFIX:PATH",
+          "value": "${thisFileDir}\\..\\..\\bin\\${name}\\chromaprint"
+        }
+      ]
+    }
+  ]
+}

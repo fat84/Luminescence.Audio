@@ -1,9 +1,12 @@
 [submodule "chromaprint"]
-	path = chromaprint
+	path = lib/submodules/chromaprint
 	url = https://github.com/acoustid/chromaprint.git
+	ignore = untracked
 [submodule "taglib"]
-	path = taglib
+	path = lib/submodules/taglib
 	url = https://github.com/taglib/taglib.git
+	ignore = untracked
 [submodule "zlib"]
-	path = zlib
+	path = lib/submodules/zlib
 	url = https://github.com/madler/zlib.git
+	ignore = untracked

@@ -97,7 +97,7 @@ bool sameFile2 = ChromaprintFingerprinter.CompareFile(@"C:\MyFolder\MyAudioFile3
 
 The Luminescence.Audio requires the following redistribuables to run:
 - The XAudio 2.7 redistribuable that you can download [here](http://www.luminescence-software.org/download/audio/dx_sdk_jun10_xaudio27.zip) (contains the developer and end-user XAudio2 runtimes) (54 MB) or [here](http://www.luminescence-software.org/download/audio/Jun2010_XAudio_x86.exe) (contains only the end-user XAudio2 runtime) (13 MB)
-- The Visual C++ 2017 x86 runtime that you can download [here](https://go.microsoft.com/fwlink/?LinkId=746572) or [here](http://www.luminescence-software.org/download/audio/vcredist_x86.exe) (14 MB)
+- The Visual C++ 2017 x86 runtime that you can download [here](https://go.microsoft.com/fwlink/?LinkId=746571) or [here](http://www.luminescence-software.org/download/audio/vcredist_x86.exe) (14 MB)
 
 ## Licence
 

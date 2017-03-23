@@ -20,6 +20,14 @@
         {
           "name": "CMAKE_INSTALL_PREFIX:PATH",
           "value": "${thisFileDir}\\..\\..\\bin\\${name}\\taglib"
+        },
+        {
+          "name": "CMAKE_SYSTEM_VERSION",
+          "value": "6.1"
+        },
+        {
+          "name": "CMAKE_CXX_FLAGS",
+          "value": "/D _WIN32_WINNT=0x0601"
         }
       ]
     },
@@ -42,6 +50,14 @@
         {
           "name": "CMAKE_INSTALL_PREFIX:PATH",
           "value": "${thisFileDir}\\..\\..\\bin\\${name}\\taglib"
+        },
+        {
+          "name": "CMAKE_SYSTEM_VERSION",
+          "value": "6.1"
+        },
+        {
+          "name": "CMAKE_CXX_FLAGS",
+          "value": "/D _WIN32_WINNT=0x0601"
         }
       ]
     },
@@ -64,6 +80,14 @@
         {
           "name": "CMAKE_INSTALL_PREFIX:PATH",
           "value": "${thisFileDir}\\..\\..\\bin\\${name}\\taglib"
+        },
+        {
+          "name": "CMAKE_SYSTEM_VERSION",
+          "value": "6.1"
+        },
+        {
+          "name": "CMAKE_CXX_FLAGS",
+          "value": "/D _WIN32_WINNT=0x0601"
         }
       ]
     },
@@ -86,6 +110,14 @@
         {
           "name": "CMAKE_INSTALL_PREFIX:PATH",
           "value": "${thisFileDir}\\..\\..\\bin\\${name}\\taglib"
+        },
+        {
+          "name": "CMAKE_SYSTEM_VERSION",
+          "value": "6.1"
+        },
+        {
+          "name": "CMAKE_CXX_FLAGS",
+          "value": "/D _WIN32_WINNT=0x0601"
         }
       ]
     }

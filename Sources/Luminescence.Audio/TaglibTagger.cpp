@@ -170,7 +170,7 @@ namespace Luminescence
          static const String^ Lyrics = "LYRICS";
       };
 
-      public enum class Format
+      public enum class PictureFormat
       {
          Unknown = TagLib::MP4::CoverArt::Format::Unknown,
          JPEG = TagLib::MP4::CoverArt::Format::JPEG,
@@ -185,19 +185,19 @@ namespace Luminescence
 		  Picture(const TagLib::ByteVector& data, PictureType type, const TagLib::String& description)
 		  {
 			  Data = PictureByteVectorToManagedArray(data);
-			  PictureFormat = GetFormatFromData(Data);
+			  Format = GetFormatFromData(Data);
 			  Type = type;
 			  Description = gcnew String(description.toCString());
 		  }
 
-		  Picture(const TagLib::ByteVector& data, Format format) :
+		  Picture(const TagLib::ByteVector& data, PictureFormat format) :
 			  Picture(PictureByteVectorToManagedArray(data), format, PictureType::FrontCover, nullptr) { }
 
       public:
-         Picture(array<byte>^ data, Format format, PictureType type, String^ description)
+         Picture(array<byte>^ data, PictureFormat format, PictureType type, String^ description)
          {
             Data = data;
-            PictureFormat = format;
+            Format = format;
             Type = type;
             Description = description;
          }
@@ -207,29 +207,29 @@ namespace Luminescence
 
          property array<byte>^ Data;
          property PictureType Type;
-         property Format PictureFormat;
+         property PictureFormat Format;
          property String^ Description;
 
-         String^ GetMimeType() { return GetMimeTypeFromFormat(PictureFormat); }
+         String^ GetMimeType() { return GetMimeTypeFromFormat(Format); }
 
-         static String^ GetMimeTypeFromFormat(Format format)
+         static String^ GetMimeTypeFromFormat(PictureFormat format)
          {
             switch (format)
             {
-            case Format::JPEG:
+            case PictureFormat::JPEG:
                return "image/jpeg";
-            case Format::PNG:
+            case PictureFormat::PNG:
                return "image/png";
-            case Format::GIF:
+            case PictureFormat::GIF:
                return "image/gif";
-            case Format::BMP:
+            case PictureFormat::BMP:
                return "image/bmp";
 			default:
 			   return "application/octet-stream";
             }
          }
 
-         static Format GetFormatFromData(array<byte>^ data)
+         static PictureFormat GetFormatFromData(array<byte>^ data)
          {
             // https://en.wikipedia.org/wiki/List_of_file_signatures
 
@@ -237,7 +237,7 @@ namespace Luminescence
                data[0] == 0xFF &&
                data[1] == 0xD8 &&
                data[2] == 0xFF)
-               return Format::JPEG;
+               return PictureFormat::JPEG;
 
             if (data->Length > 8 &&
                data[0] == 0x89 &&
@@ -248,24 +248,24 @@ namespace Luminescence
                data[5] == 0x0A &&
                data[6] == 0x1A &&
                data[7] == 0x0A)
-               return Format::PNG;
+               return PictureFormat::PNG;
 
             if (data->Length > 4 &&
                data[0] == 0x47 &&
                data[1] == 0x49 &&
                data[2] == 0x46 &&
                data[3] == 0x38)
-               return Format::GIF;
+               return PictureFormat::GIF;
 
             if (data->Length > 2 &&
                data[0] == 0x42 &&
                data[1] == 0x4D)
-               return Format::BMP;
+               return PictureFormat::BMP;
 
-			return Format::Unknown;
+			return PictureFormat::Unknown;
          }
 
-         byte GetAtomDataType() { return (byte)PictureFormat; }
+         byte GetAtomDataType() { return (byte)Format; }
       };
 
       [AttributeUsage(AttributeTargets::Class, AllowMultiple = true)]
@@ -677,7 +677,7 @@ namespace Luminescence
             for (auto it = arts.begin(); it != arts.end(); it++)
             {
                TagLib::MP4::CoverArt pic = *it;
-               pictures->Add(gcnew Picture(pic.data(), (Format)pic.format()));
+               pictures->Add(gcnew Picture(pic.data(), (PictureFormat)pic.format()));
             }
          }
 
@@ -699,7 +699,7 @@ namespace Luminescence
                TagLib::MP4::CoverArtList arts;
                for each(auto picture in pictures)
                {
-                  TagLib::MP4::CoverArt pic((TagLib::MP4::CoverArt::Format)picture->PictureFormat, ManagedArrayToByteVector(picture->Data));
+                  TagLib::MP4::CoverArt pic((TagLib::MP4::CoverArt::Format)picture->Format, ManagedArrayToByteVector(picture->Data));
                   arts.append(pic);
                }
 

@@ -51,20 +51,6 @@ static String^ GetVorbisVersionFromVendor(String^ vendor)
    return nullptr;
 }
 
-static bool IsEmptyByteVector(const TagLib::ByteVector& bv)
-{
-   if (bv.isEmpty())
-      return true;
-
-   for (auto it = bv.begin(); it != bv.end(); it++)
-   {
-      if (*it != 0)
-         return false;
-   }
-
-   return true;
-}
-
 namespace Luminescence
 {
    namespace Audio
@@ -186,7 +172,7 @@ namespace Luminescence
 
       public enum class Format
       {
-         //Unknown = TagLib::MP4::CoverArt::Format::Unknown,
+         Unknown = TagLib::MP4::CoverArt::Format::Unknown,
          JPEG = TagLib::MP4::CoverArt::Format::JPEG,
          PNG = TagLib::MP4::CoverArt::Format::PNG,
          GIF = TagLib::MP4::CoverArt::Format::GIF,
@@ -195,6 +181,18 @@ namespace Luminescence
 
       public ref class Picture
       {
+	  internal:
+		  Picture(const TagLib::ByteVector& data, PictureType type, const TagLib::String& description)
+		  {
+			  Data = PictureByteVectorToManagedArray(data);
+			  PictureFormat = GetFormatFromData(Data);
+			  Type = type;
+			  Description = gcnew String(description.toCString());
+		  }
+
+		  Picture(const TagLib::ByteVector& data, Format format) :
+			  Picture(PictureByteVectorToManagedArray(data), format, PictureType::FrontCover, nullptr) { }
+
       public:
          Picture(array<byte>^ data, Format format, PictureType type, String^ description)
          {
@@ -204,13 +202,8 @@ namespace Luminescence
             Description = description;
          }
 
-         Picture(array<byte>^ data, PictureType type, String^ description)
-         {
-            Data = data;
-            PictureFormat = GetFormatFromData(data);
-            Type = type;
-            Description = description;
-         }
+		 Picture(array<byte>^ data, PictureType type, String^ description) :
+			 Picture(data, GetFormatFromData(data), type, description) { }
 
          property array<byte>^ Data;
          property PictureType Type;
@@ -231,8 +224,8 @@ namespace Luminescence
                return "image/gif";
             case Format::BMP:
                return "image/bmp";
-            default:
-               throw gcnew NotSupportedException(ResourceStrings::GetString("PictureFormatNotSupported"));
+			default:
+			   return "application/octet-stream";
             }
          }
 
@@ -269,7 +262,7 @@ namespace Luminescence
                data[1] == 0x4D)
                return Format::BMP;
 
-            throw gcnew NotSupportedException(ResourceStrings::GetString("PictureFormatNotSupported"));
+			return Format::Unknown;
          }
 
          byte GetAtomDataType() { return (byte)PictureFormat; }
@@ -398,11 +391,7 @@ namespace Luminescence
             for (auto it = arts.begin(); it != arts.end(); it++)
             {
                TagLib::FLAC::Picture *pic = *it;
-
-               pictures->Add(gcnew Picture(
-                  ByteVectorToManagedArray(pic->data()),
-                  (PictureType)pic->type(),
-                  gcnew String(pic->description().toCString())));
+               pictures->Add(gcnew Picture(pic->data(), (PictureType)pic->type(), pic->description()));
             }
          }
 
@@ -467,13 +456,7 @@ namespace Luminescence
                {
                   TagLib::ID3v2::Frame *frame = *it;
                   TagLib::ID3v2::AttachedPictureFrame *pic = static_cast<TagLib::ID3v2::AttachedPictureFrame*>(frame);
-
-                  if (IsEmptyByteVector(pic->picture())) continue;
-
-                  pictures->Add(gcnew Picture(
-                     ByteVectorToManagedArray(pic->picture()),
-                     (PictureType)pic->type(),
-                     gcnew String(pic->description().toCString())));
+                  pictures->Add(gcnew Picture(pic->picture(), (PictureType)pic->type(), pic->description()));
                }
             }
             else
@@ -558,11 +541,7 @@ namespace Luminescence
             for (auto it = arts.begin(); it != arts.end(); it++)
             {
                TagLib::FLAC::Picture *pic = *it;
-
-               pictures->Add(gcnew Picture(
-                  ByteVectorToManagedArray(pic->data()),
-                  (PictureType)pic->type(),
-                  gcnew String(pic->description().toCString())));
+               pictures->Add(gcnew Picture(pic->data(), (PictureType)pic->type(), pic->description()));
             }
 
             tags = PropertyMapToManagedDictionary(file.properties());
@@ -627,11 +606,7 @@ namespace Luminescence
             {
                TagLib::ASF::Attribute attr = *it;
                TagLib::ASF::Picture pic = attr.toPicture();
-
-               pictures->Add(gcnew Picture(
-                  ByteVectorToManagedArray(pic.picture()),
-                  (PictureType)pic.type(),
-                  gcnew String(pic.description().toCString())));
+               pictures->Add(gcnew Picture(pic.picture(), (PictureType)pic.type(), pic.description()));
             }
          }
 
@@ -702,12 +677,7 @@ namespace Luminescence
             for (auto it = arts.begin(); it != arts.end(); it++)
             {
                TagLib::MP4::CoverArt pic = *it;
-
-               pictures->Add(gcnew Picture(
-                  ByteVectorToManagedArray(pic.data()),
-                  (Format)pic.format(),
-                  PictureType::FrontCover,
-                  nullptr));
+               pictures->Add(gcnew Picture(pic.data(), (Format)pic.format()));
             }
          }
 

@@ -12,16 +12,25 @@ using namespace System::Collections::Generic;
 using namespace System::Runtime::InteropServices;
 using namespace System::Text;
 
-static array<byte>^ ByteVectorToManagedArray(const TagLib::ByteVector& data)
+static array<byte>^ PictureByteVectorToManagedArray(const TagLib::ByteVector& data)
 {
-   if (data.size() == 0)
-      return gcnew array<byte>(0);
+	int offset = 0;
+	for (auto it = data.begin(); it != data.end(); it++)
+	{
+		if (*it == 0)
+			offset++;
+		else
+			break;
+	}
 
-   array<byte>^ buffer = gcnew array<byte>(data.size());
-   pin_ptr<byte> buffer_start = &buffer[0];
-   byte *dest = buffer_start;
-   std::copy(data.begin(), data.end(), dest);
-   return buffer;
+	if (data.size() == offset)
+		return gcnew array<byte>(0);
+
+	array<byte>^ buffer = gcnew array<byte>(data.size() - offset);
+	pin_ptr<byte> buffer_start = &buffer[0];
+	byte *dest = buffer_start;
+	std::copy(data.begin() + offset, data.end(), dest);
+	return buffer;
 }
 
 static List<String^>^ PropertyMapToManagedList(const TagLib::PropertyMap& map)

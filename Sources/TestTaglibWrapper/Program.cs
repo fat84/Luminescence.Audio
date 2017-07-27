@@ -15,13 +15,13 @@ namespace TestTaglibWrapper
 
          TaglibSettings.MinId3Version = Id3Version.id3v23;
          TaglibSettings.MaxId3Version = Id3Version.id3v24;
-         TaglibSettings.ID3Latin1Encoding = Encoding.GetEncoding(1251);
+         //TaglibSettings.ID3Latin1Encoding = Encoding.GetEncoding(1252);
 
          bool workOnCopy = true;
          bool writeTags = false;
          bool addCover = true;
          bool addExoticTag = false;
-         var paths = new[]
+         var paths = new string[]
          {
             //@"C:\Users\cyber\Downloads\Test\flac.ogg", // should crash because Ogg FLAC is not supported yet
 
@@ -30,8 +30,7 @@ namespace TestTaglibWrapper
             //@"C:\Users\cyber\Downloads\Test\vorbis.ogg",
             //@"C:\Users\cyber\Downloads\Test\wma.wma",
             //@"C:\Users\cyber\Downloads\Test\aac.m4a",
-            @"C:\Users\cyber\Downloads\MP3EncTestSuite\rus-1-iso8859-1.mp3",
-            @"C:\Users\cyber\Downloads\MP3EncTestSuite\rus-23-iso8859-1.mp3"
+            //@"C:\Users\cyber\Downloads\Jean_Jacques_Goldman_-_A_nos_actes_manques.mp3"
          };
 
          DoWork(workOnCopy, writeTags, addCover, addExoticTag, paths);

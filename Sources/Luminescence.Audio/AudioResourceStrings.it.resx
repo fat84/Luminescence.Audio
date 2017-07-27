@@ -144,7 +144,4 @@
   <data name="InvalidAudioFile" xml:space="preserve">
     <value>Il file non è conforme alle specifiche del formato.</value>
   </data>
-  <data name="PictureFormatNotSupported" xml:space="preserve">
-    <value>Il formato immagine non è supportato.</value>
-  </data>
 </root>

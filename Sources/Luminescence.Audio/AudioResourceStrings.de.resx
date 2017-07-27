@@ -117,7 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-
   <data name="CannotCalculateFingerprint" xml:space="preserve">
     <value>Berechnung des akustischen Fingerprints nicht möglich ({0}).</value>
   </data>
@@ -144,8 +143,5 @@
   </data>
   <data name="InvalidAudioFile" xml:space="preserve">
     <value>Die Formatspezifikationen der Datei entsprechen nicht der erwarteten Form.</value>
-  </data>
-  <data name="PictureFormatNotSupported" xml:space="preserve">
-    <value>Dieses Bildformat wird nicht unterstützt.</value>
   </data>
 </root>

@@ -81,7 +81,7 @@ namespace TestTaglibWrapper
             string cover = @"C:\Users\cyber\Downloads\folder.jpg";
             var fi = new FileInfo(cover);
             Console.WriteLine($"Adding a cover : FrontCover, JPEG, {fi.Length} bytes, without description");
-            tagger.Pictures.Add(new Picture(File.ReadAllBytes(cover), Format.JPEG, PictureType.FrontCover, null)); 
+            tagger.Pictures.Add(new Picture(File.ReadAllBytes(cover), PictureFormat.JPEG, PictureType.FrontCover, null)); 
          }
 
          Console.WriteLine("Saving...");
@@ -121,7 +121,7 @@ namespace TestTaglibWrapper
                Console.WriteLine("COVER ART:");
                Console.WriteLine($"   Type={cover.Type}");
                Console.WriteLine($"   Description={cover.Description}");
-               Console.WriteLine($"   PictureFormat={cover.PictureFormat}");
+               Console.WriteLine($"   PictureFormat={cover.Format}");
                Console.WriteLine($"   Size={cover.Data.Length} bytes");
 
                Console.WriteLine();

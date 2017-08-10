@@ -474,25 +474,19 @@ namespace Luminescence
 
             TagLib::ID3v2::Tag *id3 = file.ID3v2Tag(true);
             id3->setProperties(ManagedDictionaryToPropertyMap(tags));
-            // ID3 implements the complete PropertyMap interface, so an empty map is always returned
+            // ID3 implements the complete PropertyMap interface, so id3->setProperties() always returns an empty PropertyMap.
 
             id3->removeFrames("APIC");
             for each(auto picture in pictures)
             {
-               array<byte>^ data = picture->Data;
-               pin_ptr<byte> p = &data[0];
-               unsigned char *pby = p;
-               char *pch = reinterpret_cast<char*>(pby);
-               TagLib::ByteVector buffer(pch, picture->Data->Length);
-
                TagLib::ID3v2::AttachedPictureFrame *frame = new TagLib::ID3v2::AttachedPictureFrame();
-               frame->setPicture(buffer);
+               frame->setPicture(ManagedArrayToByteVector(picture->Data));
                frame->setMimeType(msclr::interop::marshal_as<std::string>(picture->GetMimeType()).c_str());
                frame->setType((TagLib::ID3v2::AttachedPictureFrame::Type)picture->Type);
                if (picture->Description != nullptr)
                   frame->setDescription(msclr::interop::marshal_as<std::wstring>(picture->Description).c_str());
 
-               id3->addFrame(frame); // At this point the tag takes ownership of the frame and will handle freeing its memory.
+               id3->addFrame(frame); // At this point, the tag takes ownership of the frame and will handle freeing its memory.
             }
 
             int tagVersion = id3->header()->majorVersion();

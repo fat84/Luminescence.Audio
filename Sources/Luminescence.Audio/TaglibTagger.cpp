@@ -762,7 +762,11 @@ namespace Luminescence
 
          IEnumerable<String^>^ GetTagValues(String^ tag)
          {
-            return tags->ContainsKey(tag) ? tags[tag] : Enumerable::Empty<String^>();
+			   List<String^>^ tagValues;
+			   if (tags->TryGetValue(tag, tagValues))
+				   return tagValues;
+
+            return Enumerable::Empty<String^>();
          }
 
          void ReplaceTag(String^ tag, ...array<String^>^ values)
@@ -779,12 +783,13 @@ namespace Luminescence
 
          void AddTag(String^ tag, ...array<String^>^ values)
          {
-            if (tags->ContainsKey(tag))
+			   List<String^>^ tagValues;
+            if (tags->TryGetValue(tag, tagValues))
             {
                for each (String^ value in values)
                {
-                  if (!tags[tag]->Contains(value))
-                     tags[tag]->Add(value);
+                  if (!tagValues->Contains(value))
+                     tagValues->Add(value);
                }
             }
             else
@@ -793,10 +798,11 @@ namespace Luminescence
 
          void AddTag(String^ tag, String^ value)
          {
-            if (tags->ContainsKey(tag))
+            List<String^>^ tagValues;
+            if (tags->TryGetValue(tag, tagValues))
             {
-               if (!tags[tag]->Contains(value))
-                  tags[tag]->Add(value);
+               if (!tagValues->Contains(value))
+                  tagValues->Add(value);
             }
             else
             {

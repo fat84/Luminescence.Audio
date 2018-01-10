@@ -18,7 +18,6 @@ namespace TestChromaprintWrapper
       {
          TestFingerprinting();
          //TestFindingDuplicates();
-         //BenchmarkFingerprintComparer();
          //TestLookup();
 
          Console.Write("Press any key to continue . . . ");
@@ -52,34 +51,6 @@ namespace TestChromaprintWrapper
          {
             // l'empreinte acoustique brut par la librairie diffère de l'empreinte encodée après decodage
             Debugger.Break();
-         }
-      }
-
-      private static void BenchmarkFingerprintComparer()
-      {
-         var sw = new Stopwatch();
-         var fingerprint1 = new uint[1981];
-         var fingerprint2 = new uint[2016];
-
-         for (int j = 0; j < 5; j++)
-         {
-            sw.Restart();
-            for (int i = 0; i < 100; i++)
-            {
-               FingerprintComparer.MatchFingerprints3(fingerprint1, fingerprint2, -1);
-            }
-            sw.Stop();
-            Console.WriteLine(sw.ElapsedMilliseconds);
-
-            sw.Restart();
-            for (int i = 0; i < 100; i++)
-            {
-               ChromaprintFingerprinter.MatchFingerprints(fingerprint1, fingerprint2, -1);
-            }
-            sw.Stop();
-            Console.WriteLine(sw.ElapsedMilliseconds);
-
-            Console.WriteLine();
          }
       }
 

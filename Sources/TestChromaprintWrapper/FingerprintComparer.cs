@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Luminescence.Audio;
 using Metatogger.Data;
@@ -49,7 +50,7 @@ namespace Metatogger.Business
          var dups = new List<AudioFile>();
          var matrix = new float[candidates.Count];
 
-         Parallel.For(0, matrix.Length, i => { matrix[i] = ChromaprintFingerprinter.MatchFingerprints(candidates[i].Fingerprint, file.Fingerprint, -1); });
+         Parallel.For(0, matrix.Length, i => { matrix[i] = MatchFingerprints3(candidates[i].Fingerprint, file.Fingerprint); });
          for (int i = 0; i < matrix.Length; i++)
          {
             if (matrix[i] >= level)
@@ -92,6 +93,7 @@ namespace Metatogger.Business
       }
 
       // http://stackoverflow.com/questions/109023/how-to-count-the-number-of-set-bits-in-a-32-bit-integer
+      [MethodImpl(MethodImplOptions.AggressiveInlining)]
       private static uint PopCount(uint i)
       {
          i = i - ((i >> 1) & 0x55555555);

@@ -41,9 +41,6 @@
     <ClCompile Include="TaglibTagger.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="match_fingerprint.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="License.txt" />

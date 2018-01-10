@@ -16,9 +16,6 @@
 using namespace System;
 using namespace chromaprint;
 
-// defined in match_fingerprints.cpp
-float match_fingerprints3(uint32_t *a, int asize, uint32_t *b, int bsize, int maxoffset);
-
 namespace Luminescence
 {
    namespace Audio
@@ -119,7 +116,7 @@ namespace Luminescence
                chromaprint_dealloc(raw_fp_data);
                chromaprint_free(chromaprint_ctx);
             }
-         };
+         };         
 
          static String^ GetEncodedFingerprint(String^ path) { return GetEncodedFingerprint(path, 120); }
          static String^ GetEncodedFingerprint(String^ path, int length)
@@ -144,10 +141,15 @@ namespace Luminescence
 
          static String^ EncodeFingerprintBase64(array<uint32_t>^ fingerprint)
          {
+            return EncodeFingerprintBase64(fingerprint, fingerprint->Length);
+         }
+
+         static String^ EncodeFingerprintBase64(array<uint32_t>^ fingerprint, int length)
+         {
             pin_ptr<uint32_t> _fingerprint = &fingerprint[0];
             char *encoded;
             int encoded_size;
-            chromaprint_encode_fingerprint(_fingerprint, fingerprint->Length, CHROMAPRINT_ALGORITHM_DEFAULT, &encoded, &encoded_size, 1);
+            chromaprint_encode_fingerprint(_fingerprint, length, CHROMAPRINT_ALGORITHM_DEFAULT, &encoded, &encoded_size, 1);
             String^ fp = gcnew String(encoded, 0, encoded_size);
             chromaprint_dealloc(encoded);
             return fp;
@@ -162,19 +164,6 @@ namespace Luminescence
             array<uint32_t>^ mfp = NativeIntArrayToManagedOne(fp, length);
             chromaprint_dealloc(fp);
             return mfp;
-         }
-
-         static float MatchFingerprints(array<uint32_t>^ fingerprint1, array<uint32_t>^ fingerprint2) { return MatchFingerprints(fingerprint1, fingerprint2, -1); }
-         static float MatchFingerprints(array<uint32_t>^ fingerprint1, array<uint32_t>^ fingerprint2, int maxoffset)
-         {
-            pin_ptr<uint32_t> _fingerprint1 = &fingerprint1[0];
-            pin_ptr<uint32_t> _fingerprint2 = &fingerprint2[0];
-            return match_fingerprints3(_fingerprint1, fingerprint1->Length, _fingerprint2, fingerprint2->Length, maxoffset);
-         };
-
-         static float CompareFile(String^ path1, String^ path2)
-         {
-            return MatchFingerprints(GetRawFingerprint(path1, 0), GetRawFingerprint(path2, 0), -1);
          }
 
          static property Version^ ChromaprintAlgorithmVersion

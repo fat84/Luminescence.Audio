@@ -3,7 +3,7 @@
 ./configure \
 	--prefix='../build' \
 	--toolchain=msvc \
-	--yasmexe='E:/Home/Important/Development/Toolkit/Tools/yasm-1.3.0-win32.exe' \
+	--x86asmexe='/mnt/e/Home/Important/Development/Toolkit/Tools/yasm-1.3.0-win32.exe' \
 	--cpu=i686 \
 \
 	--enable-shared \

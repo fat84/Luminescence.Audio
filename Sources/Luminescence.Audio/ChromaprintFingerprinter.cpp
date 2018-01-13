@@ -87,17 +87,42 @@ namespace Luminescence
             if (!chromaprint_finish(chromaprint_ctx))
                ThrowCannotCalculateFingerprintException("Could not finish the fingerprinting process");
 
-            int size;
+            /*int size;
             if (!chromaprint_get_raw_fingerprint_size(chromaprint_ctx, &size))
                ThrowCannotCalculateFingerprintException("Could not get the fingerprinting size");
 
             if (size <= 0)
-               ThrowCannotCalculateFingerprintException("Empty fingerprint");
+               ThrowCannotCalculateFingerprintException("Empty fingerprint");*/
          };
 
       public:
-         static array<uint32_t>^ GetRawFingerprint(String^ path) { return GetRawFingerprint(path, 120); }
-         static array<uint32_t>^ GetRawFingerprint(String^ path, int length)
+         // The Acoustid service uses 120 seconds as default for matching audio files.
+         static array<uint32_t>^ GetRawFingerprint(String^ path, int lengthInSeconds)
+         {
+            ChromaprintContext *chromaprint_ctx = chromaprint_new(CHROMAPRINT_ALGORITHM_DEFAULT);
+            uint32_t *raw_fp_data = nullptr;
+            try
+            {
+               ComputeFingerprint(path, lengthInSeconds, chromaprint_ctx);
+
+               int raw_fp_size = 0;
+               if (!chromaprint_get_raw_fingerprint(chromaprint_ctx, &raw_fp_data, &raw_fp_size))
+                  ThrowCannotCalculateFingerprintException("Could not get the fingerprinting");
+
+               array<uint32_t>^ fingerprint = gcnew array<uint32_t>(raw_fp_size);
+               for (int i = 0; i < raw_fp_size; i++)
+                  fingerprint[i] = raw_fp_data[i];
+
+               return fingerprint;
+            }
+            finally
+            {
+               chromaprint_dealloc(raw_fp_data);
+               chromaprint_free(chromaprint_ctx);
+            }
+         };
+
+         static int GetRawFingerprint(String^ path, int length, array<uint32_t>^ buffer)
          {
             ChromaprintContext *chromaprint_ctx = chromaprint_new(CHROMAPRINT_ALGORITHM_DEFAULT);
             uint32_t *raw_fp_data = nullptr;
@@ -109,14 +134,17 @@ namespace Luminescence
                if (!chromaprint_get_raw_fingerprint(chromaprint_ctx, &raw_fp_data, &raw_fp_size))
                   ThrowCannotCalculateFingerprintException("Could not get the fingerprinting");
 
-               return NativeIntArrayToManagedOne(raw_fp_data, raw_fp_size);
+               for (int i = 0; i < raw_fp_size; i++)
+                  buffer[i] = raw_fp_data[i];
+
+               return raw_fp_size;
             }
             finally
             {
                chromaprint_dealloc(raw_fp_data);
                chromaprint_free(chromaprint_ctx);
             }
-         };         
+         };
 
          static String^ GetEncodedFingerprint(String^ path) { return GetEncodedFingerprint(path, 120); }
          static String^ GetEncodedFingerprint(String^ path, int length)
@@ -146,11 +174,14 @@ namespace Luminescence
 
          static String^ EncodeFingerprintBase64(array<uint32_t>^ fingerprint, int length)
          {
-            pin_ptr<uint32_t> _fingerprint = &fingerprint[0];
             char *encoded;
             int encoded_size;
+
+            pin_ptr<uint32_t> _fingerprint = &fingerprint[0];
             chromaprint_encode_fingerprint(_fingerprint, length, CHROMAPRINT_ALGORITHM_DEFAULT, &encoded, &encoded_size, 1);
+
             String^ fp = gcnew String(encoded, 0, encoded_size);
+
             chromaprint_dealloc(encoded);
             return fp;
          };
@@ -159,12 +190,17 @@ namespace Luminescence
          {
             uint32_t *fp;
             int length, algorithm;
+
             std::string encoded_fp = msclr::interop::marshal_as<std::string>(fingerprint);
             chromaprint_decode_fingerprint(encoded_fp.c_str(), encoded_fp.size(), &fp, &length, &algorithm, 1);
-            array<uint32_t>^ mfp = NativeIntArrayToManagedOne(fp, length);
+
+            array<uint32_t>^ raw_fingerprint = gcnew array<uint32_t>(length);
+            for (int i = 0; i < length; i++)
+               raw_fingerprint[i] = fp[i];
+
             chromaprint_dealloc(fp);
-            return mfp;
-         }
+            return raw_fingerprint;
+         }         
 
          static property Version^ ChromaprintAlgorithmVersion
          {

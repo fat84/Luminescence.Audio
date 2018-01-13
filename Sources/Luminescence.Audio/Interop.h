@@ -27,9 +27,9 @@ static array<byte>^ PictureByteVectorToManagedArray(const TagLib::ByteVector& da
 		return gcnew array<byte>(0);
 
 	array<byte>^ buffer = gcnew array<byte>(data.size() - offset);
-	pin_ptr<byte> buffer_start = &buffer[0];
-	byte *dest = buffer_start;
-	std::copy(data.begin() + offset, data.end(), dest);
+   for (int i = 0; i < buffer->Length; i++)
+      buffer[i] = data[i];
+
 	return buffer;
 }
 
@@ -102,16 +102,4 @@ static std::string ManagedStringToNativeUtf8One(String^ s)
    utf8.resize(encodedBytes->Length);
    Marshal::Copy(encodedBytes, 0, IntPtr((void*)utf8.data()), encodedBytes->Length);
    return utf8;
-}
-
-static array<uint32_t>^ NativeIntArrayToManagedOne(const uint32_t* data, int size)
-{
-   if (size == 0)
-      return gcnew array<uint32_t>(0);
-
-   array<uint32_t>^ buffer = gcnew array<uint32_t>(size);
-   pin_ptr<uint32_t> buffer_start = &buffer[0];
-   uint32_t *dest = buffer_start;
-   std::copy(data, data + size, dest);
-   return buffer;
 }

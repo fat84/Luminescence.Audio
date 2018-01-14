@@ -2,7 +2,7 @@
 
 Luminescence.Audio is a C++/CLI library for playing (with [FFmpeg](https://github.com/FFmpeg/FFmpeg) and [XAudio 2.7](https://msdn.microsoft.com/en-us/library/windows/desktop/ee415764.aspx)), tagging (with [TagLib](https://github.com/taglib/taglib)) and fingerprinting (with [FFmpeg](https://github.com/FFmpeg/FFmpeg) and [Acoustid Chromaprint](https://bitbucket.org/acoustid/chromaprint/overview)) audio files, in managed code.
 
-**Luminescence.Audio is available as [NuGet package](https://www.nuget.org/packages/Luminescence.Audio.x86/). Do not forget to install all [required runtimes](#native-dependencies-required).**
+**Do not forget to install all [required runtimes](#native-dependencies-required).**
 
 This library has been designed to be used with my tags editor, [Metatogger](http://www.luminescence-software.org/metatogger.html).
 

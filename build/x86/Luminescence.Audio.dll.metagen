@@ -1,0 +1,193 @@
+  Luminescence.Audio.AudioResourceStrings.resources - Embedded, ContainedInManifestFile, 
+ImageRuntimeVersion: v4.0.30319
+Assembly Luminescence.Audio, Version=3.8.*, Culture=Langue indifférente (Pays indifférent): 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly WindowsBase, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35: 
+	hash=None, flags=None
+Class Luminescence.Audio.PathEventArgs: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.EventArgs
+    Void .ctor(System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Properties:
+    System.String Path 'get ' : 
+  Methods:
+    get_Path(): PrivateScope, Public, HideBySig, SpecialName
+Class Luminescence.Audio.FFmpegAudioPlayer: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Interfaces:
+    System.IDisposable
+  Properties:
+    Boolean Paused 'get set' : 
+    Boolean Muted 'get set' : 
+    Single Volume 'get set' : 
+    System.String PlayingFile 'get ' : 
+  Events:
+    System.EventHandler`1[Luminescence.Audio.PathEventArgs] PlayerStarted: SpecialName
+    System.EventHandler`1[Luminescence.Audio.PathEventArgs] PlayerStopped: SpecialName
+  Methods:
+    Play(String): PrivateScope, Public, HideBySig
+    Stop(): PrivateScope, Public, HideBySig
+    add_PlayerStopped(EventHandler`1): PrivateScope, Public, HideBySig, SpecialName
+    remove_PlayerStopped(EventHandler`1): PrivateScope, Public, HideBySig, SpecialName
+    add_PlayerStarted(EventHandler`1): PrivateScope, Public, HideBySig, SpecialName
+    remove_PlayerStarted(EventHandler`1): PrivateScope, Public, HideBySig, SpecialName
+    get_PlayingFile(): PrivateScope, Public, HideBySig, SpecialName
+    get_Volume(): PrivateScope, Public, HideBySig, SpecialName
+    set_Volume(Single): PrivateScope, Public, HideBySig, SpecialName
+    get_Muted(): PrivateScope, Public, HideBySig, SpecialName
+    set_Muted(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig, SpecialName
+    get_Paused(): PrivateScope, Public, HideBySig, SpecialName
+    set_Paused(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig, SpecialName
+    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
+Class Luminescence.Audio.ChromaprintFingerprinter: AutoLayout, AnsiClass, Class, Public, Abstract, Sealed, BeforeFieldInit
+  Properties:
+    System.Version ChromaprintAlgorithmVersion 'get ' : 
+  Methods:
+    GetRawFingerprint(String, Int32, UInt32[]): PrivateScope, Public, Static, HideBySig
+    GetRawFingerprint(String, Int32): PrivateScope, Public, Static, HideBySig
+    GetEncodedFingerprint(String, Int32): PrivateScope, Public, Static, HideBySig
+    GetEncodedFingerprint(String): PrivateScope, Public, Static, HideBySig
+    EncodeFingerprintBase64(UInt32[], Int32): PrivateScope, Public, Static, HideBySig
+    EncodeFingerprintBase64(UInt32[]): PrivateScope, Public, Static, HideBySig
+    DecodeFingerprintBase64(String): PrivateScope, Public, Static, HideBySig
+    get_ChromaprintAlgorithmVersion(): PrivateScope, Public, Static, HideBySig, SpecialName
+Class Luminescence.Audio.TaglibSettings: AutoLayout, AnsiClass, Class, Public, Abstract, Sealed, BeforeFieldInit
+  Fields:
+    Luminescence.Audio.Id3Version MinId3Version : Public, Static
+    Luminescence.Audio.Id3Version MaxId3Version : Public, Static
+    Boolean OverrideID3Latin1EncodingCodepage : Public, Static
+    System.Text.Encoding ID3Latin1Encoding : Public, Static
+Class Luminescence.Audio.TagNameKey: AutoLayout, AnsiClass, Class, Public, Abstract, Sealed, BeforeFieldInit
+  Fields:
+    System.String Artist IsConst : Public, Static
+    System.String Title IsConst : Public, Static
+    System.String Date IsConst : Public, Static
+    System.String Album IsConst : Public, Static
+    System.String Genre IsConst : Public, Static
+    System.String TrackNumber IsConst : Public, Static
+    System.String AlbumArtist IsConst : Public, Static
+    System.String DiscNumber IsConst : Public, Static
+    System.String Lyricist IsConst : Public, Static
+    System.String Composer IsConst : Public, Static
+    System.String Language IsConst : Public, Static
+    System.String OriginalAlbum IsConst : Public, Static
+    System.String OriginalArtist IsConst : Public, Static
+    System.String OriginalDate IsConst : Public, Static
+    System.String AlbumSort IsConst : Public, Static
+    System.String ArtistSort IsConst : Public, Static
+    System.String AlbumArtistSort IsConst : Public, Static
+    System.String TitleSort IsConst : Public, Static
+    System.String Label IsConst : Public, Static
+    System.String Comment IsConst : Public, Static
+    System.String Lyrics IsConst : Public, Static
+Class Luminescence.Audio.Picture: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(Byte[], Luminescence.Audio.PictureType, System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(Byte[], Luminescence.Audio.PictureFormat, Luminescence.Audio.PictureType, System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Properties:
+    System.String Description 'get set' : 
+    Luminescence.Audio.PictureFormat Format 'get set' : 
+    Luminescence.Audio.PictureType Type 'get set' : 
+    Byte[] Data 'get set' : 
+  Methods:
+    get_Data(): PrivateScope, Public, HideBySig, SpecialName
+    set_Data(Byte[]): PrivateScope, Public, HideBySig, SpecialName
+    get_Type(): PrivateScope, Public, HideBySig, SpecialName
+    set_Type(PictureType): PrivateScope, Public, HideBySig, SpecialName
+    get_Format(): PrivateScope, Public, HideBySig, SpecialName
+    set_Format(PictureFormat): PrivateScope, Public, HideBySig, SpecialName
+    get_Description(): PrivateScope, Public, HideBySig, SpecialName
+    set_Description(String): PrivateScope, Public, HideBySig, SpecialName
+    GetMimeType(): PrivateScope, Public, HideBySig
+    GetMimeTypeFromFormat(PictureFormat): PrivateScope, Public, Static, HideBySig
+    GetFormatFromData(Byte[]): PrivateScope, Public, Static, HideBySig
+    GetAtomDataType(): PrivateScope, Public, HideBySig
+Class Luminescence.Audio.FileFormatAttribute: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Attribute
+    Void .ctor(System.String, System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Properties:
+    System.String File 'get ' : 
+    System.String Extension 'get ' : 
+  Methods:
+    get_Extension(): PrivateScope, Public, HideBySig, SpecialName
+    get_File(): PrivateScope, Public, HideBySig, SpecialName
+Class Luminescence.Audio.TaglibTagger: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Properties:
+    System.Collections.Generic.List`1[Luminescence.Audio.Picture] Pictures 'get ' : 
+    System.Collections.Generic.Dictionary`2[System.String,System.Collections.Generic.List`1[System.String]] Tags 'get ' : 
+    Byte BitsPerSample 'get ' : 
+    Int32 SampleRate 'get ' : 
+    Int32 Bitrate 'get ' : 
+    System.TimeSpan Duration 'get ' : 
+    Byte Channels 'get ' : 
+    System.String CodecVersion 'get ' : 
+    System.String Codec 'get ' : 
+    System.String Source 'get set' : 
+  Methods:
+    get_Source(): PrivateScope, Public, HideBySig, SpecialName
+    set_Source(String): PrivateScope, Public, HideBySig, SpecialName
+    get_Codec(): PrivateScope, Public, HideBySig, SpecialName
+    get_CodecVersion(): PrivateScope, Public, HideBySig, SpecialName
+    get_Channels(): PrivateScope, Public, HideBySig, SpecialName
+    get_Duration(): PrivateScope, Public, HideBySig, SpecialName
+    get_Bitrate(): PrivateScope, Public, HideBySig, SpecialName
+    get_SampleRate(): PrivateScope, Public, HideBySig, SpecialName
+    get_BitsPerSample(): PrivateScope, Public, HideBySig, SpecialName
+    get_Tags(): PrivateScope, Public, HideBySig, SpecialName
+    get_Pictures(): PrivateScope, Public, HideBySig, SpecialName
+    SaveTags(): PrivateScope, Public, HideBySig
+    RemoveTag(String): PrivateScope, Public, HideBySig
+    GetTagValues(String): PrivateScope, Public, HideBySig
+    ReplaceTag(String, String): PrivateScope, Public, HideBySig
+    ReplaceTag(String, String[]): PrivateScope, Public, HideBySig
+    AddTag(String, String): PrivateScope, Public, HideBySig
+    AddTag(String, String[]): PrivateScope, Public, HideBySig
+Struct Luminescence.Audio.Id3Version: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    Luminescence.Audio.Id3Version id3v23 = 3 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.Id3Version id3v24 = 4 : Public, Static, Literal, HasDefault
+Struct Luminescence.Audio.PictureType: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    Luminescence.Audio.PictureType Other = 0 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType FileIcon = 1 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType OtherFileIcon = 2 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType FrontCover = 3 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType BackCover = 4 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType LeafletPage = 5 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType Media = 6 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType LeadArtist = 7 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType Artist = 8 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType Conductor = 9 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType Band = 10 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType Composer = 11 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType Lyricist = 12 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType RecordingLocation = 13 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType DuringRecording = 14 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType DuringPerformance = 15 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType MovieScreenCapture = 16 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType ColouredFish = 17 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType Illustration = 18 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType BandLogo = 19 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureType PublisherLogo = 20 : Public, Static, Literal, HasDefault
+Struct Luminescence.Audio.PictureFormat: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    Luminescence.Audio.PictureFormat Unknown = 0 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureFormat JPEG = 13 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureFormat PNG = 14 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureFormat GIF = 12 : Public, Static, Literal, HasDefault
+    Luminescence.Audio.PictureFormat BMP = 27 : Public, Static, Literal, HasDefault

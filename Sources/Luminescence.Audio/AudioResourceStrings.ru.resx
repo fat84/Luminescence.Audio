@@ -132,9 +132,6 @@
   <data name="CannotOpenFileWriting" xml:space="preserve">
     <value>Файл не может быть открыт для записи тэгов.</value>
   </data>
-  <data name="CannotUseAudioEngine" xml:space="preserve">
-    <value>Механизм воспроизведения аудио недоступен ({0}, {1: X}).</value>
-  </data>
   <data name="FileFormatNotSupported" xml:space="preserve">
     <value>Формат файла не поддерживается.</value>
   </data>

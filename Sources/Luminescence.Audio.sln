@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Luminescence.Audio", "Luminescence.Audio\Luminescence.Audio.vcxproj", "{680E3C60-AE7F-4119-BBC7-FDAFA1130954}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAudioPlayerWrapper", "TestAudioPlayerWrapper\TestAudioPlayerWrapper.csproj", "{69FEAAA9-B506-4EE1-A8F6-F0068BACD22D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestChromaprintWrapper", "TestChromaprintWrapper\TestChromaprintWrapper.csproj", "{C0B9BA76-EC74-4EE0-9FEB-662112E7F2B5}"
 EndProject
@@ -30,12 +28,6 @@ Global
 		{680E3C60-AE7F-4119-BBC7-FDAFA1130954}.Release|Any CPU.ActiveCfg = Release|Win32
 		{680E3C60-AE7F-4119-BBC7-FDAFA1130954}.Release|x86.ActiveCfg = Release|Win32
 		{680E3C60-AE7F-4119-BBC7-FDAFA1130954}.Release|x86.Build.0 = Release|Win32
-		{69FEAAA9-B506-4EE1-A8F6-F0068BACD22D}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{69FEAAA9-B506-4EE1-A8F6-F0068BACD22D}.Debug|x86.ActiveCfg = Debug|x86
-		{69FEAAA9-B506-4EE1-A8F6-F0068BACD22D}.Debug|x86.Build.0 = Debug|x86
-		{69FEAAA9-B506-4EE1-A8F6-F0068BACD22D}.Release|Any CPU.ActiveCfg = Release|x86
-		{69FEAAA9-B506-4EE1-A8F6-F0068BACD22D}.Release|x86.ActiveCfg = Release|x86
-		{69FEAAA9-B506-4EE1-A8F6-F0068BACD22D}.Release|x86.Build.0 = Release|x86
 		{C0B9BA76-EC74-4EE0-9FEB-662112E7F2B5}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{C0B9BA76-EC74-4EE0-9FEB-662112E7F2B5}.Debug|x86.ActiveCfg = Debug|x86
 		{C0B9BA76-EC74-4EE0-9FEB-662112E7F2B5}.Debug|x86.Build.0 = Debug|x86
@@ -53,5 +45,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {548FE87D-9271-4DA1-B412-85E9E06B95ED}
 	EndGlobalSection
 EndGlobal

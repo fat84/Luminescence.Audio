@@ -1,6 +1,7 @@
 # Luminescence.Audio
 
-Luminescence.Audio is a C++/CLI library for playing (with [FFmpeg](https://github.com/FFmpeg/FFmpeg) and [XAudio 2.7](https://msdn.microsoft.com/en-us/library/windows/desktop/ee415764.aspx)), tagging (with [TagLib](https://github.com/taglib/taglib)) and fingerprinting (with [FFmpeg](https://github.com/FFmpeg/FFmpeg) and [Acoustid Chromaprint](https://bitbucket.org/acoustid/chromaprint/overview)) audio files, in managed code.
+Luminescence.Audio is a C++/CLI library for tagging (with [TagLib](https://github.com/taglib/taglib)) and fingerprinting (with [FFmpeg](https://github.com/FFmpeg/FFmpeg) and [Acoustid Chromaprint](https://bitbucket.org/acoustid/chromaprint/overview)) audio files, in managed code.
+To play media files with [FFmpeg](https://github.com/FFmpeg/FFmpeg) in managed code, it is recommended to use the [ffmediaelement](https://github.com/unosquare/ffmediaelement) control.
 
 **Do not forget to install all [required runtimes](#native-dependencies-required).**
 
@@ -55,25 +56,6 @@ pictures.Clear();
 tagger.Save(); // saving changes
 ```
 
-## How to play audio file in C♯
-
-```C#
-using Luminescence.Audio;
-
-// all audio formats supported by FFmpeg can be played
-var player = new FFmpegAudioPlayer();
-player.Play(@"C:\MyFolder\MyAudioFile.flac");
-
-// a volume level of 1.0 means there is no attenuation or gain and 0 means silence
-player.Volume = 0.5;
-player.Muted = true;
-
-player.Paused = true;
-player.Stop();
-
-player.Dispose();
-```
-
 ## How to use the fingerprinting API in C♯
 
 ```C#
@@ -95,9 +77,7 @@ bool sameFile2 = ChromaprintFingerprinter.CompareFile(@"C:\MyFolder\MyAudioFile3
 
 ## Native dependencies required
 
-The Luminescence.Audio requires the following redistribuables to run:
-- The XAudio 2.7 redistribuable that you can download [here](http://www.luminescence-software.org/download/audio/dx_sdk_jun10_xaudio27.zip) (contains the developer and end-user XAudio2 runtimes) (54 MB) or [here](http://www.luminescence-software.org/download/audio/Jun2010_XAudio_x86.exe) (contains only the end-user XAudio2 runtime) (13 MB)
-- The Visual C++ 2017 x86 runtime that you can download [here](http://www.luminescence-software.org/download/audio/vcredist_x86.exe) (14 MB)
+The Luminescence.Audio library requires the Visual C++ 2017 x86 runtime that you can download [here](http://www.luminescence-software.org/download/audio/vcredist_x86.exe) (14 MB).
 
 ## Licence
 

@@ -1,6 +1,6 @@
   Luminescence.Audio.AudioResourceStrings.resources - Embedded, ContainedInManifestFile, 
 ImageRuntimeVersion: v4.0.30319
-Assembly Luminescence.Audio, Version=3.8.*, Culture=Langue indifférente (Pays indifférent): 
+Assembly Luminescence.Audio, Version=4.0.*, Culture=Langue indifférente (Pays indifférent): 
 	hash=SHA1, flags=PublicKey
 Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
@@ -14,40 +14,6 @@ Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c5619
 	hash=None, flags=None
 Assembly WindowsBase, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35: 
 	hash=None, flags=None
-Class Luminescence.Audio.PathEventArgs: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-  :System.EventArgs
-    Void .ctor(System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Properties:
-    System.String Path 'get ' : 
-  Methods:
-    get_Path(): PrivateScope, Public, HideBySig, SpecialName
-Class Luminescence.Audio.FFmpegAudioPlayer: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Interfaces:
-    System.IDisposable
-  Properties:
-    Boolean Paused 'get set' : 
-    Boolean Muted 'get set' : 
-    Single Volume 'get set' : 
-    System.String PlayingFile 'get ' : 
-  Events:
-    System.EventHandler`1[Luminescence.Audio.PathEventArgs] PlayerStarted: SpecialName
-    System.EventHandler`1[Luminescence.Audio.PathEventArgs] PlayerStopped: SpecialName
-  Methods:
-    Play(String): PrivateScope, Public, HideBySig
-    Stop(): PrivateScope, Public, HideBySig
-    add_PlayerStopped(EventHandler`1): PrivateScope, Public, HideBySig, SpecialName
-    remove_PlayerStopped(EventHandler`1): PrivateScope, Public, HideBySig, SpecialName
-    add_PlayerStarted(EventHandler`1): PrivateScope, Public, HideBySig, SpecialName
-    remove_PlayerStarted(EventHandler`1): PrivateScope, Public, HideBySig, SpecialName
-    get_PlayingFile(): PrivateScope, Public, HideBySig, SpecialName
-    get_Volume(): PrivateScope, Public, HideBySig, SpecialName
-    set_Volume(Single): PrivateScope, Public, HideBySig, SpecialName
-    get_Muted(): PrivateScope, Public, HideBySig, SpecialName
-    set_Muted(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig, SpecialName
-    get_Paused(): PrivateScope, Public, HideBySig, SpecialName
-    set_Paused(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig, SpecialName
-    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
 Class Luminescence.Audio.ChromaprintFingerprinter: AutoLayout, AnsiClass, Class, Public, Abstract, Sealed, BeforeFieldInit
   Properties:
     System.Version ChromaprintAlgorithmVersion 'get ' : 

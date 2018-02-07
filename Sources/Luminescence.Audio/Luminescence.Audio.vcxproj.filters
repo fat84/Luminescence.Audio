@@ -35,9 +35,6 @@
     <ClCompile Include="ChromaprintFingerprinter.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="FFmpegAudioPlayer.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="TaglibTagger.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>

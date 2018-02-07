@@ -132,9 +132,6 @@
   <data name="CannotOpenFileWriting" xml:space="preserve">
     <value>Il file non può essere aperto per la scrittura dei tag.</value>
   </data>
-  <data name="CannotUseAudioEngine" xml:space="preserve">
-    <value>Il motore di riproduzione audio non è disponibile ({0}, {1: X}).</value>
-  </data>
   <data name="FileFormatNotSupported" xml:space="preserve">
     <value>Il formato del file non è supportato.</value>
   </data>

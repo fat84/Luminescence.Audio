@@ -12,11 +12,11 @@ using namespace System::Security::Permissions;
 // associées à un assembly.
 //
 [assembly:AssemblyTitleAttribute("Luminescence.Audio")];
-[assembly:AssemblyDescriptionAttribute("A C++/CLI assembly for playing (with FFmpeg and XAudio2), tagging (with TagLib) and fingerprinting (with FFmpeg and Acoustid Chromaprint) audio files.")]
+[assembly:AssemblyDescriptionAttribute("A C++/CLI assembly for tagging (with TagLib) and fingerprinting (with FFmpeg and Acoustid Chromaprint) audio files.")]
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("Luminescence Software")];
 [assembly:AssemblyProductAttribute("Luminescence.Audio")];
-[assembly:AssemblyCopyrightAttribute("Sylvain Rougeaux, © 2011-2017")];
+[assembly:AssemblyCopyrightAttribute("Sylvain Rougeaux, © 2011-2018")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 
@@ -31,6 +31,6 @@ using namespace System::Security::Permissions;
 // Vous pouvez spécifier toutes les valeurs ou indiquer les numéros de révision et de build par défaut
 // en utilisant '*', comme indiqué ci-dessous :
 
-[assembly:AssemblyVersionAttribute("3.8.0.0")];
+[assembly:AssemblyVersionAttribute("4.0.0.0")];
 [assembly:ComVisible(false)];
 [assembly:CLSCompliantAttribute(true)];

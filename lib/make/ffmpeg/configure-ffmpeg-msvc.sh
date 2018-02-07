@@ -3,7 +3,7 @@
 ./configure \
 	--prefix='../build' \
 	--toolchain=msvc \
-	--yasmexe='E:/Home/Important/Development/Toolkit/Tools/yasm-1.3.0-win32.exe' \
+	--x86asmexe='E:/Home/Important/Development/Toolkit/Tools/yasm-1.3.0-win32.exe' \
 	--cpu=i686 \
 \
 	--enable-shared \
@@ -37,14 +37,11 @@
 	--disable-bsfs \
 	--disable-filters \
 	--disable-parsers \
-	--disable-protocols \
 	--disable-indevs \
 	--disable-outdevs \
 	--disable-encoders \
 	--disable-decoders \
 	--disable-bsfs \
-\
-	--enable-protocol=file \
 \
 	--enable-demuxer=image2 \
 	--enable-demuxer=aac \

@@ -37,14 +37,11 @@
 	--disable-bsfs \
 	--disable-filters \
 	--disable-parsers \
-	--disable-protocols \
 	--disable-indevs \
 	--disable-outdevs \
 	--disable-encoders \
 	--disable-decoders \
 	--disable-bsfs \
-\
-	--enable-protocol=file \
 \
 	--enable-demuxer=image2 \
 	--enable-demuxer=aac \

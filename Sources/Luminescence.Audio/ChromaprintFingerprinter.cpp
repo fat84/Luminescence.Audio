@@ -167,11 +167,7 @@ namespace Luminescence
             }
          };
 
-         static String^ EncodeFingerprintBase64(array<uint32_t>^ fingerprint)
-         {
-            return EncodeFingerprintBase64(fingerprint, fingerprint->Length);
-         }
-
+         static String^ EncodeFingerprintBase64(array<uint32_t>^ fingerprint) { return EncodeFingerprintBase64(fingerprint, fingerprint->Length); }
          static String^ EncodeFingerprintBase64(array<uint32_t>^ fingerprint, int length)
          {
             char *encoded;

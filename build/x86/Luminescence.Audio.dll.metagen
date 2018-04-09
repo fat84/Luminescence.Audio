@@ -85,7 +85,7 @@ Class Luminescence.Audio.FileFormatAttribute: AutoLayout, AnsiClass, Class, Publ
   Methods:
     get_Extension(): PrivateScope, Public, HideBySig, SpecialName
     get_File(): PrivateScope, Public, HideBySig, SpecialName
-Class Luminescence.Audio.TaglibTagger: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+Class Luminescence.Audio.TaglibTagger: AutoLayout, AnsiClass, Class, Public
     Void .ctor(System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Properties:
     System.Collections.Generic.List`1[Luminescence.Audio.Picture] Pictures 'get ' : 

@@ -705,7 +705,15 @@ namespace Luminescence
          }
 
       public:
-         TaglibTagger(String^ path) { ReadTags(path); }
+         static TaglibTagger()
+         {
+            std::set_new_handler(throw_out_of_memory_exception);
+         }
+
+         TaglibTagger(String^ path)
+         {
+            ReadTags(path); 
+         }
 
          property String^ Source
          {

@@ -103,3 +103,8 @@ static std::string ManagedStringToNativeUtf8One(String^ s)
    Marshal::Copy(encodedBytes, 0, IntPtr((void*)utf8.data()), encodedBytes->Length);
    return utf8;
 }
+
+static void throw_out_of_memory_exception()
+{
+   throw gcnew OutOfMemoryException();
+}

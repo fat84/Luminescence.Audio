@@ -5,7 +5,7 @@
       "name": "x86-Debug",
       "generator": "Visual Studio 15 2017",
       "configurationType": "Debug",
-      "buildRoot": "${env.LOCALAPPDATA}\\CMakeBuild\\${workspaceHash}\\build\\${name}",
+      "buildRoot": "${env.USERPROFILE}\\CMakeBuild\\${workspaceHash}\\build\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-m -v:minimal",
       "variables": [
@@ -31,7 +31,7 @@
         },
         {
           "name": "CMAKE_CXX_FLAGS",
-          "value": "/D _WIN32_WINNT=0x0601"
+          "value": "/D _WIN32_WINNT=0x0601 /EHsc"
         }
       ]
     },
@@ -39,7 +39,7 @@
       "name": "x86-Release",
       "generator": "Visual Studio 15 2017",
       "configurationType": "Release",
-      "buildRoot": "${env.LOCALAPPDATA}\\CMakeBuild\\${workspaceHash}\\build\\${name}",
+      "buildRoot": "${env.USERPROFILE}\\CMakeBuild\\${workspaceHash}\\build\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-m -v:minimal",
       "variables": [
@@ -65,7 +65,7 @@
         },
         {
           "name": "CMAKE_CXX_FLAGS",
-          "value": "/D _WIN32_WINNT=0x0601"
+          "value": "/D _WIN32_WINNT=0x0601 /EHsc"
         }
       ]
     },
@@ -73,7 +73,7 @@
       "name": "x64-Debug",
       "generator": "Visual Studio 15 2017 Win64",
       "configurationType": "Debug",
-      "buildRoot": "${env.LOCALAPPDATA}\\CMakeBuild\\${workspaceHash}\\build\\${name}",
+      "buildRoot": "${env.USERPROFILE}\\CMakeBuild\\${workspaceHash}\\build\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-m -v:minimal",
       "variables": [
@@ -99,7 +99,7 @@
         },
         {
           "name": "CMAKE_CXX_FLAGS",
-          "value": "/D _WIN32_WINNT=0x0601"
+          "value": "/D _WIN32_WINNT=0x0601 /EHsc"
         }
       ]
     },
@@ -107,7 +107,7 @@
       "name": "x64-Release",
       "generator": "Visual Studio 15 2017 Win64",
       "configurationType": "Release",
-      "buildRoot": "${env.LOCALAPPDATA}\\CMakeBuild\\${workspaceHash}\\build\\${name}",
+      "buildRoot": "${env.USERPROFILE}\\CMakeBuild\\${workspaceHash}\\build\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-m -v:minimal",
       "variables": [
@@ -133,7 +133,7 @@
         },
         {
           "name": "CMAKE_CXX_FLAGS",
-          "value": "/D _WIN32_WINNT=0x0601"
+          "value": "/D _WIN32_WINNT=0x0601 /EHsc"
         }
       ]
     }

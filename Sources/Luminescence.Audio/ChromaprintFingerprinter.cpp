@@ -170,6 +170,12 @@ namespace Luminescence
          static String^ EncodeFingerprintBase64(array<uint32_t>^ fingerprint) { return EncodeFingerprintBase64(fingerprint, fingerprint->Length); }
          static String^ EncodeFingerprintBase64(array<uint32_t>^ fingerprint, int length)
          {
+			if (fingerprint == nullptr || fingerprint->Length == 0)
+			  throw gcnew ArgumentException("fingerprint is null or empty", "fingerprint");
+
+			if (length <= 0)
+			  throw gcnew ArgumentOutOfRangeException("length", "length is lower or equal to 0");
+
             char *encoded;
             int encoded_size;
 
